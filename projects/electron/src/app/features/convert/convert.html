@@ -1,0 +1,124 @@
+<section class="page">
+  <header class="page-header">
+    <div>
+      <h1>Convert datasets</h1>
+      <p>Each selected dataset produces its own DB Master-compatible text folder.</p>
+    </div>
+  </header>
+
+  <mat-stepper linear>
+    <mat-step [completed]="selectedDatasetIds().length > 0">
+      <ng-template matStepLabel>Select datasets</ng-template>
+      <div class="choice-grid">
+        @for (dataset of store.availableDatasets(); track dataset.id) {
+          <mat-card appearance="outlined">
+            <mat-card-header>
+              <mat-checkbox
+                [checked]="selectedDatasetIds().includes(dataset.id)"
+                (change)="toggleDataset(dataset.id, $event.checked)"
+              >
+                {{ dataset.name }}
+              </mat-checkbox>
+            </mat-card-header>
+            <mat-card-content>
+              <p>
+                FIFA {{ dataset.fifaVersion }} · {{ dataset.tableCount }} tables ·
+                {{ dataset.rowCount }} rows
+              </p>
+            </mat-card-content>
+          </mat-card>
+        } @empty {
+          <p>No available datasets. Import one from the Datasets page first.</p>
+        }
+      </div>
+      <div class="step-actions">
+        <button matButton="filled" matStepperNext [disabled]="!selectedDatasetIds().length">
+          Next
+        </button>
+      </div>
+    </mat-step>
+
+    <mat-step [completed]="selectedTables().length > 0">
+      <ng-template matStepLabel>Target and tables</ng-template>
+      <label class="field-label" for="target-version">Target FIFA</label>
+      <mat-select
+        id="target-version"
+        class="version-select"
+        [value]="targetVersion()"
+        (valueChange)="setTarget($event)"
+      >
+        @for (fifa of [11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23]; track fifa) {
+          <mat-option [value]="fifa">FIFA {{ fifa }}</mat-option>
+        }
+      </mat-select>
+      <h2>Compatible tables</h2>
+      <div class="table-grid">
+        @for (table of compatibleTables(); track table) {
+          <mat-checkbox
+            [checked]="selectedTables().includes(table)"
+            (change)="toggleTable(table, $event.checked)"
+          >
+            {{ table }}
+          </mat-checkbox>
+        }
+      </div>
+      <div class="step-actions">
+        <button matButton matStepperPrevious>Back</button>
+        <button matButton="filled" matStepperNext [disabled]="!selectedTables().length">
+          Next
+        </button>
+      </div>
+    </mat-step>
+
+    <mat-step [completed]="!!outputParentPath()">
+      <ng-template matStepLabel>Output options</ng-template>
+      <button matButton="outlined" (click)="chooseOutput()">
+        <mat-icon>folder_open</mat-icon>
+        Choose output parent folder
+      </button>
+      @if (outputParentPath()) {
+        <p class="path">{{ outputParentPath() }}</p>
+      }
+      <mat-checkbox [checked]="extendContracts()" (change)="extendContracts.set($event.checked)">
+        Extend expired contracts and loans to target defaults
+      </mat-checkbox>
+      <div class="step-actions">
+        <button matButton matStepperPrevious>Back</button>
+        <button matButton="filled" matStepperNext [disabled]="!outputParentPath()">Review</button>
+      </div>
+    </mat-step>
+
+    <mat-step>
+      <ng-template matStepLabel>Review and run</ng-template>
+      <mat-card appearance="outlined">
+        <mat-card-content>
+          <p>
+            <strong>{{ selectedDatasetIds().length }}</strong> datasets → FIFA {{ targetVersion() }}
+          </p>
+          <p>
+            <strong>{{ selectedTables().length }}</strong> compatible tables selected
+          </p>
+          <p>Output: {{ outputParentPath() }}</p>
+        </mat-card-content>
+      </mat-card>
+      @if (store.conversionProgress()) {
+        <mat-progress-bar mode="indeterminate" />
+        <p aria-live="polite">{{ store.conversionProgress() }}</p>
+      }
+      @for (message of resultMessages(); track $index) {
+        <p>{{ message }}</p>
+      }
+      <div class="step-actions">
+        <button matButton matStepperPrevious [disabled]="store.loading()">Back</button>
+        @if (store.loading()) {
+          <button matButton (click)="cancel()">Cancel conversion</button>
+        } @else {
+          <button matButton="filled" (click)="run()">Convert datasets</button>
+        }
+        @if (resultMessages().length) {
+          <button matButton (click)="showHistory()">View history</button>
+        }
+      </div>
+    </mat-step>
+  </mat-stepper>
+</section>

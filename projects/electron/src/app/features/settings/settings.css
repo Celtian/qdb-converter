@@ -1,0 +1,14 @@
+:host {
+  display: block;
+}
+
+mat-card {
+  max-width: 48rem;
+  margin-bottom: 1rem;
+}
+
+mat-radio-group {
+  display: flex;
+  gap: 1rem;
+  padding-top: 1rem;
+}

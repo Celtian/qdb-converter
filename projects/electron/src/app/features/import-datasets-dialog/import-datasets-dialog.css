@@ -1,0 +1,30 @@
+.source-actions,
+.candidate-fields {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.candidate-list {
+  display: grid;
+  gap: 0.75rem;
+  margin-block: 1rem;
+}
+
+.candidate {
+  padding: 1rem;
+  border: 1px solid var(--mat-sys-outline-variant);
+  border-radius: 0.75rem;
+}
+
+.candidate-fields mat-form-field:first-child {
+  flex: 1;
+}
+
+.candidate p {
+  margin: 0;
+}
+
+.warning {
+  color: var(--mat-sys-tertiary);
+}

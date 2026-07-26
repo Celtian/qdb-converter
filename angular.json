@@ -1,0 +1,107 @@
+{
+  "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+  "version": 1,
+  "cli": {
+    "packageManager": "bun",
+    "schematicCollections": ["angular-eslint"]
+  },
+  "newProjectRoot": "projects",
+  "projects": {
+    "electron": {
+      "projectType": "application",
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "css"
+        }
+      },
+      "root": "projects/electron",
+      "sourceRoot": "projects/electron/src",
+      "prefix": "app",
+      "architect": {
+        "build": {
+          "builder": "@angular/build:application",
+          "options": {
+            "browser": "projects/electron/src/main.ts",
+            "tsConfig": "projects/electron/tsconfig.app.json",
+            "assets": [
+              {
+                "glob": "**/*",
+                "input": "projects/electron/public"
+              }
+            ],
+            "styles": [
+              "@fontsource/roboto/400.css",
+              "@fontsource/roboto/500.css",
+              "@fontsource/roboto/700.css",
+              "@angular/material/prebuilt-themes/azure-blue.css",
+              "material-icons/iconfont/material-icons.css",
+              "projects/electron/src/styles.css"
+            ]
+          },
+          "configurations": {
+            "production": {
+              "baseHref": "./",
+              "optimization": {
+                "styles": {
+                  "inlineCritical": false
+                }
+              },
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "600kB",
+                  "maximumError": "1MB"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "4kB",
+                  "maximumError": "8kB"
+                }
+              ],
+              "outputHashing": "all"
+            },
+            "development": {
+              "optimization": false,
+              "extractLicenses": false,
+              "sourceMap": true
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "serve": {
+          "builder": "@angular/build:dev-server",
+          "configurations": {
+            "production": {
+              "buildTarget": "electron:build:production"
+            },
+            "development": {
+              "buildTarget": "electron:build:development"
+            }
+          },
+          "defaultConfiguration": "development"
+        },
+        "test": {
+          "builder": "@angular/build:unit-test",
+          "options": {
+            "coverageInclude": ["projects/electron/src/app/**/*.ts"],
+            "coverageExclude": ["projects/electron/src/app/**/*.spec.ts"],
+            "coverageReporters": ["text", "html", "cobertura"],
+            "coverageThresholds": {
+              "statements": 80,
+              "branches": 80,
+              "functions": 80,
+              "lines": 80
+            }
+          }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": ["projects/electron/**/*.ts", "projects/electron/**/*.html"],
+            "eslintConfig": "projects/electron/eslint.config.js"
+          }
+        }
+      }
+    }
+  }
+}

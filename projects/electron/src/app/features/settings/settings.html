@@ -1,0 +1,40 @@
+<section class="page">
+  <header class="page-header">
+    <div>
+      <h1>Settings</h1>
+      <p>Application appearance and storage behavior.</p>
+    </div>
+  </header>
+
+  <mat-card appearance="outlined">
+    <mat-card-header>
+      <mat-icon mat-card-avatar>palette</mat-icon>
+      <mat-card-title>Theme</mat-card-title>
+      <mat-card-subtitle>Choose how QDB Converter follows your desktop.</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <mat-radio-group
+        aria-label="Theme preference"
+        [value]="theme.preference()"
+        (change)="setTheme($event.value)"
+      >
+        <mat-radio-button value="system">System</mat-radio-button>
+        <mat-radio-button value="light">Light</mat-radio-button>
+        <mat-radio-button value="dark">Dark</mat-radio-button>
+      </mat-radio-group>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card appearance="outlined">
+    <mat-card-header>
+      <mat-icon mat-card-avatar>shield</mat-icon>
+      <mat-card-title>Managed snapshots</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <p>
+        Imported sources are copied into the application data directory. Removing a dataset deletes
+        only that copy; source files and converted output are never removed.
+      </p>
+    </mat-card-content>
+  </mat-card>
+</section>

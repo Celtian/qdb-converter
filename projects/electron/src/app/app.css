@@ -1,0 +1,33 @@
+:host,
+mat-sidenav-container,
+mat-sidenav-content {
+  display: block;
+  height: 100%;
+}
+
+:host {
+  min-width: 0;
+  overflow: hidden;
+}
+
+mat-sidenav {
+  width: 15.5rem;
+  border-right: 1px solid var(--mat-sys-outline-variant);
+  border-radius: 0;
+  background: var(--mat-sys-surface-container-low);
+}
+
+.app-content {
+  height: 100%;
+  min-width: 0;
+  overflow: auto;
+  background: var(--mat-sys-surface);
+}
+
+mat-toolbar {
+  border-bottom: 1px solid var(--mat-sys-outline-variant);
+}
+
+mat-toolbar + .app-content {
+  height: calc(100% - 64px);
+}
