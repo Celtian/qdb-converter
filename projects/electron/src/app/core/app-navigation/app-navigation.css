@@ -18,6 +18,10 @@
   text-decoration: none;
 }
 
+.brand img {
+  border-radius: 7px;
+}
+
 nav,
 .utility-actions {
   display: grid;

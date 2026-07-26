@@ -6,6 +6,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { RouterOutlet } from '@angular/router';
+import { NgxAppVersionDirective } from 'ngx-app-version';
 import { map } from 'rxjs';
 import { AppStore } from './core/app-store';
 import { AppNavigation } from './core/app-navigation/app-navigation';
@@ -22,6 +23,7 @@ import { AppNavigation } from './core/app-navigation/app-navigation';
   ],
   templateUrl: './app.html',
   styleUrl: './app.css',
+  hostDirectives: [NgxAppVersionDirective],
 })
 export class App {
   private readonly store = inject(AppStore);

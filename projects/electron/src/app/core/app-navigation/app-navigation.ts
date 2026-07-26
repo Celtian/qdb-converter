@@ -1,3 +1,4 @@
+import { NgOptimizedImage } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
@@ -15,7 +16,14 @@ interface NavigationLink {
 
 @Component({
   selector: 'app-app-navigation',
-  imports: [MatButtonModule, MatDividerModule, MatIconModule, RouterLink, RouterLinkActive],
+  imports: [
+    NgOptimizedImage,
+    MatButtonModule,
+    MatDividerModule,
+    MatIconModule,
+    RouterLink,
+    RouterLinkActive,
+  ],
   templateUrl: './app-navigation.html',
   styleUrl: './app-navigation.css',
 })

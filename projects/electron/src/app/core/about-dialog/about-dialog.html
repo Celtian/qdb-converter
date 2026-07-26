@@ -1,5 +1,12 @@
-<h2 mat-dialog-title><mat-icon>sync_alt</mat-icon> QDB Converter</h2>
+<header class="about-header">
+  <div class="identity">
+    <img ngSrc="qdb-converter-icon.png" width="56" height="56" alt="" priority />
+    <h2 mat-dialog-title>QDB Converter</h2>
+  </div>
+</header>
+
 <mat-dialog-content>
+  <p class="version">Version {{ version }}</p>
   <p>Convert FIFA 11–23 DB Master table datasets from text folders or PC t3db databases.</p>
   <p>Built with Angular, Electron, fifa-t3db, fifatables, fifadate, and fifarating.</p>
 </mat-dialog-content>

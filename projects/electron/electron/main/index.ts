@@ -3,6 +3,7 @@ import {
   BrowserWindow,
   dialog,
   ipcMain,
+  Menu,
   shell,
   type IpcMainInvokeEvent,
   type OpenDialogOptions,
@@ -40,6 +41,9 @@ const uuidPattern = /^[0-9a-f-]{36}$/i;
 app.setName('QDB Converter');
 
 const rendererUrl = process.env['QDB_RENDERER_URL'];
+const applicationIcon = app.isPackaged
+  ? join(app.getAppPath(), 'dist', 'electron', 'browser', 'qdb-converter-icon.png')
+  : resolve(__dirname, '../../../../projects/electron/public/qdb-converter-icon.png');
 const trustedSender = (event: IpcMainInvokeEvent): void => {
   const url = event.senderFrame?.url ?? '';
   const trusted =
@@ -492,6 +496,7 @@ const createWindow = async (): Promise<void> => {
     minHeight: 620,
     show: false,
     backgroundColor: '#f7f9ff',
+    icon: applicationIcon,
     webPreferences: {
       preload: join(__dirname, '..', 'preload.js'),
       contextIsolation: true,
@@ -513,6 +518,7 @@ const createWindow = async (): Promise<void> => {
 };
 
 app.whenReady().then(async () => {
+  Menu.setApplicationMenu(null);
   library = new DatasetLibrary(app.getPath('userData'));
   registerIpc();
   if (app.isPackaged) updateElectronApp();

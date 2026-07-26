@@ -7,6 +7,7 @@
 /out
 /bazel-out
 /.electron
+/projects/version-info.ts
 
 # Node
 /node_modules
