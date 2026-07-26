@@ -1,6 +1,6 @@
 {
   "name": "qdb-converter",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Convert FIFA 11–23 database table datasets from a secure desktop application",
   "author": {
     "name": "Dominik Hladík",
