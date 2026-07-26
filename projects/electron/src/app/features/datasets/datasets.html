@@ -1,8 +1,8 @@
 <section class="page" [class.has-selection]="selectedCount() > 0">
   <header class="page-header">
     <div>
-      <h1>Datasets</h1>
-      <p>Managed FIFA database snapshots ready for conversion.</p>
+      <h1>Imported datasets</h1>
+      <p>Managed source snapshots ready for conversion.</p>
     </div>
     <a matButton="filled" routerLink="/import">
       <mat-icon>add</mat-icon>
@@ -10,29 +10,42 @@
     </a>
   </header>
 
-  <div class="filters">
-    <mat-form-field appearance="outline" subscriptSizing="dynamic">
+  <div class="table-controls">
+    <mat-form-field class="search-field" appearance="outline" subscriptSizing="dynamic">
       <mat-label>Search datasets</mat-label>
-      <mat-icon matPrefix>search</mat-icon>
+      <mat-icon matPrefix aria-hidden="true">search</mat-icon>
       <input matInput type="search" [value]="query()" (input)="setQuery($event)" />
     </mat-form-field>
-    <mat-form-field appearance="outline" subscriptSizing="dynamic">
-      <mat-label>FIFA version</mat-label>
-      <mat-select [value]="version()" (valueChange)="setVersion($event)">
-        <mat-option value="all">All versions</mat-option>
-        @for (fifa of [11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23]; track fifa) {
-          <mat-option [value]="fifa.toString()">FIFA {{ fifa }}</mat-option>
-        }
-      </mat-select>
-    </mat-form-field>
-    <mat-form-field appearance="outline" subscriptSizing="dynamic">
-      <mat-label>Source</mat-label>
-      <mat-select [value]="source()" (valueChange)="setSource($event)">
-        <mat-option value="all">All sources</mat-option>
-        <mat-option value="text-folder">Text folder</mat-option>
-        <mat-option value="t3db">t3db</mat-option>
-      </mat-select>
-    </mat-form-field>
+    <button
+      class="filter-button"
+      matButton="tonal"
+      type="button"
+      [attr.aria-label]="
+        activeFilterCount()
+          ? 'Open filters, ' + (activeFilterCount() | number) + ' active'
+          : 'Open filters'
+      "
+      (click)="openFilters()"
+    >
+      <mat-icon aria-hidden="true">filter_alt</mat-icon>
+      Filters
+      @if (activeFilterCount()) {
+        <span class="filter-count" aria-hidden="true">{{ activeFilterCount() | number }}</span>
+      }
+    </button>
+    <button
+      class="column-button"
+      matButton="tonal"
+      type="button"
+      [attr.aria-label]="'Choose columns, ' + (hiddenColumnCount() | number) + ' hidden'"
+      (click)="openColumns()"
+    >
+      <mat-icon aria-hidden="true">view_column</mat-icon>
+      Columns
+      @if (hiddenColumnCount()) {
+        <span class="column-count" aria-hidden="true">{{ hiddenColumnCount() | number }}</span>
+      }
+    </button>
   </div>
 
   @if (store.loading()) {
@@ -185,9 +198,6 @@
                 <mat-icon aria-hidden="true">more_vert</mat-icon>
               </button>
               <mat-menu #actions="matMenu">
-                <button mat-menu-item (click)="validate(dataset)">
-                  <mat-icon aria-hidden="true">fact_check</mat-icon>Run validations
-                </button>
                 <button mat-menu-item (click)="rename(dataset)">
                   <mat-icon aria-hidden="true">edit</mat-icon>Rename
                 </button>
@@ -197,10 +207,10 @@
               </mat-menu>
             </td>
           </ng-container>
-          <tr mat-header-row *matHeaderRowDef="columns"></tr>
+          <tr mat-header-row *matHeaderRowDef="displayedColumns()"></tr>
           <tr
             mat-row
-            *matRowDef="let row; columns: columns"
+            *matRowDef="let row; columns: displayedColumns()"
             [class.selected-row]="isSelected(row)"
           ></tr>
         </table>
@@ -218,10 +228,10 @@
       />
     } @else if (!store.loading()) {
       <div class="empty-state">
-        @if (!store.datasets().length) {
+        @if (!store.importedDatasets().length) {
           <div role="status">
             <mat-icon>database</mat-icon>
-            <h2>No datasets found</h2>
+            <h2>No imported datasets found</h2>
             <p>Import a DB Master text folder or a paired .db and .xml source.</p>
           </div>
         } @else {

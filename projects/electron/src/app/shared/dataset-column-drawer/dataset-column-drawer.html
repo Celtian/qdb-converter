@@ -1,0 +1,28 @@
+<form
+  class="column-form"
+  aria-labelledby="dataset-column-title"
+  (submit)="apply(); $event.preventDefault()"
+>
+  <header>
+    <h2 id="dataset-column-title">Columns</h2>
+    <button matIconButton type="button" aria-label="Close columns" (click)="cancel()">
+      <mat-icon aria-hidden="true">close</mat-icon>
+    </button>
+  </header>
+
+  <div class="column-fields" cdkScrollable>
+    <app-dataset-column-editor
+      [columns]="data.columns"
+      [defaultPreference]="data.defaultPreference"
+      [table]="data.table"
+      [(preference)]="draftPreference"
+    />
+  </div>
+
+  <footer>
+    <button matButton type="button" (click)="resetDefaults()">Reset to defaults</button>
+    <span></span>
+    <button matButton type="button" (click)="cancel()">Cancel</button>
+    <button matButton="filled" type="submit">Apply</button>
+  </footer>
+</form>

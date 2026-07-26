@@ -1,6 +1,5 @@
-import { randomUUID } from 'node:crypto';
-import { mkdir, readFile, readdir, rename, rm, writeFile } from 'node:fs/promises';
-import { basename, join } from 'node:path';
+import { mkdir, readFile, readdir, rm, writeFile } from 'node:fs/promises';
+import { join } from 'node:path';
 import { openFifaDatabase, type FifaDatabase } from 'fifa-t3db';
 import { registerFifaDatePrototype } from 'fifadate';
 import {
@@ -11,7 +10,7 @@ import {
   type FifaRatingAttributes,
 } from 'fifarating';
 import { Datatype, type Field } from 'fifatables';
-import type { ConversionRequest, TableConversionSummary } from '../shared/contracts';
+import type { TableConversionSummary } from '../shared/contracts';
 import { fieldsFor, isSupportedTable } from '../shared/table-config';
 import {
   encodeFifaText,
@@ -19,12 +18,11 @@ import {
   type TableRow,
   type TableValue,
 } from '../shared/text-format';
-import type { DatasetRecord } from './dataset-library';
+import type { ImportedDatasetRecord } from './dataset-library';
 
 registerFifaDatePrototype();
 
 export interface DatasetConversionOutput {
-  outputPath: string;
   tables: TableConversionSummary[];
   warnings: string[];
 }
@@ -98,18 +96,6 @@ const normalizedValue = (
   };
 };
 
-const extendDate = (field: Field, value: TableValue): TableValue => {
-  const fallback = targetDefault(field);
-  if (typeof value !== 'number' || typeof fallback !== 'number') return value;
-  if (field.name === 'contractvaliduntil') return value < fallback ? fallback : value;
-  if (field.name !== 'loandateend') return value;
-  try {
-    return Date.fromFifaDate(value) < Date.fromFifaDate(fallback) ? fallback : value;
-  } catch {
-    return fallback;
-  }
-};
-
 const positionValues = Object.values(Position);
 const ratingFifa = (version: number): RatingFifa | undefined =>
   Object.values(RatingFifa).find((candidate) => Number(candidate.slice(4)) === version);
@@ -126,35 +112,10 @@ const hasRatingDifference = (row: TableRow, targetVersion: number): boolean => {
   return Number.isFinite(calculated) && Math.round(calculated) !== Math.round(stored);
 };
 
-const sanitizeName = (name: string): string =>
-  name
-    .normalize('NFKD')
-    .replace(/[^\w.-]+/g, '-')
-    .replace(/^-+|-+$/g, '')
-    .slice(0, 60) || 'dataset';
-
-const timestamp = (date: Date): string =>
-  date
-    .toISOString()
-    .replace(/[-:]/g, '')
-    .replace(/\.\d{3}Z$/, 'Z');
-
-const uniqueOutputPath = async (
-  parent: string,
-  datasetName: string,
+export const createConvertedDatasetSnapshot = async (
+  dataset: ImportedDatasetRecord,
   targetVersion: number,
-): Promise<string> => {
-  const base = `${sanitizeName(datasetName)}-fifa${targetVersion}-${timestamp(new Date())}`;
-  const existing = new Set(await readdir(parent).catch(() => []));
-  if (!existing.has(base)) return join(parent, base);
-  let suffix = 2;
-  while (existing.has(`${base}-${suffix}`)) suffix += 1;
-  return join(parent, `${base}-${suffix}`);
-};
-
-export const convertDataset = async (
-  dataset: DatasetRecord,
-  request: ConversionRequest,
+  outputDirectory: string,
   progress?: (message: string) => void,
   cancelled: () => boolean = () => false,
 ): Promise<DatasetConversionOutput> => {
@@ -162,22 +123,16 @@ export const convertDataset = async (
     dataset.source.kind === 'text-folder'
       ? await textSource(join(dataset.snapshotDirectory, 'text'))
       : await t3dbSource(dataset.snapshotDirectory);
-  await mkdir(request.outputParentPath, { recursive: true });
-  const outputPath = await uniqueOutputPath(
-    request.outputParentPath,
-    dataset.name,
-    request.targetVersion,
-  );
-  const temporaryPath = join(
-    request.outputParentPath,
-    `.${basename(outputPath)}.${randomUUID()}.tmp`,
-  );
-  await mkdir(temporaryPath);
+  await mkdir(outputDirectory, { recursive: true });
   const summaries: TableConversionSummary[] = [];
   const warnings: string[] = [];
 
   try {
-    const selected = request.tables.filter(isSupportedTable);
+    const selected = dataset.tableNames.filter(
+      (table) => isSupportedTable(table) && fieldsFor(targetVersion, table).length > 0,
+    );
+    if (!selected.length)
+      throw new Error('The imported dataset has no tables compatible with the target FIFA.');
     for (const [tableIndex, table] of selected.entries()) {
       if (cancelled()) throw new Error('CONVERSION_CANCELLED');
       if (!source.available.has(table)) {
@@ -185,7 +140,7 @@ export const convertDataset = async (
         continue;
       }
       progress?.(`Converting ${table} (${tableIndex + 1}/${selected.length})…`);
-      const fields = fieldsFor(request.targetVersion, table);
+      const fields = fieldsFor(targetVersion, table);
       const rows = await source.read(table);
       let defaultSubstitutions = 0;
       let ratingDifferences = 0;
@@ -195,16 +150,14 @@ export const convertDataset = async (
         for (const field of fields) {
           const normalized = normalizedValue(field, row[field.name]);
           if (normalized.substituted) defaultSubstitutions += 1;
-          output[field.name] = request.extendContracts
-            ? extendDate(field, normalized.value)
-            : normalized.value;
+          output[field.name] = normalized.value;
         }
-        if (table === 'players' && hasRatingDifference(output, request.targetVersion))
+        if (table === 'players' && hasRatingDifference(output, targetVersion))
           ratingDifferences += 1;
         return output;
       });
       await writeFile(
-        join(temporaryPath, `${table}.txt`),
+        join(outputDirectory, `${table}.txt`),
         encodeFifaText(
           fields.map((field) => field.name),
           converted,
@@ -218,10 +171,9 @@ export const convertDataset = async (
         warnings: [],
       });
     }
-    await rename(temporaryPath, outputPath);
-    return { outputPath, tables: summaries, warnings };
+    return { tables: summaries, warnings };
   } catch (error) {
-    await rm(temporaryPath, { recursive: true, force: true });
+    await rm(outputDirectory, { recursive: true, force: true });
     throw error;
   }
 };

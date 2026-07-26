@@ -1,15 +1,49 @@
 <header class="about-header">
   <div class="identity">
-    <img ngSrc="qdb-converter-icon.png" width="56" height="56" alt="" priority />
-    <h2 mat-dialog-title>QDB Converter</h2>
+    <img ngSrc="qdb-converter-icon.png" width="88" height="88" alt="" priority />
+    <div>
+      <h2 mat-dialog-title>QDB Converter</h2>
+      <p class="version">Version {{ version }}</p>
+    </div>
   </div>
+  <button
+    class="close-icon"
+    type="button"
+    matIconButton
+    mat-dialog-close
+    aria-label="Close About dialog"
+  >
+    <mat-icon>close</mat-icon>
+  </button>
 </header>
 
 <mat-dialog-content>
-  <p class="version">Version {{ version }}</p>
-  <p>Convert FIFA 11–23 DB Master table datasets from text folders or PC t3db databases.</p>
-  <p>Built with Angular, Electron, fifa-t3db, fifatables, fifadate, and fifarating.</p>
+  <p class="description">
+    Local-first Windows desktop application for importing and converting FIFA 11–23 database
+    datasets from DB Master-compatible text folders and PC t3db sources.
+  </p>
+  <p class="legal">© 2026 Dominik Hladík <span aria-hidden="true">·</span> MIT License</p>
 </mat-dialog-content>
-<mat-dialog-actions align="end">
-  <button type="button" matButton mat-dialog-close>Close</button>
+<mat-dialog-actions class="dialog-actions">
+  <button class="close-action" type="button" matButton mat-dialog-close>Close</button>
+  <div class="external-actions">
+    <a
+      matButton
+      href="https://github.com/Celtian/qdb-converter#readme"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      <mat-icon aria-hidden="true">menu_book</mat-icon>
+      <span>Documentation</span>
+    </a>
+    <a
+      matButton="filled"
+      href="https://github.com/Celtian/qdb-converter"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      <mat-icon aria-hidden="true">code</mat-icon>
+      <span>GitHub</span>
+    </a>
+  </div>
 </mat-dialog-actions>

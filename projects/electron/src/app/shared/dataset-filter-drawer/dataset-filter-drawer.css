@@ -1,0 +1,53 @@
+:host {
+  display: block;
+  height: 100%;
+  overflow: hidden;
+}
+
+.filter-form {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+  width: 100%;
+}
+
+header {
+  align-items: center;
+  border-bottom: 1px solid var(--mat-sys-outline-variant);
+  display: flex;
+  justify-content: space-between;
+  padding: 0.75rem 1rem;
+}
+
+h2 {
+  font-size: 1.25rem;
+  margin: 0;
+}
+
+.filter-fields {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 1rem;
+  overflow: auto;
+  padding: 1.25rem 1rem;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+footer {
+  align-items: center;
+  border-top: 1px solid var(--mat-sys-outline-variant);
+  display: flex;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+}
+
+footer span {
+  flex: 1;
+}

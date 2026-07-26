@@ -1,24 +1,23 @@
 import { mkdtemp, mkdir, readFile, writeFile } from 'node:fs/promises';
+import { existsSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import type { ConversionRequest } from '../shared/contracts';
 import { encodeFifaText, parseTextTable } from '../shared/text-format';
-import { convertDataset } from './conversion-engine';
-import type { DatasetRecord } from './dataset-library';
+import { createConvertedDatasetSnapshot } from './conversion-engine';
+import type { ImportedDatasetRecord } from './dataset-library';
 
 describe('conversion engine', () => {
-  it('writes target-ordered UTF-16LE tables without overwriting output', async () => {
+  it('converts every compatible source table into target-ordered UTF-16LE text', async () => {
     const root = await mkdtemp(join(tmpdir(), 'qdb-converter-'));
     const text = join(root, 'snapshot', 'text');
-    const output = join(root, 'output');
+    const output = join(root, 'converted');
     await mkdir(text, { recursive: true });
-    const source = encodeFifaText(
-      ['playerid', 'name'],
-      [{ playerid: 7, name: 'Converted player' }],
+    await writeFile(
+      join(text, 'playernames.txt'),
+      encodeFifaText(['playerid', 'name'], [{ playerid: 7, name: 'Converted player' }]),
     );
-    await writeFile(join(text, 'playernames.txt'), source);
-    const dataset: DatasetRecord = {
+    const dataset: ImportedDatasetRecord = {
       id: '11111111-1111-4111-8111-111111111111',
       name: 'Fixture',
       fifaVersion: 23,
@@ -29,35 +28,27 @@ describe('conversion engine', () => {
         importedAt: new Date(0).toISOString(),
       },
       status: 'available',
-      tableNames: ['playernames'],
-      tableCount: 1,
+      tableNames: ['playernames', 'players', 'unknown'],
+      tableCount: 3,
       rowCount: 1,
       warnings: [],
       snapshotDirectory: join(root, 'snapshot'),
     };
-    const request: ConversionRequest = {
-      requestId: '22222222-2222-4222-8222-222222222222',
-      datasetIds: [dataset.id],
-      targetVersion: 23,
-      tables: ['playernames'],
-      outputParentPath: output,
-      extendContracts: false,
-    };
-    request.tables.push('players');
     const progress: string[] = [];
-    const result = await convertDataset(dataset, request, (message) => progress.push(message));
-    const parsed = parseTextTable(await readFile(join(result.outputPath, 'playernames.txt')));
+
+    const result = await createConvertedDatasetSnapshot(dataset, 23, output, (message) =>
+      progress.push(message),
+    );
+
+    const parsed = parseTextTable(await readFile(join(output, 'playernames.txt')));
     expect(parsed.headers).toContain('nameid');
     expect(parsed.rows).toHaveLength(1);
     expect(result.tables[0]?.defaultSubstitutions).toBeGreaterThan(0);
     expect(result.warnings[0]).toMatch(/players.*skipped/);
     expect(progress[0]).toMatch(/Converting/);
-
-    const collision = await convertDataset(dataset, request);
-    expect(collision.outputPath).not.toBe(result.outputPath);
   });
 
-  it('normalizes numeric values, extends dates, and removes cancelled temporary output', async () => {
+  it('normalizes values without extending dates and cleans cancelled snapshots', async () => {
     const root = await mkdtemp(join(tmpdir(), 'qdb-converter-'));
     const text = join(root, 'snapshot', 'text');
     await mkdir(text, { recursive: true });
@@ -76,9 +67,9 @@ describe('conversion engine', () => {
         ],
       ),
     );
-    const dataset: DatasetRecord = {
+    const dataset: ImportedDatasetRecord = {
       id: '11111111-1111-4111-8111-111111111111',
-      name: '///',
+      name: 'Fixture',
       fifaVersion: 23,
       source: {
         kind: 'text-folder',
@@ -93,19 +84,44 @@ describe('conversion engine', () => {
       warnings: [],
       snapshotDirectory: join(root, 'snapshot'),
     };
-    const request: ConversionRequest = {
-      requestId: '22222222-2222-4222-8222-222222222222',
-      datasetIds: [dataset.id],
-      targetVersion: 23,
-      tables: ['players'],
-      outputParentPath: join(root, 'output'),
-      extendContracts: true,
-    };
-    const result = await convertDataset(dataset, request);
-    expect(result.outputPath).toContain('dataset-fifa23');
+    const output = join(root, 'converted');
+    const result = await createConvertedDatasetSnapshot(dataset, 23, output);
+    const parsed = parseTextTable(await readFile(join(output, 'players.txt')));
+
     expect(result.tables[0]?.defaultSubstitutions).toBeGreaterThan(1);
-    await expect(convertDataset(dataset, request, undefined, () => true)).rejects.toThrow(
-      /CANCELLED/,
-    );
+    expect(parsed.rows[0]?.['contractvaliduntil']).toBe('1');
+
+    const cancelledOutput = join(root, 'cancelled');
+    await expect(
+      createConvertedDatasetSnapshot(dataset, 23, cancelledOutput, undefined, () => true),
+    ).rejects.toThrow(/CANCELLED/);
+    expect(existsSync(cancelledOutput)).toBe(false);
+  });
+
+  it('rejects sources without target-compatible tables', async () => {
+    const root = await mkdtemp(join(tmpdir(), 'qdb-converter-'));
+    const snapshot = join(root, 'snapshot', 'text');
+    await mkdir(snapshot, { recursive: true });
+    const dataset: ImportedDatasetRecord = {
+      id: '11111111-1111-4111-8111-111111111111',
+      name: 'Unsupported',
+      fifaVersion: 23,
+      source: {
+        kind: 'text-folder',
+        originalPaths: ['/fixture'],
+        hashes: {},
+        importedAt: new Date(0).toISOString(),
+      },
+      status: 'available',
+      tableNames: ['unknown'],
+      tableCount: 1,
+      rowCount: 0,
+      warnings: [],
+      snapshotDirectory: join(root, 'snapshot'),
+    };
+
+    await expect(
+      createConvertedDatasetSnapshot(dataset, 23, join(root, 'converted')),
+    ).rejects.toThrow(/no tables compatible/);
   });
 });

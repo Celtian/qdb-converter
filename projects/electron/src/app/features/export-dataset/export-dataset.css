@@ -1,0 +1,123 @@
+.wizard-card {
+  overflow: hidden;
+}
+
+.qdb-wizard {
+  --mat-stepper-container-color: transparent;
+}
+
+.step-content {
+  display: grid;
+  justify-items: start;
+  gap: 1.5rem;
+  padding: 1.5rem 0 0.5rem;
+}
+
+.step-content h2,
+.step-content p {
+  margin: 0;
+}
+
+.step-content h2 {
+  font-size: 1.35rem;
+}
+
+.step-intro {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.step-intro p,
+.choice-label small {
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.dataset-type-options {
+  display: grid;
+  gap: 0.75rem;
+  width: 100%;
+  max-width: 52rem;
+}
+
+.dataset-type-options mat-radio-button {
+  padding: 1rem;
+  border: 1px solid var(--mat-sys-outline-variant);
+  border-radius: 0.75rem;
+}
+
+.dataset-type-options mat-radio-button:has(input:checked) {
+  border-color: var(--mat-sys-primary);
+  background: var(--mat-sys-secondary-container);
+}
+
+.choice-label {
+  display: grid;
+  gap: 0.2rem;
+}
+
+.choice-label small {
+  white-space: normal;
+}
+
+.dataset-picker,
+.selected-dataset {
+  width: 100%;
+}
+
+.selected-dataset {
+  display: grid;
+  gap: 0.5rem;
+  padding: 1rem;
+}
+
+.dataset-option {
+  min-height: 4rem;
+}
+
+.dataset-option-content {
+  display: grid;
+  padding-block: 0.375rem;
+  line-height: 1.35;
+}
+
+.dataset-option-details {
+  font-size: 0.875rem;
+}
+
+.target-picker {
+  width: 100%;
+}
+
+.dataset-option-details,
+.selected-dataset p {
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.success span {
+  overflow-wrap: anywhere;
+}
+
+.success {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  color: var(--mat-sys-primary);
+}
+
+.step-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+@media (max-width: 600px) {
+  .step-actions {
+    flex-wrap: wrap;
+  }
+
+  .step-actions button {
+    flex: 1 1 auto;
+  }
+}

@@ -3,10 +3,10 @@ import { TestBed } from '@angular/core/testing';
 import { MatButtonHarness } from '@angular/material/button/testing';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import axe from 'axe-core';
-import type { DatasetDescriptor } from '../../../../shared/contracts';
+import type { ImportedDatasetDescriptor } from '../../../../shared/contracts';
 import { DatasetDetailsDialog } from './dataset-details-dialog';
 
-const dataset: DatasetDescriptor = {
+const dataset: ImportedDatasetDescriptor = {
   id: '11111111-1111-4111-8111-111111111111',
   name: 'Fixture',
   fifaVersion: 23,
@@ -38,10 +38,15 @@ describe('DatasetDetailsDialog', () => {
     const loader = TestbedHarnessEnvironment.loader(fixture);
     await fixture.whenStable();
     const element = fixture.nativeElement as HTMLElement;
+    const details = [...element.querySelectorAll('.details dt')].map((term) => ({
+      label: term.textContent?.trim(),
+      value: term.nextElementSibling?.textContent?.trim(),
+    }));
 
     expect(element.querySelector('h2')?.textContent).toContain(dataset.name);
     expect(element.querySelector('.details')?.textContent).toContain('FIFA 23');
-    expect(element.querySelector('.details')?.textContent).toContain('1,234 rows');
+    expect(details).toContainEqual({ label: 'Tables', value: '2' });
+    expect(details).toContainEqual({ label: 'Rows', value: '1,234' });
     expect(element.querySelector('time')?.getAttribute('datetime')).toBe(dataset.source.importedAt);
     expect(
       [...element.querySelectorAll('.path-list code')].map((item) => item.textContent),
@@ -49,8 +54,15 @@ describe('DatasetDetailsDialog', () => {
     expect(element.querySelector('.warning-list')?.textContent).toContain(dataset.warnings[0]);
     expect((await axe.run(element)).violations).toEqual([]);
 
+    const renameButton = await loader.getHarness(MatButtonHarness.with({ text: 'Rename' }));
+    expect(await renameButton.getAppearance()).toBe('filled');
+    expect(await (await renameButton.host()).getAttribute('aria-haspopup')).toBe('dialog');
+    await renameButton.click();
+    expect(close).toHaveBeenLastCalledWith('rename');
+
+    close.mockClear();
     await (await loader.getHarness(MatButtonHarness.with({ text: 'Close' }))).click();
-    expect(close).toHaveBeenCalled();
+    expect(close).toHaveBeenLastCalledWith(undefined);
   });
 
   it('shows the corruption error when the dataset is unavailable', async () => {
@@ -64,7 +76,7 @@ describe('DatasetDetailsDialog', () => {
             status: 'corrupt',
             error: 'The managed source snapshot is missing.',
             warnings: [],
-          } satisfies DatasetDescriptor,
+          } satisfies ImportedDatasetDescriptor,
         },
         { provide: MatDialogRef, useValue: { close: vi.fn() } },
       ],
@@ -78,6 +90,9 @@ describe('DatasetDetailsDialog', () => {
       'The managed source snapshot is missing.',
     );
     expect(element.querySelector('.warning-list')).toBeNull();
+    expect(element.querySelector('button[aria-haspopup="dialog"]')?.textContent).toContain(
+      'Rename',
+    );
     expect((await axe.run(element)).violations).toEqual([]);
   });
 });

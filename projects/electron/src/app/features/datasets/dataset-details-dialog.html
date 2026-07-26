@@ -18,13 +18,11 @@
       </time>
     </dd>
 
-    <dt>Contents</dt>
-    <dd>
-      {{ dataset.tableCount | number }}
-      {{ dataset.tableCount === 1 ? 'table' : 'tables' }} ·
-      {{ dataset.rowCount | number }}
-      {{ dataset.rowCount === 1 ? 'row' : 'rows' }}
-    </dd>
+    <dt>{{ dataset.tableCount === 1 ? 'Table' : 'Tables' }}</dt>
+    <dd>{{ dataset.tableCount | number }}</dd>
+
+    <dt>{{ dataset.rowCount === 1 ? 'Row' : 'Rows' }}</dt>
+    <dd>{{ dataset.rowCount | number }}</dd>
   </dl>
 
   @if (dataset.status === 'corrupt' && dataset.error) {
@@ -64,5 +62,8 @@
 </mat-dialog-content>
 
 <mat-dialog-actions align="end">
-  <button type="button" matButton mat-dialog-close>Close</button>
+  <button type="button" matButton [mat-dialog-close]="closeResult">Close</button>
+  <button type="button" matButton="filled" aria-haspopup="dialog" [mat-dialog-close]="renameResult">
+    Rename
+  </button>
 </mat-dialog-actions>

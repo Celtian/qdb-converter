@@ -2,7 +2,7 @@ import { createHash } from 'node:crypto';
 import { copyFile, mkdir, readFile, readdir } from 'node:fs/promises';
 import { basename, extname, join } from 'node:path';
 import { openFifaDatabase } from 'fifa-t3db';
-import type { DatasetRecord } from './dataset-library';
+import type { ImportedDatasetRecord } from './dataset-library';
 import { sourceProvenance } from './dataset-library';
 import type { SelectedSource } from './source-selections';
 import { SUPPORTED_TABLES } from '../shared/table-config';
@@ -20,7 +20,7 @@ export const importDatasetSnapshot = async (
   source: SelectedSource,
   temporaryDirectory: string,
   progress?: (message: string) => void,
-): Promise<DatasetRecord> => {
+): Promise<ImportedDatasetRecord> => {
   await mkdir(temporaryDirectory, { recursive: true });
   const hashes: Record<string, string> = {};
   let rowCount = 0;

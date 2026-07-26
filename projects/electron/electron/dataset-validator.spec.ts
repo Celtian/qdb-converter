@@ -6,7 +6,11 @@ import { Datatype, type Field } from 'fifatables';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { fieldsFor } from '../shared/table-config';
 import { encodeFifaText, type TableRow } from '../shared/text-format';
-import { type DatasetRecord, sourceProvenance } from './dataset-library';
+import {
+  type ConvertedDatasetRecord,
+  type ImportedDatasetRecord,
+  sourceProvenance,
+} from './dataset-library';
 import { validateDatasetSnapshot, validateSelectedSource } from './dataset-validator';
 import type { SelectedSource } from './source-selections';
 
@@ -25,7 +29,7 @@ const validRow = (fields: readonly Field[], rowIndex: number): TableRow =>
   Object.fromEntries(fields.map((field) => [field.name, validValue(field, rowIndex)]));
 
 const textDataset = async (): Promise<{
-  dataset: DatasetRecord;
+  dataset: ImportedDatasetRecord;
   directory: string;
   fields: Field[];
 }> => {
@@ -147,6 +151,76 @@ describe('dataset validator', () => {
     expect(result.errors[0]?.message).toBe('Managed table file is missing.');
   });
 
+  it('validates converted text tables from the snapshot root', async () => {
+    const root = mkdtempSync(join(tmpdir(), 'qdb-validation-converted-'));
+    const fields = fieldsFor(22, 'leagues');
+    const invalidField = fields.find((field) => field.type === Datatype.Int)!;
+    const row = validRow(fields, 0);
+    row[invalidField.name] = 'not-a-number';
+    await writeFile(
+      join(root, 'leagues.txt'),
+      encodeFifaText(
+        fields.map((field) => field.name),
+        [row],
+      ),
+    );
+    const converted: ConvertedDatasetRecord = {
+      id: '33333333-3333-4333-8333-333333333333',
+      name: 'Converted fixture',
+      sourceDatasetId: datasetId,
+      sourceDatasetName: 'Fixture',
+      sourceVersion: 23,
+      fifaVersion: 22,
+      createdAt: new Date(1).toISOString(),
+      status: 'available',
+      tableNames: ['leagues'],
+      tableCount: 1,
+      rowCount: 1,
+      tableSummaries: [],
+      warnings: [],
+      snapshotDirectory: root,
+    };
+
+    const result = await validateDatasetSnapshot(converted);
+
+    expect(result).toMatchObject({
+      datasetId: converted.id,
+      tablesChecked: 1,
+      rowsChecked: 1,
+      errorCount: 1,
+    });
+    expect(result.errors[0]).toMatchObject({
+      table: 'leagues',
+      field: invalidField.name,
+      samples: [{ row: 1, value: 'not-a-number' }],
+    });
+  });
+
+  it('reports missing converted text tables as blocking errors', async () => {
+    const root = mkdtempSync(join(tmpdir(), 'qdb-validation-converted-'));
+    const converted: ConvertedDatasetRecord = {
+      id: '33333333-3333-4333-8333-333333333333',
+      name: 'Converted fixture',
+      sourceDatasetId: datasetId,
+      sourceDatasetName: 'Fixture',
+      sourceVersion: 23,
+      fifaVersion: 22,
+      createdAt: new Date(1).toISOString(),
+      status: 'available',
+      tableNames: ['leagues'],
+      tableCount: 1,
+      rowCount: 0,
+      tableSummaries: [],
+      warnings: [],
+      snapshotDirectory: root,
+    };
+
+    const result = await validateDatasetSnapshot(converted);
+
+    expect(result).toMatchObject({ tablesChecked: 0, rowsChecked: 0, errorCount: 1 });
+    expect(result.errors[0]?.message).toBe('Managed table file is missing.');
+  });
+
   it('validates managed t3db rows against the same published ranges', async () => {
     const root = mkdtempSync(join(tmpdir(), 'qdb-validation-'));
     const fields = fieldsFor(23, 'leagues');
@@ -161,7 +235,7 @@ describe('dataset validator', () => {
       listTables: () => [{ name: 'leagues' }],
       readTable: () => ({ rows: [row] }),
     });
-    const dataset: DatasetRecord = {
+    const dataset: ImportedDatasetRecord = {
       id: datasetId,
       name: 't3db fixture',
       fifaVersion: 23,

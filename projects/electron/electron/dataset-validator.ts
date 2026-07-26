@@ -11,7 +11,7 @@ import type {
 } from '../shared/contracts';
 import { fieldsFor, isSupportedTable } from '../shared/table-config';
 import { parseTextTable, type TableRow, type TableValue } from '../shared/text-format';
-import type { DatasetRecord } from './dataset-library';
+import type { ConvertedDatasetRecord, ImportedDatasetRecord } from './dataset-library';
 import type { SelectedSource } from './source-selections';
 
 const MAX_SAMPLES_PER_ISSUE = 25;
@@ -288,10 +288,18 @@ const validationReport = async (
 };
 
 export const validateDatasetSnapshot = async (
-  dataset: DatasetRecord,
+  dataset: ImportedDatasetRecord | ConvertedDatasetRecord,
 ): Promise<DatasetValidationResult> => {
   const report = await validationReport('Dataset', async (state) => {
-    if (dataset.source.kind === 'text-folder')
+    if (!('source' in dataset)) {
+      await validateTextSource(
+        dataset.snapshotDirectory,
+        dataset.fifaVersion,
+        dataset.tableNames,
+        'Managed table file is missing.',
+        state,
+      );
+    } else if (dataset.source.kind === 'text-folder')
       await validateTextSource(
         join(dataset.snapshotDirectory, 'text'),
         dataset.fifaVersion,

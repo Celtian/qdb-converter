@@ -1,0 +1,43 @@
+<p [id]="instructionsId()">
+  Choose and reorder the columns shown in the {{ tableLabel() }} table. Drag a handle or focus it
+  and use the Up and Down arrow keys.
+</p>
+<div
+  class="column-list"
+  cdkDropList
+  cdkDropListLockAxis="y"
+  role="list"
+  [cdkDropListData]="orderedColumns()"
+  (cdkDropListDropped)="drop($event)"
+>
+  @for (column of orderedColumns(); track column.key) {
+    <div class="column-row" cdkDrag role="listitem" [cdkDragData]="column">
+      <mat-checkbox
+        [checked]="isColumnVisible(column)"
+        [disabled]="column.required"
+        (change)="setColumnVisibility(column, $event.checked)"
+      >
+        {{ column.label }}
+      </mat-checkbox>
+      <button
+        class="drag-handle"
+        cdkDragHandle
+        matIconButton
+        type="button"
+        [attr.aria-label]="'Reorder ' + column.label + ' column'"
+        [attr.aria-describedby]="instructionsId()"
+        (keydown.arrowup)="moveColumn(column, -1); $event.preventDefault()"
+        (keydown.arrowdown)="moveColumn(column, 1); $event.preventDefault()"
+      >
+        <mat-icon aria-hidden="true">drag_indicator</mat-icon>
+      </button>
+      <ng-template cdkDragPreview [matchSize]="true">
+        <div class="column-drag-preview" aria-hidden="true">
+          <span>{{ column.label }}</span>
+          <mat-icon>drag_indicator</mat-icon>
+        </div>
+      </ng-template>
+    </div>
+  }
+</div>
+<p class="live-announcement" aria-live="polite">{{ announcement() }}</p>

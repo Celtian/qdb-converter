@@ -1,0 +1,169 @@
+<section class="page">
+  <header class="page-header">
+    <div>
+      <h1>Validate dataset</h1>
+      <p>Check one imported or converted dataset for structural and data issues.</p>
+    </div>
+  </header>
+
+  <mat-card appearance="outlined" class="wizard-card">
+    <mat-stepper
+      class="qdb-wizard"
+      linear
+      aria-label="Dataset validation wizard"
+      (selectionChange)="stepChanged($event.selectedIndex)"
+    >
+      <ng-template matStepperIcon="number" let-index="index">
+        <span aria-hidden="true">{{ index + 1 }}</span>
+      </ng-template>
+      <ng-template matStepperIcon="edit" let-index="index">
+        <span aria-hidden="true">{{ index + 1 }}</span>
+      </ng-template>
+      <ng-template matStepperIcon="done" let-index="index">
+        <span aria-hidden="true">{{ index + 1 }}</span>
+      </ng-template>
+
+      <mat-step [completed]="!!selectedDatasetKind()">
+        <ng-template matStepLabel>Select dataset type</ng-template>
+        <div class="step-content">
+          <div class="step-intro">
+            <h2>Choose dataset type</h2>
+            <p>Select which managed dataset library you want to validate.</p>
+          </div>
+
+          <mat-radio-group
+            class="dataset-type-options"
+            aria-label="Dataset validation type"
+            [value]="selectedDatasetKind()"
+            (change)="selectDatasetKind($event.value)"
+          >
+            <mat-radio-button value="imported">
+              <span class="choice-label">
+                <strong>Imported dataset</strong>
+                <small>Validate a managed source snapshot from the imported library.</small>
+              </span>
+            </mat-radio-button>
+            <mat-radio-button value="converted">
+              <span class="choice-label">
+                <strong>Converted dataset</strong>
+                <small>Validate a text dataset created by a conversion.</small>
+              </span>
+            </mat-radio-button>
+          </mat-radio-group>
+
+          <div class="step-actions">
+            <button
+              type="button"
+              matButton="filled"
+              matStepperNext
+              [disabled]="!selectedDatasetKind()"
+            >
+              Next
+            </button>
+          </div>
+        </div>
+      </mat-step>
+
+      <mat-step [completed]="!!selectedDataset()">
+        <ng-template matStepLabel>Select dataset</ng-template>
+        <div class="step-content">
+          <mat-form-field class="dataset-picker" appearance="outline">
+            <mat-label>{{ datasetTypeLabel() }} dataset</mat-label>
+            <input
+              type="text"
+              matInput
+              [value]="datasetQuery()"
+              [matAutocomplete]="datasetAutocomplete"
+              [disabled]="!availableDatasets().length"
+              (input)="filterDatasets($event)"
+            />
+            <mat-icon matSuffix aria-hidden="true">search</mat-icon>
+            <mat-hint>Type to find a {{ datasetTypeLabel().toLocaleLowerCase() }} dataset</mat-hint>
+            <mat-autocomplete
+              #datasetAutocomplete="matAutocomplete"
+              [autoActiveFirstOption]="true"
+              [displayWith]="displayDatasetName"
+              [requireSelection]="true"
+              (closed)="restoreDatasetQuery()"
+              (optionSelected)="selectDataset($event.option.value)"
+            >
+              @for (dataset of filteredDatasets(); track dataset.id) {
+                <mat-option class="dataset-option" [value]="dataset.id">
+                  <span class="dataset-option-content">
+                    <strong>{{ dataset.name }}</strong>
+                    <span class="dataset-option-details">
+                      FIFA {{ dataset.fifaVersion }} · {{ dataset.tableCount }} tables ·
+                      {{ dataset.rowCount }} rows ·
+                      {{ dataset.status === 'available' ? 'Available' : 'Corrupt' }}
+                    </span>
+                  </span>
+                </mat-option>
+              } @empty {
+                <mat-option disabled>No matching datasets</mat-option>
+              }
+            </mat-autocomplete>
+          </mat-form-field>
+
+          @if (selectedDatasetKind() === 'imported' && !availableDatasets().length) {
+            <p>No imported datasets were found. Add one from the Import page first.</p>
+          } @else if (selectedDatasetKind() === 'converted' && !availableDatasets().length) {
+            <p>No converted datasets were found. Create one from the Convert page first.</p>
+          }
+
+          @if (selectedDataset(); as dataset) {
+            <mat-card appearance="outlined" class="selected-dataset">
+              <div class="selected-dataset-heading">
+                <strong>{{ dataset.name }}</strong>
+                <app-status-badge [status]="dataset.status" />
+              </div>
+              <p>{{ datasetOrigin(dataset) }}</p>
+              <p>{{ dataset.tableCount }} tables · {{ dataset.rowCount }} rows</p>
+            </mat-card>
+          }
+
+          <div class="step-actions">
+            <button type="button" matButton matStepperPrevious>Back</button>
+            <button type="button" matButton="filled" matStepperNext [disabled]="!selectedDataset()">
+              Validate dataset
+            </button>
+          </div>
+        </div>
+      </mat-step>
+
+      <mat-step [completed]="!!result()">
+        <ng-template matStepLabel>Validation results</ng-template>
+        <div class="step-content result-step">
+          @if (loading()) {
+            <div class="loading-state" role="status" aria-live="polite">
+              <mat-spinner diameter="44" />
+              <p>Checking the managed dataset snapshot…</p>
+            </div>
+          } @else if (error()) {
+            <section class="validation-failed" role="alert">
+              <mat-icon aria-hidden="true">error</mat-icon>
+              <div>
+                <h2>Validation could not be completed</h2>
+                <p>{{ error() }}</p>
+              </div>
+            </section>
+          } @else if (result(); as validation) {
+            <app-validation-report
+              [report]="validation"
+              [subject]="selectedDataset()?.name ?? 'dataset'"
+              [headingIdPrefix]="'dataset-validation-' + validation.datasetId"
+            />
+          }
+
+          <div class="step-actions">
+            <button type="button" matButton matStepperPrevious [disabled]="loading()">Back</button>
+            @if (error()) {
+              <button type="button" matButton="filled" (click)="run()">Try again</button>
+            } @else if (result()) {
+              <button type="button" matButton="filled" (click)="run()">Run again</button>
+            }
+          </div>
+        </div>
+      </mat-step>
+    </mat-stepper>
+  </mat-card>
+</section>

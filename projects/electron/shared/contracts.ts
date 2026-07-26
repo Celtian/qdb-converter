@@ -9,7 +9,7 @@ export interface SourceProvenance {
   importedAt: string;
 }
 
-export interface DatasetDescriptor {
+export interface ImportedDatasetDescriptor {
   id: string;
   name: string;
   fifaVersion: number;
@@ -58,7 +58,7 @@ export interface DatasetImportRequest {
 export interface DatasetImportResult {
   selectionId: string;
   status: OperationStatus;
-  dataset?: DatasetDescriptor;
+  dataset?: ImportedDatasetDescriptor;
   error?: ValidationError;
 }
 
@@ -89,6 +89,18 @@ export interface DatasetValidationResult extends DatasetValidationReport {
   datasetId: string;
 }
 
+export type DatasetKind = 'imported' | 'converted';
+
+export interface DatasetCleanupResult {
+  imported: number;
+  converted: number;
+}
+
+export interface DatasetValidationRequest {
+  datasetKind: DatasetKind;
+  datasetId: string;
+}
+
 export interface DatasetImportValidationRequest {
   selectionId: string;
   fifaVersion: number;
@@ -106,7 +118,8 @@ export interface ValidationError {
     | 'version-mismatch'
     | 'missing-files'
     | 'cancelled'
-    | 'conversion-failed';
+    | 'conversion-failed'
+    | 'export-failed';
   message: string;
   details?: string[];
 }
@@ -119,54 +132,59 @@ export interface TableConversionSummary {
   warnings: string[];
 }
 
-export interface ConversionRequest {
+export interface ConvertedDatasetDescriptor {
+  id: string;
+  name: string;
+  sourceDatasetId: string;
+  sourceDatasetName: string;
+  sourceVersion: number;
+  fifaVersion: number;
+  createdAt: string;
+  status: DatasetStatus;
+  tableNames: string[];
+  tableCount: number;
+  rowCount: number;
+  tableSummaries: TableConversionSummary[];
+  warnings: string[];
+  error?: string;
+}
+
+export interface CreateConvertedDatasetRequest {
   requestId: string;
-  datasetIds: string[];
+  sourceDatasetId: string;
   targetVersion: number;
-  tables: string[];
-  outputParentPath: string;
-  extendContracts: boolean;
+  name: string;
 }
 
 export interface ConversionProgress {
   requestId: string;
-  datasetId?: string;
-  completedDatasets: number;
-  totalDatasets: number;
+  sourceDatasetId?: string;
   message: string;
 }
 
-export interface ConversionResult {
-  datasetId: string;
+export interface CreateConvertedDatasetResult {
+  sourceDatasetId: string;
   status: OperationStatus;
-  outputPath?: string;
+  dataset?: ConvertedDatasetDescriptor;
   tables: TableConversionSummary[];
   warnings: string[];
   error?: ValidationError;
 }
 
-export interface ConversionRecord {
-  id: string;
-  requestId: string;
+export interface ExportDatasetRequest {
+  datasetKind: DatasetKind;
   datasetId: string;
-  datasetName: string;
-  sourceVersion: number;
-  targetVersion: number;
-  source: SourceProvenance;
-  status: OperationStatus;
-  outputPath?: string;
-  selectedTables: string[];
-  tableSummaries: TableConversionSummary[];
-  warnings: string[];
-  error?: ValidationError;
-  startedAt: string;
-  completedAt: string;
-  durationMs: number;
+  targetParentPath: string;
+}
+
+export interface ExportDatasetResult {
+  datasetId: string;
+  outputPath: string;
 }
 
 export interface QdbConverterApi {
-  listDatasets(): Promise<DatasetDescriptor[]>;
-  validateDataset(id: string): Promise<DatasetValidationResult>;
+  listImportedDatasets(): Promise<ImportedDatasetDescriptor[]>;
+  validateDataset(request: DatasetValidationRequest): Promise<DatasetValidationResult>;
   validateImportSource(
     request: DatasetImportValidationRequest,
   ): Promise<DatasetImportValidationResult>;
@@ -176,15 +194,21 @@ export interface QdbConverterApi {
   prepareT3dbSource(request: T3dbSourcePreparationRequest): Promise<DatasetImportCandidate>;
   importDatasets(requests: DatasetImportRequest[]): Promise<DatasetImportResult[]>;
   cancelImport(): Promise<boolean>;
-  renameDataset(id: string, name: string): Promise<DatasetDescriptor>;
-  removeDataset(id: string): Promise<boolean>;
-  removeDatasets(ids: string[]): Promise<number>;
-  selectOutputDirectory(): Promise<string | undefined>;
-  runConversion(request: ConversionRequest): Promise<ConversionResult[]>;
+  renameImportedDataset(id: string, name: string): Promise<ImportedDatasetDescriptor>;
+  removeImportedDataset(id: string): Promise<boolean>;
+  removeImportedDatasets(ids: string[]): Promise<number>;
+  removeAllDatasets(kinds: DatasetKind[]): Promise<DatasetCleanupResult>;
+  listConvertedDatasets(): Promise<ConvertedDatasetDescriptor[]>;
+  createConvertedDataset(
+    request: CreateConvertedDatasetRequest,
+  ): Promise<CreateConvertedDatasetResult>;
   cancelConversion(requestId: string): Promise<boolean>;
-  listConversions(): Promise<ConversionRecord[]>;
-  removeConversion(id: string): Promise<boolean>;
-  revealOutput(path: string): Promise<boolean>;
+  renameConvertedDataset(id: string, name: string): Promise<ConvertedDatasetDescriptor>;
+  removeConvertedDataset(id: string): Promise<boolean>;
+  removeConvertedDatasets(ids: string[]): Promise<number>;
+  selectExportDirectory(): Promise<string | undefined>;
+  exportDataset(request: ExportDatasetRequest): Promise<ExportDatasetResult>;
+  revealExport(path: string): Promise<boolean>;
   onImportProgress(listener: (message: string) => void): () => void;
   onConversionProgress(listener: (progress: ConversionProgress) => void): () => void;
 }

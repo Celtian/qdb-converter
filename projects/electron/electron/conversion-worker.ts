@@ -1,18 +1,22 @@
 import { parentPort, workerData } from 'node:worker_threads';
-import type { ConversionRequest } from '../shared/contracts';
-import { convertDataset } from './conversion-engine';
-import type { DatasetRecord } from './dataset-library';
+import type { CreateConvertedDatasetRequest } from '../shared/contracts';
+import { createConvertedDatasetSnapshot } from './conversion-engine';
+import type { ImportedDatasetRecord } from './dataset-library';
 
 interface ConversionWorkerData {
-  dataset: DatasetRecord;
-  request: ConversionRequest;
+  dataset: ImportedDatasetRecord;
+  request: CreateConvertedDatasetRequest;
+  outputDirectory: string;
 }
 
 const run = async (): Promise<void> => {
   const data = workerData as ConversionWorkerData;
   try {
-    const output = await convertDataset(data.dataset, data.request, (message) =>
-      parentPort?.postMessage({ type: 'progress', message }),
+    const output = await createConvertedDatasetSnapshot(
+      data.dataset,
+      data.request.targetVersion,
+      data.outputDirectory,
+      (message) => parentPort?.postMessage({ type: 'progress', message }),
     );
     parentPort?.postMessage({ type: 'completed', output });
   } catch (error) {

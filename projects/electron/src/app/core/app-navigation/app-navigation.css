@@ -22,10 +22,25 @@
   border-radius: 7px;
 }
 
-nav,
+.nav-group,
 .utility-actions {
   display: grid;
   gap: 0.25rem;
+}
+
+.nav-group + .nav-group {
+  border-top: 1px solid var(--mat-sys-outline-variant);
+  margin-top: 0.5rem;
+  padding-top: 0.5rem;
+}
+
+.nav-group-label {
+  color: var(--mat-sys-on-surface-variant);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  padding: 0.35rem 0.75rem 0.15rem;
+  text-transform: uppercase;
 }
 
 nav a,
@@ -33,10 +48,6 @@ nav a,
 .utility-actions button {
   width: 100%;
   justify-content: flex-start;
-}
-
-nav mat-divider {
-  margin: 0.5rem 0;
 }
 
 .active {

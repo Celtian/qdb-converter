@@ -1,0 +1,91 @@
+<form
+  class="filter-form"
+  aria-labelledby="dataset-filter-title"
+  (submit)="apply(); $event.preventDefault()"
+>
+  <header>
+    <h2 id="dataset-filter-title">Filters</h2>
+    <button matIconButton type="button" aria-label="Close filters" (click)="cancel()">
+      <mat-icon aria-hidden="true">close</mat-icon>
+    </button>
+  </header>
+
+  <div class="filter-fields">
+    @if (kind === 'imported') {
+      <mat-form-field appearance="outline" subscriptSizing="dynamic">
+        <mat-label>FIFA version</mat-label>
+        <mat-select
+          aria-label="Filter imported datasets by FIFA version"
+          [value]="filtersModel().fifaVersion"
+          (valueChange)="setFifaVersion($event)"
+        >
+          <mat-option value="all">All versions</mat-option>
+          @for (fifa of fifaVersions; track fifa) {
+            <mat-option [value]="fifa">FIFA {{ fifa }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" subscriptSizing="dynamic">
+        <mat-label>Source</mat-label>
+        <mat-select
+          aria-label="Filter imported datasets by source"
+          [value]="filtersModel().sourceKind"
+          (valueChange)="setSourceKind($event)"
+        >
+          <mat-option value="all">All sources</mat-option>
+          <mat-option value="text-folder">Text folder</mat-option>
+          <mat-option value="t3db">t3db</mat-option>
+        </mat-select>
+      </mat-form-field>
+    } @else {
+      <mat-form-field appearance="outline" subscriptSizing="dynamic">
+        <mat-label>Source FIFA version</mat-label>
+        <mat-select
+          aria-label="Filter converted datasets by source FIFA version"
+          [value]="filtersModel().sourceVersion"
+          (valueChange)="setSourceVersion($event)"
+        >
+          <mat-option value="all">All source versions</mat-option>
+          @for (fifa of fifaVersions; track fifa) {
+            <mat-option [value]="fifa">FIFA {{ fifa }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" subscriptSizing="dynamic">
+        <mat-label>Target FIFA version</mat-label>
+        <mat-select
+          aria-label="Filter converted datasets by target FIFA version"
+          [value]="filtersModel().targetVersion"
+          (valueChange)="setTargetVersion($event)"
+        >
+          <mat-option value="all">All target versions</mat-option>
+          @for (fifa of fifaVersions; track fifa) {
+            <mat-option [value]="fifa">FIFA {{ fifa }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" subscriptSizing="dynamic">
+        <mat-label>Status</mat-label>
+        <mat-select
+          aria-label="Filter converted datasets by status"
+          [value]="filtersModel().status"
+          (valueChange)="setStatus($event)"
+        >
+          <mat-option value="all">All statuses</mat-option>
+          <mat-option value="available">Available</mat-option>
+          <mat-option value="corrupt">Corrupt</mat-option>
+        </mat-select>
+      </mat-form-field>
+    }
+  </div>
+
+  <footer>
+    <button matButton type="button" (click)="clearAll()">Clear all</button>
+    <span></span>
+    <button matButton type="button" (click)="cancel()">Cancel</button>
+    <button matButton="filled" type="submit">Apply</button>
+  </footer>
+</form>

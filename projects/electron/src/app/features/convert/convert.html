@@ -1,8 +1,8 @@
 <section class="page">
   <header class="page-header">
     <div>
-      <h1>Convert datasets</h1>
-      <p>Each selected dataset produces its own DB Master-compatible text folder.</p>
+      <h1>Convert dataset</h1>
+      <p>Create an independent managed dataset for another FIFA version.</p>
     </div>
   </header>
 
@@ -18,104 +18,88 @@
         <span aria-hidden="true">{{ index + 1 }}</span>
       </ng-template>
 
-      <mat-step [completed]="selectedDatasetIds().length > 0">
-        <ng-template matStepLabel>Select datasets</ng-template>
+      <mat-step [completed]="!!selectedDataset()">
+        <ng-template matStepLabel>Select imported dataset</ng-template>
         <div class="step-content">
-          <div class="choice-grid">
-            @for (dataset of store.availableDatasets(); track dataset.id) {
-              <mat-card appearance="outlined">
-                <mat-card-header>
-                  <mat-checkbox
-                    [checked]="selectedDatasetIds().includes(dataset.id)"
-                    (change)="toggleDataset(dataset.id, $event.checked)"
-                  >
-                    {{ dataset.name }}
-                  </mat-checkbox>
-                </mat-card-header>
-                <mat-card-content>
-                  <p>
-                    FIFA {{ dataset.fifaVersion }} · {{ dataset.tableCount }} tables ·
-                    {{ dataset.rowCount }} rows
-                  </p>
-                </mat-card-content>
-              </mat-card>
-            } @empty {
-              <p>No available datasets. Import one from the Datasets page first.</p>
-            }
-          </div>
-          <div class="step-actions">
-            <button
-              type="button"
-              matButton="filled"
-              matStepperNext
-              [disabled]="!selectedDatasetIds().length"
+          <mat-form-field class="dataset-picker" appearance="outline">
+            <mat-label>Imported dataset</mat-label>
+            <input
+              type="text"
+              matInput
+              autocomplete="off"
+              [value]="datasetQuery()"
+              [matAutocomplete]="datasetAutocomplete"
+              [disabled]="!store.availableImportedDatasets().length"
+              (input)="filterDatasets($event)"
+            />
+            <mat-icon matSuffix aria-hidden="true">search</mat-icon>
+            <mat-hint>Type to find an imported dataset</mat-hint>
+            <mat-autocomplete
+              #datasetAutocomplete="matAutocomplete"
+              [autoActiveFirstOption]="true"
+              [displayWith]="displayDatasetName"
+              [requireSelection]="true"
+              (closed)="restoreDatasetQuery()"
+              (optionSelected)="selectDataset($event.option.value)"
             >
+              @for (dataset of filteredDatasets(); track dataset.id) {
+                <mat-option class="dataset-option" [value]="dataset.id">
+                  <span class="dataset-option-content">
+                    <strong>{{ dataset.name }}</strong>
+                    <span class="dataset-option-details">
+                      FIFA {{ dataset.fifaVersion }} · {{ dataset.tableCount }} tables ·
+                      {{ dataset.rowCount }} rows
+                    </span>
+                  </span>
+                </mat-option>
+              } @empty {
+                <mat-option disabled>No matching imported datasets</mat-option>
+              }
+            </mat-autocomplete>
+          </mat-form-field>
+          @if (!store.availableImportedDatasets().length) {
+            <div class="empty-choice">
+              <p>No imported datasets are available.</p>
+              <a matButton="filled" routerLink="/import">Import dataset</a>
+            </div>
+          }
+          @if (selectedDataset(); as dataset) {
+            <mat-card appearance="outlined" class="selected-dataset">
+              <strong>{{ dataset.name }}</strong>
+              <p>
+                FIFA {{ dataset.fifaVersion }} · {{ dataset.tableCount }} tables ·
+                {{ dataset.rowCount }} rows
+              </p>
+            </mat-card>
+          }
+          <div class="step-actions">
+            <button type="button" matButton="filled" matStepperNext [disabled]="!selectedDataset()">
               Next
             </button>
           </div>
         </div>
       </mat-step>
 
-      <mat-step [completed]="selectedTables().length > 0">
-        <ng-template matStepLabel>Target and tables</ng-template>
+      <mat-step [completed]="compatibleTableCount() > 0">
+        <ng-template matStepLabel>Select target FIFA</ng-template>
         <div class="step-content">
-          <div>
-            <label class="field-label" for="target-version">Target FIFA</label>
-            <mat-select
-              id="target-version"
-              class="version-select"
-              [value]="targetVersion()"
-              (valueChange)="setTarget($event)"
-            >
-              @for (fifa of [11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23]; track fifa) {
+          <mat-form-field appearance="outline" class="version-select">
+            <mat-label>Target FIFA</mat-label>
+            <mat-select [value]="targetVersion()" (valueChange)="setTarget($event)">
+              @for (fifa of fifaVersions; track fifa) {
                 <mat-option [value]="fifa">FIFA {{ fifa }}</mat-option>
               }
             </mat-select>
-          </div>
-          <div>
-            <h2>Compatible tables</h2>
-            <div class="table-grid">
-              @for (table of compatibleTables(); track table) {
-                <mat-checkbox
-                  [checked]="selectedTables().includes(table)"
-                  (change)="toggleTable(table, $event.checked)"
-                >
-                  {{ table }}
-                </mat-checkbox>
-              }
-            </div>
-          </div>
-          <div class="step-actions">
-            <button type="button" matButton matStepperPrevious>Back</button>
-            <button
-              type="button"
-              matButton="filled"
-              matStepperNext
-              [disabled]="!selectedTables().length"
-            >
-              Next
-            </button>
-          </div>
-        </div>
-      </mat-step>
-
-      <mat-step [completed]="!!outputParentPath()">
-        <ng-template matStepLabel>Output options</ng-template>
-        <div class="step-content">
-          <div class="output-options">
-            <button type="button" matButton="outlined" (click)="chooseOutput()">
-              <mat-icon>folder_open</mat-icon>
-              Choose output parent folder
-            </button>
-            <mat-checkbox
-              [checked]="extendContracts()"
-              (change)="extendContracts.set($event.checked)"
-            >
-              Extend expired contracts and loans to target defaults
-            </mat-checkbox>
-          </div>
-          @if (outputParentPath()) {
-            <p class="path">{{ outputParentPath() }}</p>
+          </mat-form-field>
+          <p>
+            {{ compatibleTableCount() }}
+            {{ compatibleTableCount() === 1 ? 'compatible table' : 'compatible tables' }} will be
+            converted automatically.
+          </p>
+          @if (!compatibleTableCount()) {
+            <p class="error" role="alert">
+              This imported dataset has no tables compatible with FIFA {{ targetVersion() }}.
+            </p>
           }
           <div class="step-actions">
             <button type="button" matButton matStepperPrevious>Back</button>
@@ -123,36 +107,52 @@
               type="button"
               matButton="filled"
               matStepperNext
-              [disabled]="!outputParentPath()"
+              [disabled]="compatibleTableCount() === 0"
             >
-              Review
+              Next
             </button>
           </div>
         </div>
       </mat-step>
 
       <mat-step>
-        <ng-template matStepLabel>Review and run</ng-template>
+        <ng-template matStepLabel>Create dataset</ng-template>
         <div class="step-content">
-          <mat-card appearance="outlined">
-            <mat-card-content>
-              <p>
-                <strong>{{ selectedDatasetIds().length }}</strong> datasets → FIFA
-                {{ targetVersion() }}
-              </p>
-              <p>
-                <strong>{{ selectedTables().length }}</strong> compatible tables selected
-              </p>
-              <p>Output: {{ outputParentPath() }}</p>
-            </mat-card-content>
-          </mat-card>
+          <mat-form-field appearance="outline" class="name-field">
+            <mat-label>Dataset name</mat-label>
+            <input matInput [formField]="nameForm.name" autocomplete="off" />
+            @if (nameForm.name().touched() && nameForm.name().invalid()) {
+              <mat-error>Enter a name between 1 and 80 characters.</mat-error>
+            } @else if (duplicateName()) {
+              <mat-error>A converted dataset with this name already exists.</mat-error>
+            }
+          </mat-form-field>
+
+          @if (selectedDataset(); as dataset) {
+            <mat-card appearance="outlined" class="review-card">
+              <mat-card-content>
+                <p><strong>Source:</strong> {{ dataset.name }} · FIFA {{ dataset.fifaVersion }}</p>
+                <p><strong>Target:</strong> FIFA {{ targetVersion() }}</p>
+                <p><strong>Tables:</strong> {{ compatibleTableCount() }}</p>
+              </mat-card-content>
+            </mat-card>
+          }
+
           @if (store.conversionProgress()) {
             <mat-progress-bar mode="indeterminate" />
             <p aria-live="polite">{{ store.conversionProgress() }}</p>
           }
-          @for (message of resultMessages(); track $index) {
-            <p>{{ message }}</p>
+          @if (store.error()) {
+            <p class="error" role="alert">{{ store.error() }}</p>
           }
+          @if (result()?.status === 'completed') {
+            <div class="success" role="status">
+              <mat-icon aria-hidden="true">check_circle</mat-icon>
+              <span>{{ result()?.dataset?.name }} was created.</span>
+              <a matButton routerLink="/datasets">View datasets</a>
+            </div>
+          }
+
           <div class="step-actions">
             <button type="button" matButton matStepperPrevious [disabled]="store.loading()">
               Back
@@ -160,10 +160,9 @@
             @if (store.loading()) {
               <button type="button" matButton (click)="cancel()">Cancel conversion</button>
             } @else {
-              <button type="button" matButton="filled" (click)="run()">Convert datasets</button>
-            }
-            @if (resultMessages().length) {
-              <button type="button" matButton (click)="showHistory()">View history</button>
+              <button type="button" matButton="filled" [disabled]="!canCreate()" (click)="create()">
+                Create dataset
+              </button>
             }
           </div>
         </div>

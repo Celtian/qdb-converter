@@ -144,7 +144,7 @@ export class ImportDatasets {
     afterRenderEffect({
       write: () => {
         const candidates = this.candidates();
-        const datasets = this.store.datasets();
+        const datasets = this.store.importedDatasets();
         const inputs = this.renderedInputs();
         const selects = this.renderedSelects();
         if (!candidates.length && !datasets.length && !inputs.length && !selects.length) return;
@@ -247,7 +247,7 @@ export class ImportDatasets {
         item.name.trim().toLocaleLowerCase('en') === normalizedName,
     );
     const duplicateInLibrary = this.store
-      .datasets()
+      .importedDatasets()
       .some((dataset) => dataset.name.toLocaleLowerCase('en') === normalizedName);
 
     if (!name) messages.push('Enter a dataset name.');

@@ -2,11 +2,11 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import axe from 'axe-core';
 import type {
-  DatasetDescriptor,
   DatasetImportCandidate,
   DatasetImportResult,
   DatasetImportValidationResult,
   DatasetSourceKind,
+  ImportedDatasetDescriptor,
   QdbConverterApi,
 } from '../../../../shared/contracts';
 import { ImportDatasets } from './import-datasets';
@@ -57,8 +57,8 @@ describe('ImportDatasets', () => {
     localStorage.removeItem(formatStorageKey);
     importResults = [];
     window.qdbConverter = {
-      listDatasets: vi.fn(async () => []),
-      listConversions: vi.fn(async () => []),
+      listImportedDatasets: vi.fn(async () => []),
+      listConvertedDatasets: vi.fn(async () => []),
       selectTextSources: vi.fn(async () => [
         {
           ...candidate('text', 'Text source'),
@@ -380,20 +380,22 @@ describe('ImportDatasets', () => {
   });
 
   it('shows an existing-name error until the candidate has a unique name', async () => {
-    vi.mocked(window.qdbConverter!.listDatasets).mockResolvedValue([
+    vi.mocked(window.qdbConverter!.listImportedDatasets).mockResolvedValue([
       {
         name: 'TEXT SOURCE',
-      } as DatasetDescriptor,
+      } as ImportedDatasetDescriptor,
     ]);
     const controls = component as unknown as {
-      store: { datasets(): DatasetDescriptor[]; refresh(): Promise<void> };
+      store: { importedDatasets(): ImportedDatasetDescriptor[]; refresh(): Promise<void> };
       candidates(): DatasetImportCandidate[];
       validationMessages(candidate: DatasetImportCandidate): string[];
     };
 
     await controls.store.refresh();
     await fixture.whenStable();
-    expect(controls.store.datasets()).toEqual([expect.objectContaining({ name: 'TEXT SOURCE' })]);
+    expect(controls.store.importedDatasets()).toEqual([
+      expect.objectContaining({ name: 'TEXT SOURCE' }),
+    ]);
     const element = fixture.nativeElement as HTMLElement;
     const button = (label: string) =>
       [...element.querySelectorAll<HTMLButtonElement>('button')].find(

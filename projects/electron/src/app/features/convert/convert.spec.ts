@@ -1,11 +1,18 @@
+import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
+import { MatAutocompleteHarness } from '@angular/material/autocomplete/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { provideRouter, Router } from '@angular/router';
-import type { DatasetDescriptor, QdbConverterApi } from '../../../../shared/contracts';
+import { provideRouter } from '@angular/router';
+import axe from 'axe-core';
+import type {
+  ConvertedDatasetDescriptor,
+  ImportedDatasetDescriptor,
+  QdbConverterApi,
+} from '../../../../shared/contracts';
 import { AppStore } from '../../core/app-store';
 
 import { Convert } from './convert';
 
-const dataset: DatasetDescriptor = {
+const importedDataset: ImportedDatasetDescriptor = {
   id: '11111111-1111-4111-8111-111111111111',
   name: 'Fixture',
   fifaVersion: 23,
@@ -22,24 +29,37 @@ const dataset: DatasetDescriptor = {
   warnings: [],
 };
 
+const convertedDataset: ConvertedDatasetDescriptor = {
+  id: '33333333-3333-4333-8333-333333333333',
+  name: 'Fixture — FIFA 22',
+  sourceDatasetId: importedDataset.id,
+  sourceDatasetName: importedDataset.name,
+  sourceVersion: 23,
+  fifaVersion: 22,
+  createdAt: new Date(1).toISOString(),
+  status: 'available',
+  tableNames: ['players'],
+  tableCount: 1,
+  rowCount: 1,
+  tableSummaries: [],
+  warnings: [],
+};
+
 describe('Convert', () => {
   let component: Convert;
   let fixture: ComponentFixture<Convert>;
 
   beforeEach(async () => {
     window.qdbConverter = {
-      listDatasets: vi.fn(async () => [dataset]),
-      listConversions: vi.fn(async () => []),
-      selectOutputDirectory: vi.fn(async () => '/output'),
-      runConversion: vi.fn(async () => [
-        {
-          datasetId: dataset.id,
-          status: 'completed' as const,
-          outputPath: '/output/result',
-          tables: [],
-          warnings: [],
-        },
-      ]),
+      listImportedDatasets: vi.fn(async () => [importedDataset]),
+      listConvertedDatasets: vi.fn(async () => []),
+      createConvertedDataset: vi.fn(async (request) => ({
+        sourceDatasetId: request.sourceDatasetId,
+        status: 'completed',
+        dataset: { ...convertedDataset, name: request.name, fifaVersion: request.targetVersion },
+        tables: [],
+        warnings: [],
+      })),
       cancelConversion: vi.fn(async () => true),
       onImportProgress: vi.fn(() => () => undefined),
       onConversionProgress: vi.fn(() => () => undefined),
@@ -54,79 +74,110 @@ describe('Convert', () => {
     await fixture.whenStable();
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
-
-  it('renders the sibling-style numbered wizard shell', () => {
+  it('renders an accessible three-step conversion wizard', async () => {
     const element = fixture.nativeElement as HTMLElement;
 
     expect(element.querySelector('mat-card.wizard-card')).toBeTruthy();
-    const stepper = element.querySelector('mat-stepper');
-    expect(stepper?.classList.contains('qdb-wizard')).toBe(true);
-    expect(stepper?.getAttribute('aria-label')).toBe('Dataset conversion wizard');
+    expect(element.querySelector('mat-stepper')?.getAttribute('aria-label')).toBe(
+      'Dataset conversion wizard',
+    );
     expect(
       [...element.querySelectorAll('.mat-step-icon-content')].map((icon) => icon.textContent),
-    ).toEqual(['1', '2', '3', '4']);
-    expect(element.querySelectorAll('.step-actions')).toHaveLength(4);
+    ).toEqual(['1', '2', '3']);
+    expect(element.querySelectorAll('.step-actions')).toHaveLength(3);
+    expect((await axe.run(element)).violations).toEqual([]);
   });
 
-  it('selects compatible tables, output, and runs a batch', async () => {
+  it('selects and clears an imported dataset with a filterable autocomplete', async () => {
+    await TestBed.inject(AppStore).refresh();
+    await fixture.whenStable();
+    const element = fixture.nativeElement as HTMLElement;
+    const loader = TestbedHarnessEnvironment.loader(fixture);
+    const autocomplete = await loader.getHarness(MatAutocompleteHarness);
+
+    expect(element.querySelector('mat-radio-group')).toBeNull();
+    await autocomplete.enterText('FIFA 23');
+    await autocomplete.selectOption({ text: /Fixture/ });
+    await fixture.whenStable();
+
+    expect(await autocomplete.getValue()).toBe('Fixture');
+    expect(element.querySelector('.selected-dataset')?.textContent).toContain(
+      'FIFA 23 · 2 tables · 1 rows',
+    );
+    expect(element.querySelector<HTMLButtonElement>('button[matsteppernext]')?.disabled).toBe(
+      false,
+    );
+
+    await autocomplete.enterText('Missing dataset');
+    await fixture.whenStable();
+
+    expect(element.querySelector('.selected-dataset')).toBeNull();
+    expect(element.querySelector<HTMLButtonElement>('button[matsteppernext]')?.disabled).toBe(true);
+  });
+
+  it('disables the autocomplete and links to import when no datasets are available', async () => {
+    vi.mocked(window.qdbConverter!.listImportedDatasets).mockResolvedValueOnce([]);
+    await TestBed.inject(AppStore).refresh();
+    await fixture.whenStable();
+    const loader = TestbedHarnessEnvironment.loader(fixture);
+    const autocomplete = await loader.getHarness(MatAutocompleteHarness);
+    const element = fixture.nativeElement as HTMLElement;
+
+    expect(await autocomplete.isDisabled()).toBe(true);
+    expect(element.querySelector('a[href="/import"]')?.textContent).toContain('Import dataset');
+  });
+
+  it('selects one imported dataset, suggests a unique name, and creates a managed dataset', async () => {
     await TestBed.inject(AppStore).refresh();
     const controls = component as unknown as {
-      toggleDataset(id: string, selected: boolean): void;
+      selectDataset(id: string): void;
       setTarget(version: number): void;
-      toggleTable(table: string, selected: boolean): void;
-      chooseOutput(): Promise<void>;
-      run(): Promise<void>;
-      showHistory(): void;
-      compatibleTables(): string[];
-      selectedTables(): string[];
-      outputParentPath(): string;
-      resultMessages(): string[];
+      create(): Promise<void>;
+      compatibleTableCount(): number;
+      nameModel(): { name: string };
+      result(): { status: string; dataset?: ConvertedDatasetDescriptor } | undefined;
     };
-    controls.toggleDataset(dataset.id, true);
-    await Promise.resolve();
-    expect(controls.compatibleTables()).toEqual(['players']);
-    expect(controls.selectedTables()).toEqual(['players']);
+
+    controls.selectDataset(importedDataset.id);
     controls.setTarget(22);
-    await Promise.resolve();
-    controls.toggleTable('players', false);
-    controls.toggleTable('players', true);
-    await controls.chooseOutput();
-    expect(controls.outputParentPath()).toBe('/output');
-    await controls.run();
-    expect(controls.resultMessages()[0]).toContain('/output/result');
-    controls.toggleDataset(dataset.id, false);
-    const navigate = vi.spyOn(TestBed.inject(Router), 'navigate');
-    controls.showHistory();
-    expect(navigate).toHaveBeenCalledWith(['/conversions']);
+    expect(controls.compatibleTableCount()).toBe(1);
+    expect(controls.nameModel().name).toBe('Fixture — FIFA 22');
+
+    await controls.create();
+    await fixture.whenStable();
+
+    expect(window.qdbConverter!.createConvertedDataset).toHaveBeenCalledWith(
+      expect.objectContaining({
+        sourceDatasetId: importedDataset.id,
+        targetVersion: 22,
+        name: 'Fixture — FIFA 22',
+      }),
+    );
+    expect(controls.result()?.status).toBe('completed');
+    expect(
+      (fixture.nativeElement as HTMLElement).querySelector('a[href="/datasets"]')?.textContent,
+    ).toContain('View datasets');
   });
 
-  it('cancels the active request and reports failed conversions', async () => {
-    vi.mocked(window.qdbConverter!.runConversion).mockResolvedValueOnce([
-      {
-        datasetId: dataset.id,
-        status: 'failed',
-        tables: [],
-        warnings: [],
-        error: { code: 'conversion-failed', message: 'failed' },
-      },
-    ]);
+  it('suffixes colliding suggestions and cancels an active conversion', async () => {
+    vi.mocked(window.qdbConverter!.listConvertedDatasets).mockResolvedValueOnce([convertedDataset]);
+    await TestBed.inject(AppStore).refresh();
     const controls = component as unknown as {
-      toggleDataset(id: string, selected: boolean): void;
-      chooseOutput(): Promise<void>;
-      run(): Promise<void>;
+      selectDataset(id: string): void;
+      setTarget(version: number): void;
       cancel(): void;
       runningRequestId: { set(value: string): void };
-      resultMessages(): string[];
+      nameModel(): { name: string };
     };
-    controls.toggleDataset(dataset.id, true);
-    await controls.chooseOutput();
-    await controls.run();
-    expect(controls.resultMessages()).toEqual(['failed']);
+
+    controls.selectDataset(importedDataset.id);
+    controls.setTarget(22);
+    expect(controls.nameModel().name).toBe('Fixture — FIFA 22 (2)');
+
     controls.runningRequestId.set('22222222-2222-4222-8222-222222222222');
     controls.cancel();
-    expect(window.qdbConverter!.cancelConversion).toHaveBeenCalled();
+    expect(window.qdbConverter!.cancelConversion).toHaveBeenCalledWith(
+      '22222222-2222-4222-8222-222222222222',
+    );
   });
 });

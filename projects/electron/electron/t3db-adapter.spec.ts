@@ -31,7 +31,7 @@ describe('t3db source adapter', () => {
   it('detects, snapshots, hashes, and converts a paired source', async () => {
     const { inspectT3dbSource } = await import('./source-inspection');
     const { importDatasetSnapshot } = await import('./dataset-importer');
-    const { convertDataset } = await import('./conversion-engine');
+    const { createConvertedDatasetSnapshot } = await import('./conversion-engine');
     const root = mkdtempSync(join(tmpdir(), 'qdb-t3db-'));
     const databasePath = join(root, 'fixture.db');
     const metadataPath = join(root, 'fixture.xml');
@@ -52,17 +52,9 @@ describe('t3db source adapter', () => {
     expect(record.rowCount).toBe(1);
     expect(record.source.hashes['fixture.db']).toMatch(/^[a-f0-9]{64}$/);
 
-    const result = await convertDataset(record, {
-      requestId: '22222222-2222-4222-8222-222222222222',
-      datasetIds: [record.id],
-      targetVersion: 23,
-      tables: ['playernames'],
-      outputParentPath: join(root, 'output'),
-      extendContracts: false,
-    });
-    expect((await readFile(join(result.outputPath, 'playernames.txt'))).byteLength).toBeGreaterThan(
-      2,
-    );
+    const output = join(root, 'output');
+    await createConvertedDatasetSnapshot(record, 23, output);
+    expect((await readFile(join(output, 'playernames.txt'))).byteLength).toBeGreaterThan(2);
   });
 
   it('rejects databases without supported or matching schema tables', async () => {

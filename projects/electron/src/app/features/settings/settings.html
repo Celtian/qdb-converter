@@ -2,7 +2,7 @@
   <header class="page-header">
     <div>
       <h1>Settings</h1>
-      <p>Application appearance and storage behavior.</p>
+      <p>Application appearance, table layouts, and storage behavior.</p>
     </div>
   </header>
 
@@ -25,16 +25,107 @@
     </mat-card-content>
   </mat-card>
 
-  <mat-card appearance="outlined">
+  <mat-card class="column-card" appearance="outlined">
     <mat-card-header>
-      <mat-icon mat-card-avatar>shield</mat-icon>
-      <mat-card-title>Managed snapshots</mat-card-title>
+      <mat-icon mat-card-avatar>view_column</mat-icon>
+      <mat-card-title>Imported dataset columns</mat-card-title>
+      <mat-card-subtitle>
+        Set the default visibility and order for the imported datasets table.
+      </mat-card-subtitle>
     </mat-card-header>
     <mat-card-content>
-      <p>
-        Imported sources are copied into the application data directory. Removing a dataset deletes
-        only that copy; source files and converted output are never removed.
+      <app-dataset-column-editor
+        [columns]="columnDefinitions.imported"
+        [defaultPreference]="defaultColumnPreference('imported')"
+        table="imported"
+        [preference]="importedColumnPreference()"
+        (preferenceChange)="saveColumns('imported', $event)"
+      />
+      <div class="column-actions">
+        <button matButton="outlined" type="button" (click)="resetColumns('imported')">
+          Reset imported columns
+        </button>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card class="column-card" appearance="outlined">
+    <mat-card-header>
+      <mat-icon mat-card-avatar>view_column</mat-icon>
+      <mat-card-title>Converted dataset columns</mat-card-title>
+      <mat-card-subtitle>
+        Set the default visibility and order for the converted datasets table.
+      </mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <app-dataset-column-editor
+        [columns]="columnDefinitions.converted"
+        [defaultPreference]="defaultColumnPreference('converted')"
+        table="converted"
+        [preference]="convertedColumnPreference()"
+        (preferenceChange)="saveColumns('converted', $event)"
+      />
+      <div class="column-actions">
+        <button matButton="outlined" type="button" (click)="resetColumns('converted')">
+          Reset converted columns
+        </button>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card class="storage-card" appearance="outlined">
+    <mat-card-header>
+      <mat-icon mat-card-avatar>storage</mat-icon>
+      <mat-card-title>Dataset storage</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <p id="dataset-storage-description">
+        QDB Converter keeps private copies of imported datasets for conversion and converted
+        datasets for export. Delete either category or both. Original source files and exported
+        folders will not be deleted.
       </p>
+      @if (store.error()) {
+        <p class="error" role="alert">{{ store.error() }}</p>
+      }
+      <fieldset class="cleanup-options" aria-describedby="dataset-storage-description">
+        <legend>Choose managed copies to delete</legend>
+        <mat-checkbox
+          class="imported-cleanup-checkbox"
+          [checked]="deleteImported()"
+          [disabled]="store.importedDatasets().length === 0 || cleanupDisabled()"
+          (change)="setCleanupSelection('imported', $event.checked)"
+        >
+          Imported datasets
+          <span class="dataset-count" aria-live="polite">
+            ({{ store.importedDatasets().length }})
+          </span>
+        </mat-checkbox>
+        <mat-checkbox
+          class="converted-cleanup-checkbox"
+          [checked]="deleteConverted()"
+          [disabled]="store.convertedDatasets().length === 0 || cleanupDisabled()"
+          (change)="setCleanupSelection('converted', $event.checked)"
+        >
+          Converted datasets
+          <span class="dataset-count" aria-live="polite">
+            ({{ store.convertedDatasets().length }})
+          </span>
+        </mat-checkbox>
+      </fieldset>
+      <div class="storage-footer">
+        <button
+          class="delete-selected-button"
+          type="button"
+          matButton="filled"
+          color="warn"
+          aria-describedby="dataset-storage-description"
+          [disabled]="!canDelete()"
+          (click)="confirmSelectedDeletion()"
+        >
+          <mat-icon>delete_sweep</mat-icon>
+          {{ deletionPending() ? 'Deleting…' : 'Delete selected datasets' }}
+        </button>
+      </div>
     </mat-card-content>
   </mat-card>
 </section>

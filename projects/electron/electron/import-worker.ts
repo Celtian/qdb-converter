@@ -1,5 +1,5 @@
 import { parentPort, workerData } from 'node:worker_threads';
-import type { DatasetRecord } from './dataset-library';
+import type { ImportedDatasetRecord } from './dataset-library';
 import { importDatasetSnapshot } from './dataset-importer';
 import type { SelectedSource } from './source-selections';
 
@@ -24,7 +24,7 @@ const run = async (): Promise<void> => {
     );
     parentPort?.postMessage({ type: 'completed', record } satisfies {
       type: 'completed';
-      record: DatasetRecord;
+      record: ImportedDatasetRecord;
     });
   } catch (error) {
     parentPort?.postMessage({

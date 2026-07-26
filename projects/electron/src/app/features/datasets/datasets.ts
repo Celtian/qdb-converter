@@ -2,24 +2,40 @@ import { DatePipe, DecimalPipe } from '@angular/common';
 import { Component, computed, inject, signal } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatPaginatorModule, type PageEvent } from '@angular/material/paginator';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
-import { MatSelectModule } from '@angular/material/select';
 import { MatSortModule, type Sort, type SortDirection } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { RouterLink } from '@angular/router';
-import type { DatasetDescriptor } from '../../../../shared/contracts';
+import type { ImportedDatasetDescriptor } from '../../../../shared/contracts';
 import { AppStore } from '../../core/app-store';
 import { ConfirmationDialog } from '../../core/confirmation-dialog/confirmation-dialog';
+import { DatasetColumnPreferences } from '../../core/dataset-column-preferences';
 import { DatasetNameDialog } from '../../core/dataset-name-dialog/dataset-name-dialog';
+import {
+  DatasetColumnDrawer,
+  type DatasetColumnDrawerData,
+} from '../../shared/dataset-column-drawer/dataset-column-drawer';
+import {
+  columnsByDatasetTable,
+  defaultDatasetColumnPreference,
+  type DatasetColumnPreference,
+  visibleDatasetColumns,
+} from '../../shared/dataset-column-editor/dataset-table-columns';
+import {
+  DatasetFilterDrawer,
+  type DatasetFilterDrawerData,
+  type DatasetFilters,
+  emptyImportedDatasetFilters,
+  type ImportedDatasetFilters,
+} from '../../shared/dataset-filter-drawer/dataset-filter-drawer';
 import { StatusBadge } from '../../shared/status-badge/status-badge';
-import { DatasetDetailsDialog } from './dataset-details-dialog';
-import { DatasetValidationDialog } from './dataset-validation-dialog';
+import { DatasetDetailsDialog, type DatasetDetailsDialogResult } from './dataset-details-dialog';
 
 type DatasetSortKey = 'imported' | 'name' | 'rows' | 'source' | 'status' | 'tables' | 'version';
 
@@ -45,14 +61,12 @@ const sortLabels: Record<DatasetSortKey, string> = {
     DecimalPipe,
     MatButtonModule,
     MatCheckboxModule,
-    MatDialogModule,
     MatFormFieldModule,
     MatIconModule,
     MatInputModule,
     MatMenuModule,
     MatPaginatorModule,
     MatProgressBarModule,
-    MatSelectModule,
     MatSortModule,
     MatTableModule,
     RouterLink,
@@ -61,12 +75,16 @@ const sortLabels: Record<DatasetSortKey, string> = {
   templateUrl: './datasets.html',
   styleUrl: './datasets.css',
 })
-export class Datasets {
+export class ImportedDatasets {
   protected readonly store = inject(AppStore);
   private readonly dialog = inject(MatDialog);
+  private readonly columnPreferences = inject(DatasetColumnPreferences);
   protected readonly query = signal('');
-  protected readonly version = signal('all');
-  protected readonly source = signal('all');
+  private readonly filters = signal<ImportedDatasetFilters>(emptyImportedDatasetFilters());
+  protected readonly activeFilterCount = computed(() => {
+    const filters = this.filters();
+    return Number(filters.fifaVersion !== 'all') + Number(filters.sourceKind !== 'all');
+  });
   protected readonly pageIndex = signal(0);
   protected readonly pageSize = signal(25);
   protected readonly pageSizeOptions = [10, 25, 50, 100];
@@ -74,26 +92,28 @@ export class Datasets {
   protected readonly sortAnnouncement = signal('');
   protected readonly selectedIds = signal<ReadonlySet<string>>(new Set());
   protected readonly deletionPending = signal(false);
-  protected readonly columns = [
+  protected readonly columnDefinitions = columnsByDatasetTable.imported;
+  private readonly columnPreference = signal(this.columnPreferences.load('imported'));
+  protected readonly columns = computed(() => visibleDatasetColumns(this.columnPreference()));
+  protected readonly displayedColumns = computed<readonly string[]>(() => [
     'select',
-    'name',
-    'version',
-    'source',
-    'tables',
-    'rows',
-    'imported',
-    'status',
-    'actions',
-  ];
+    ...this.columns(),
+  ]);
+  protected readonly hiddenColumnCount = computed(
+    () => this.columnDefinitions.length - this.columns().length,
+  );
   protected readonly filtered = computed(() => {
     const query = this.query().trim().toLocaleLowerCase();
+    const filters = this.filters();
     const sort = this.sort();
     return this.store
-      .datasets()
+      .importedDatasets()
       .filter(
-        (dataset) => this.version() === 'all' || dataset.fifaVersion === Number(this.version()),
+        (dataset) => filters.fifaVersion === 'all' || dataset.fifaVersion === filters.fifaVersion,
       )
-      .filter((dataset) => this.source() === 'all' || dataset.source.kind === this.source())
+      .filter(
+        (dataset) => filters.sourceKind === 'all' || dataset.source.kind === filters.sourceKind,
+      )
       .filter((dataset) =>
         [
           dataset.name,
@@ -127,40 +147,46 @@ export class Datasets {
     return !this.allRowsSelected() && rows.some((dataset) => selectedIds.has(dataset.id));
   });
 
-  protected showDetails(dataset: DatasetDescriptor): void {
-    this.dialog.open(DatasetDetailsDialog, {
-      data: dataset,
-      width: '520px',
-      maxWidth: 'calc(100vw - 2rem)',
-      autoFocus: 'dialog',
-    });
-  }
-
-  protected rename(dataset: DatasetDescriptor): void {
+  protected showDetails(dataset: ImportedDatasetDescriptor): void {
     this.dialog
-      .open(DatasetNameDialog, { data: { name: dataset.name }, width: '420px' })
+      .open<DatasetDetailsDialog, ImportedDatasetDescriptor, DatasetDetailsDialogResult>(
+        DatasetDetailsDialog,
+        {
+          data: dataset,
+          width: '520px',
+          maxWidth: 'calc(100vw - 2rem)',
+          autoFocus: 'dialog',
+        },
+      )
       .afterClosed()
-      .subscribe((name: string | undefined) => {
-        if (name && name !== dataset.name) void this.store.renameDataset(dataset.id, name);
+      .subscribe((result) => {
+        if (result === 'rename') this.rename(dataset);
       });
   }
 
-  protected validate(dataset: DatasetDescriptor): void {
-    this.dialog.open(DatasetValidationDialog, {
-      data: dataset,
-      width: '900px',
-      maxWidth: 'calc(100vw - 2rem)',
-      autoFocus: 'dialog',
-    });
+  protected rename(dataset: ImportedDatasetDescriptor): void {
+    this.dialog
+      .open(DatasetNameDialog, {
+        data: { name: dataset.name },
+        width: '440px',
+        maxWidth: 'calc(100vw - 2rem)',
+        ariaDescribedBy: 'dataset-name-dialog-description',
+        autoFocus: '[data-dialog-primary-field]',
+        restoreFocus: true,
+      })
+      .afterClosed()
+      .subscribe((name: string | undefined) => {
+        if (name && name !== dataset.name) void this.store.renameImportedDataset(dataset.id, name);
+      });
   }
 
-  protected remove(dataset: DatasetDescriptor): void {
+  protected remove(dataset: ImportedDatasetDescriptor): void {
     if (this.deletionPending()) return;
     this.dialog
       .open(ConfirmationDialog, {
         data: {
           title: 'Delete dataset?',
-          message: `The managed snapshot for “${dataset.name}” will be deleted. Conversion history and external output remain untouched.`,
+          message: `The managed imported snapshot for “${dataset.name}” will be deleted. Converted datasets and exported folders remain untouched.`,
           confirmLabel: 'Delete',
         },
         role: 'alertdialog',
@@ -171,11 +197,11 @@ export class Datasets {
       });
   }
 
-  protected isSelected(dataset: DatasetDescriptor): boolean {
+  protected isSelected(dataset: ImportedDatasetDescriptor): boolean {
     return this.selectedIds().has(dataset.id);
   }
 
-  protected toggleRow(dataset: DatasetDescriptor, checked: boolean): void {
+  protected toggleRow(dataset: ImportedDatasetDescriptor, checked: boolean): void {
     this.selectedIds.update((selectedIds) => {
       const next = new Set(selectedIds);
       if (checked) next.add(dataset.id);
@@ -198,7 +224,7 @@ export class Datasets {
       .open(ConfirmationDialog, {
         data: {
           title: `Delete selected ${subject}?`,
-          message: `The managed ${snapshots} for ${count} selected ${subject} will be deleted. Conversion history and external output remain untouched.`,
+          message: `The managed imported ${snapshots} for ${count} selected ${subject} will be deleted. Converted datasets and exported folders remain untouched.`,
           confirmLabel: `Delete ${count} ${subject}`,
         },
         role: 'alertdialog',
@@ -215,16 +241,59 @@ export class Datasets {
     this.query.set((event.target as HTMLInputElement).value);
   }
 
-  protected setVersion(value: string): void {
-    this.clearSelection();
-    this.pageIndex.set(0);
-    this.version.set(value);
+  protected openFilters(): void {
+    this.dialog
+      .open<DatasetFilterDrawer, DatasetFilterDrawerData, DatasetFilters>(DatasetFilterDrawer, {
+        ariaLabelledBy: 'dataset-filter-title',
+        ariaModal: true,
+        autoFocus: 'first-tabbable',
+        data: { filters: { ...this.filters() } },
+        delayFocusTrap: false,
+        disableClose: false,
+        height: '100vh',
+        maxHeight: '100vh',
+        maxWidth: '100vw',
+        panelClass: 'dataset-filter-drawer-panel',
+        position: { right: '0', top: '0' },
+        restoreFocus: true,
+        width: '28rem',
+      })
+      .afterClosed()
+      .subscribe((filters) => {
+        if (filters?.kind !== 'imported') return;
+        this.applyFilters(filters);
+      });
   }
 
-  protected setSource(value: string): void {
-    this.clearSelection();
-    this.pageIndex.set(0);
-    this.source.set(value);
+  protected openColumns(): void {
+    this.dialog
+      .open<DatasetColumnDrawer, DatasetColumnDrawerData, DatasetColumnPreference>(
+        DatasetColumnDrawer,
+        {
+          ariaLabelledBy: 'dataset-column-title',
+          ariaModal: true,
+          autoFocus: 'first-tabbable',
+          data: {
+            table: 'imported',
+            columns: this.columnDefinitions,
+            preference: this.columnPreference(),
+            defaultPreference: defaultDatasetColumnPreference('imported'),
+          },
+          delayFocusTrap: false,
+          disableClose: false,
+          height: '100vh',
+          maxHeight: '100vh',
+          maxWidth: '100vw',
+          panelClass: 'dataset-column-drawer-panel',
+          position: { right: '0', top: '0' },
+          restoreFocus: true,
+          width: '28rem',
+        },
+      )
+      .afterClosed()
+      .subscribe((preference) => {
+        if (preference) this.applyColumns(preference);
+      });
   }
 
   protected sortChanged(sort: Sort): void {
@@ -240,8 +309,7 @@ export class Datasets {
   protected clearFilters(): void {
     this.clearSelection();
     this.query.set('');
-    this.version.set('all');
-    this.source.set('all');
+    this.filters.set(emptyImportedDatasetFilters());
     this.pageIndex.set(0);
   }
 
@@ -255,9 +323,24 @@ export class Datasets {
     this.selectedIds.set(new Set());
   }
 
+  private applyFilters(filters: ImportedDatasetFilters): void {
+    this.clearSelection();
+    this.filters.set({ ...filters });
+    this.pageIndex.set(0);
+  }
+
+  private applyColumns(preference: DatasetColumnPreference): void {
+    this.columnPreferences.save('imported', preference);
+    this.columnPreference.set(preference);
+    if (visibleDatasetColumns(preference).includes(this.sort().active)) return;
+    this.sort.set({ active: 'name', direction: 'asc' });
+    this.pageIndex.set(0);
+    this.sortAnnouncement.set('Sorted by Name ascending.');
+  }
+
   private compareDatasets(
-    left: DatasetDescriptor,
-    right: DatasetDescriptor,
+    left: ImportedDatasetDescriptor,
+    right: ImportedDatasetDescriptor,
     sort: DatasetSort,
   ): number {
     const direction = sort.direction === 'asc' ? 1 : -1;
@@ -297,7 +380,7 @@ export class Datasets {
   private async deleteDataset(id: string): Promise<void> {
     this.deletionPending.set(true);
     try {
-      if (await this.store.removeDataset(id)) this.clearSelection();
+      if (await this.store.removeImportedDataset(id)) this.clearSelection();
     } finally {
       this.deletionPending.set(false);
     }
@@ -308,7 +391,7 @@ export class Datasets {
     if (!ids.length || this.deletionPending()) return;
     this.deletionPending.set(true);
     try {
-      if (await this.store.removeDatasets(ids)) this.clearSelection();
+      if (await this.store.removeImportedDatasets(ids)) this.clearSelection();
     } finally {
       this.deletionPending.set(false);
     }

@@ -1,14 +1,23 @@
-import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { existsSync, mkdtempSync } from 'node:fs';
+import { mkdir, readFile, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import type { ConversionRecord } from '../shared/contracts';
-import { DatasetLibrary, type DatasetRecord, sourceProvenance } from './dataset-library';
+import {
+  DatasetLibrary,
+  type ConvertedDatasetRecord,
+  type ImportedDatasetRecord,
+  sourceProvenance,
+} from './dataset-library';
 
-const id = '11111111-1111-4111-8111-111111111111';
-const recordFor = (library: DatasetLibrary, datasetId = id, name = 'Fixture'): DatasetRecord => ({
-  id: datasetId,
+const importedId = '11111111-1111-4111-8111-111111111111';
+const convertedId = '33333333-3333-4333-8333-333333333333';
+const importedRecordFor = (
+  library: DatasetLibrary,
+  id = importedId,
+  name = 'Fixture',
+): ImportedDatasetRecord => ({
+  id,
   name,
   fifaVersion: 23,
   source: sourceProvenance('text-folder', ['/original'], { 'players.txt': 'hash' }),
@@ -17,141 +26,172 @@ const recordFor = (library: DatasetLibrary, datasetId = id, name = 'Fixture'): D
   tableCount: 1,
   rowCount: 2,
   warnings: [],
-  snapshotDirectory: library.temporaryDirectory(datasetId),
+  snapshotDirectory: library.importedTemporaryDirectory(id),
+});
+
+const convertedRecordFor = (
+  library: DatasetLibrary,
+  source = importedRecordFor(library),
+  id = convertedId,
+  name = 'Fixture — FIFA 22',
+): ConvertedDatasetRecord => ({
+  id,
+  name,
+  sourceDatasetId: source.id,
+  sourceDatasetName: source.name,
+  sourceVersion: source.fifaVersion,
+  fifaVersion: 22,
+  createdAt: new Date(1).toISOString(),
+  status: 'available',
+  tableNames: ['players'],
+  tableCount: 1,
+  rowCount: 2,
+  tableSummaries: [],
+  warnings: [],
+  snapshotDirectory: library.convertedTemporaryDirectory(id),
 });
 
 describe('dataset library', () => {
-  it('atomically installs, renames, reports, and removes managed snapshots', async () => {
+  it('manages imported and converted datasets in separate namespaces', async () => {
     const root = mkdtempSync(join(tmpdir(), 'qdb-library-'));
     const library = new DatasetLibrary(root);
-    const record = recordFor(library);
-    await mkdir(record.snapshotDirectory);
-    await writeFile(join(record.snapshotDirectory, 'fixture.txt'), 'managed');
+    const imported = importedRecordFor(library);
+    const converted = convertedRecordFor(library, imported);
+    await Promise.all([mkdir(imported.snapshotDirectory), mkdir(converted.snapshotDirectory)]);
+    await Promise.all([
+      writeFile(join(imported.snapshotDirectory, 'source.txt'), 'imported'),
+      writeFile(join(converted.snapshotDirectory, 'players.txt'), 'converted'),
+    ]);
 
-    expect(library.install(record).status).toBe('available');
-    expect(library.listDatasets()).toHaveLength(1);
-    expect(library.rename(id, 'Renamed').name).toBe('Renamed');
-    expect(() => library.ensureUniqueName('renamed')).toThrow(/already exists/);
-    expect(() => library.ensureUniqueName('')).toThrow(/between 1 and 80/);
-    expect(() => library.dataset('bad')).toThrow(/Invalid/);
-    expect(() => library.dataset('33333333-3333-4333-8333-333333333333')).toThrow(/not found/);
-    expect(() => library.temporaryDirectory('bad')).toThrow(/Invalid/);
-    expect(library.remove(id)).toBe(true);
-    expect(library.remove(id)).toBe(false);
+    expect(library.installImported(imported).status).toBe('available');
+    expect(library.installConverted(converted).status).toBe('available');
+    expect(library.renameImported(imported.id, 'Imported renamed').name).toBe('Imported renamed');
+    expect(library.renameConverted(converted.id, 'Converted renamed').name).toBe(
+      'Converted renamed',
+    );
+    expect(() => library.ensureUniqueImportedName('imported renamed')).toThrow(/already exists/);
+    expect(() => library.ensureUniqueConvertedName('converted renamed')).toThrow(/already exists/);
+    expect(() => library.ensureUniqueImportedName('')).toThrow(/between 1 and 80/);
+
+    expect(library.removeImported(imported.id)).toBe(true);
+    expect(library.listImportedDatasets()).toEqual([]);
+    expect(library.listConvertedDatasets()).toEqual([
+      expect.objectContaining({ id: converted.id, sourceDatasetName: 'Fixture' }),
+    ]);
+    expect(existsSync(library.convertedFinalDirectory(converted.id))).toBe(true);
+    expect(library.removeConverted(converted.id)).toBe(true);
+    expect(library.removeConverted(converted.id)).toBe(false);
   });
 
-  it('persists conversion history and retains source provenance', () => {
+  it('bulk removes selected converted datasets while preserving other managed data', async () => {
     const root = mkdtempSync(join(tmpdir(), 'qdb-library-'));
     const library = new DatasetLibrary(root);
-    const conversion: ConversionRecord = {
-      id,
-      requestId: '22222222-2222-4222-8222-222222222222',
-      datasetId: id,
-      datasetName: 'Fixture',
-      sourceVersion: 23,
-      targetVersion: 22,
-      source: sourceProvenance('t3db', ['/source.db', '/source.xml'], {}),
-      status: 'completed',
-      outputPath: '/external/output',
-      selectedTables: ['players'],
-      tableSummaries: [],
-      warnings: [],
-      startedAt: new Date(0).toISOString(),
-      completedAt: new Date(1).toISOString(),
-      durationMs: 1,
-    };
-    library.addConversion(conversion);
-    expect(new DatasetLibrary(root).listConversions()[0]?.source.originalPaths).toContain(
-      '/source.db',
+    const imported = importedRecordFor(library);
+    const removed = convertedRecordFor(library, imported);
+    const retained = convertedRecordFor(
+      library,
+      imported,
+      '55555555-5555-4555-8555-555555555555',
+      'Retained conversion',
     );
-    expect(library.removeConversion(id)).toBe(true);
-    expect(library.removeConversion(id)).toBe(false);
+    await Promise.all([
+      mkdir(imported.snapshotDirectory),
+      mkdir(removed.snapshotDirectory),
+      mkdir(retained.snapshotDirectory),
+    ]);
+    library.installImported(imported);
+    library.installConverted(removed);
+    library.installConverted(retained);
+
+    expect(library.removeConvertedMany([removed.id, removed.id])).toBe(1);
+    expect(library.listImportedDatasets()).toEqual([expect.objectContaining({ id: imported.id })]);
+    expect(library.listConvertedDatasets()).toEqual([expect.objectContaining({ id: retained.id })]);
+    expect(existsSync(library.convertedFinalDirectory(removed.id))).toBe(false);
+    expect(existsSync(library.convertedFinalDirectory(retained.id))).toBe(true);
+  });
+
+  it('migrates v1 imported datasets and preferences while discarding conversion history', async () => {
+    const root = mkdtempSync(join(tmpdir(), 'qdb-library-'));
+    const sourceDirectory = join(root, 'source');
+    const legacyLibrary = new DatasetLibrary(root);
+    const imported = importedRecordFor(legacyLibrary);
+    await mkdir(imported.snapshotDirectory);
+    legacyLibrary.installImported(imported);
+    await mkdir(sourceDirectory);
+    await writeFile(
+      join(root, 'registry.json'),
+      JSON.stringify({
+        schemaVersion: 1,
+        datasets: [
+          { ...imported, snapshotDirectory: legacyLibrary.importedFinalDirectory(imported.id) },
+        ],
+        conversions: [{ id: 'legacy-history' }],
+        preferences: { lastImportDirectory: sourceDirectory },
+      }),
+    );
+
+    const migrated = new DatasetLibrary(root);
+    expect(migrated.listImportedDatasets()).toEqual([expect.objectContaining({ id: imported.id })]);
+    expect(migrated.listConvertedDatasets()).toEqual([]);
+    expect(migrated.lastImportDirectory()).toBe(sourceDirectory);
+    const registry = JSON.parse(await readFile(join(root, 'registry.json'), 'utf8')) as {
+      schemaVersion: number;
+      importedDatasets: unknown[];
+      convertedDatasets: unknown[];
+      conversions?: unknown[];
+    };
+    expect(registry).toMatchObject({
+      schemaVersion: 2,
+      importedDatasets: [expect.objectContaining({ id: imported.id })],
+      convertedDatasets: [],
+    });
+    expect(registry.conversions).toBeUndefined();
   });
 
   it('persists the last import directory and ignores it when it no longer exists', async () => {
     const root = mkdtempSync(join(tmpdir(), 'qdb-library-'));
     const sourceDirectory = join(root, 'source');
     await mkdir(sourceDirectory);
-    await writeFile(
-      join(root, 'registry.json'),
-      JSON.stringify({ schemaVersion: 1, datasets: [], conversions: [] }),
-    );
     const library = new DatasetLibrary(root);
 
     expect(library.lastImportDirectory()).toBeUndefined();
     expect(() => library.rememberImportDirectory('relative/source')).toThrow(/absolute path/);
-
     library.rememberImportDirectory(sourceDirectory);
-    expect(library.lastImportDirectory()).toBe(sourceDirectory);
     expect(new DatasetLibrary(root).lastImportDirectory()).toBe(sourceDirectory);
-
-    const { rm } = await import('node:fs/promises');
     await rm(sourceDirectory, { recursive: true });
     expect(library.lastImportDirectory()).toBeUndefined();
   });
 
-  it('removes multiple managed snapshots once while preserving conversion history', async () => {
+  it('cleans interrupted operations and reports missing snapshots', async () => {
     const root = mkdtempSync(join(tmpdir(), 'qdb-library-'));
+    await Promise.all([
+      mkdir(join(root, 'datasets', `${importedId}.importing`), { recursive: true }),
+      mkdir(join(root, 'converted-datasets', `${convertedId}.creating`), { recursive: true }),
+    ]);
     const library = new DatasetLibrary(root);
-    const secondId = '44444444-4444-4444-8444-444444444444';
-    const missingId = '55555555-5555-4555-8555-555555555555';
-    const first = recordFor(library);
-    const second = recordFor(library, secondId, 'Second');
-    await mkdir(first.snapshotDirectory);
-    await mkdir(second.snapshotDirectory);
-    library.install(first);
-    library.install(second);
-    library.addConversion({
-      id: '33333333-3333-4333-8333-333333333333',
-      requestId: '22222222-2222-4222-8222-222222222222',
-      datasetId: id,
-      datasetName: first.name,
-      sourceVersion: 23,
-      targetVersion: 22,
-      source: first.source,
-      status: 'completed',
-      outputPath: '/external/output',
-      selectedTables: ['players'],
-      tableSummaries: [],
-      warnings: [],
-      startedAt: new Date(0).toISOString(),
-      completedAt: new Date(1).toISOString(),
-      durationMs: 1,
-    });
+    expect(existsSync(library.importedTemporaryDirectory(importedId))).toBe(false);
+    expect(existsSync(library.convertedTemporaryDirectory(convertedId))).toBe(false);
 
-    expect(library.removeMany([id, id, missingId])).toBe(1);
-    expect(library.listDatasets()).toEqual([expect.objectContaining({ id: secondId })]);
-    expect(existsSync(library.finalDirectory(id))).toBe(false);
-    expect(existsSync(library.finalDirectory(secondId))).toBe(true);
-    expect(library.listConversions()).toHaveLength(1);
-    expect(new DatasetLibrary(root).listConversions()).toHaveLength(1);
+    const imported = importedRecordFor(library);
+    expect(() => library.installImported(imported)).toThrow(/snapshot is missing/);
+    await mkdir(imported.snapshotDirectory);
+    library.installImported(imported);
+    await rm(library.importedFinalDirectory(imported.id), { recursive: true });
+    expect(library.listImportedDatasets()[0]).toMatchObject({
+      status: 'corrupt',
+      error: 'The managed imported snapshot is missing.',
+    });
+    expect(() => library.importedDataset('bad')).toThrow(/Invalid/);
+    expect(() => library.convertedDataset(convertedId)).toThrow(/not found/);
   });
 
-  it('recovers a corrupt registry and interrupted import directory', async () => {
+  it('backs up malformed registry files without deleting managed directories', async () => {
     const root = mkdtempSync(join(tmpdir(), 'qdb-library-'));
-    await mkdir(join(root, 'datasets', `${id}.importing`), { recursive: true });
+    await mkdir(join(root, 'datasets'), { recursive: true });
     await writeFile(join(root, 'registry.json'), '{not-json');
     const library = new DatasetLibrary(root);
-    expect(library.listDatasets()).toEqual([]);
-    expect(
-      await readFile(join(root, 'registry.json.corrupt-'.slice(0, -1))).catch(() => undefined),
-    ).toBeUndefined();
-    expect(() => library.finalDirectory('invalid')).toThrow(/Invalid/);
-    library.discardTemporary(id);
-  });
-
-  it('reports missing installed snapshots and rejects incomplete imports', async () => {
-    const root = mkdtempSync(join(tmpdir(), 'qdb-library-'));
-    const library = new DatasetLibrary(root);
-    const record = recordFor(library);
-    expect(() => library.install(record)).toThrow(/snapshot is missing/);
-    await mkdir(record.snapshotDirectory);
-    library.install(record);
-    const { rm } = await import('node:fs/promises');
-    await rm(library.finalDirectory(id), { recursive: true });
-    expect(library.listDatasets()[0]).toMatchObject({
-      status: 'corrupt',
-      error: 'The managed source snapshot is missing.',
-    });
+    expect(library.listImportedDatasets()).toEqual([]);
+    const entries = await (await import('node:fs/promises')).readdir(root);
+    expect(entries.some((entry) => entry.startsWith('registry.json.corrupt-'))).toBe(true);
   });
 });

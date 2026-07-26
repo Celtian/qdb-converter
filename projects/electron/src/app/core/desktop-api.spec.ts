@@ -6,7 +6,7 @@ describe('DesktopApi', () => {
   it('exposes every narrow preload capability', async () => {
     const fake = Object.fromEntries(
       [
-        'listDatasets',
+        'listImportedDatasets',
         'validateDataset',
         'validateImportSource',
         'selectTextSources',
@@ -15,15 +15,19 @@ describe('DesktopApi', () => {
         'prepareT3dbSource',
         'importDatasets',
         'cancelImport',
-        'renameDataset',
-        'removeDataset',
-        'removeDatasets',
-        'selectOutputDirectory',
-        'runConversion',
+        'renameImportedDataset',
+        'removeImportedDataset',
+        'removeImportedDatasets',
+        'removeAllDatasets',
+        'listConvertedDatasets',
+        'createConvertedDataset',
         'cancelConversion',
-        'listConversions',
-        'removeConversion',
-        'revealOutput',
+        'renameConvertedDataset',
+        'removeConvertedDataset',
+        'removeConvertedDatasets',
+        'selectExportDirectory',
+        'exportDataset',
+        'revealExport',
       ].map((name) => [name, vi.fn(async () => undefined)]),
     ) as unknown as QdbConverterApi;
     fake.onImportProgress = vi.fn(() => () => undefined);
@@ -31,16 +35,16 @@ describe('DesktopApi', () => {
     window.qdbConverter = fake;
     TestBed.configureTestingModule({});
     const service = TestBed.inject(DesktopApi);
+    const sourceDatasetId = '11111111-1111-4111-8111-111111111111';
+    const convertedDatasetId = '33333333-3333-4333-8333-333333333333';
     const request = {
       requestId: '22222222-2222-4222-8222-222222222222',
-      datasetIds: ['11111111-1111-4111-8111-111111111111'],
+      sourceDatasetId,
       targetVersion: 23,
-      tables: ['players'],
-      outputParentPath: '/output',
-      extendContracts: false,
+      name: 'Converted',
     };
-    await service.listDatasets();
-    await service.validateDataset(request.datasetIds[0]!);
+    await service.listImportedDatasets();
+    await service.validateDataset({ datasetKind: 'imported', datasetId: sourceDatasetId });
     await service.validateImportSource({ selectionId: 'selection', fifaVersion: 23 });
     await service.selectTextSources();
     await service.selectT3dbDatabaseFile();
@@ -51,30 +55,46 @@ describe('DesktopApi', () => {
     });
     await service.importDatasets([]);
     await service.cancelImport();
-    await service.renameDataset(request.datasetIds[0]!, 'Name');
-    await service.removeDataset(request.datasetIds[0]!);
-    await service.removeDatasets(request.datasetIds);
-    await service.selectOutputDirectory();
-    await service.runConversion(request);
+    await service.renameImportedDataset(sourceDatasetId, 'Name');
+    await service.removeImportedDataset(sourceDatasetId);
+    await service.removeImportedDatasets([sourceDatasetId]);
+    await service.removeAllDatasets(['imported']);
+    await service.listConvertedDatasets();
+    await service.createConvertedDataset(request);
     await service.cancelConversion(request.requestId);
-    await service.listConversions();
-    await service.removeConversion(request.requestId);
-    await service.revealOutput('/output');
+    await service.renameConvertedDataset(convertedDatasetId, 'Renamed');
+    await service.removeConvertedDataset(convertedDatasetId);
+    await service.removeConvertedDatasets([convertedDatasetId]);
+    await service.selectExportDirectory();
+    await service.exportDataset({
+      datasetKind: 'converted',
+      datasetId: convertedDatasetId,
+      targetParentPath: '/output',
+    });
+    await service.revealExport('/output/export');
     service.onImportProgress(() => undefined)();
     service.onConversionProgress(() => undefined)();
-    expect(fake.removeDatasets).toHaveBeenCalledWith(request.datasetIds);
-    expect(fake.validateDataset).toHaveBeenCalledWith(request.datasetIds[0]);
-    expect(fake.validateImportSource).toHaveBeenCalledWith({
-      selectionId: 'selection',
-      fifaVersion: 23,
+
+    expect(fake.removeImportedDatasets).toHaveBeenCalledWith([sourceDatasetId]);
+    expect(fake.removeAllDatasets).toHaveBeenCalledWith(['imported']);
+    expect(fake.validateDataset).toHaveBeenCalledWith({
+      datasetKind: 'imported',
+      datasetId: sourceDatasetId,
     });
-    expect(fake.revealOutput).toHaveBeenCalledWith('/output');
+    expect(fake.createConvertedDataset).toHaveBeenCalledWith(request);
+    expect(fake.removeConvertedDatasets).toHaveBeenCalledWith([convertedDatasetId]);
+    expect(fake.exportDataset).toHaveBeenCalledWith({
+      datasetKind: 'converted',
+      datasetId: convertedDatasetId,
+      targetParentPath: '/output',
+    });
+    expect(fake.revealExport).toHaveBeenCalledWith('/output/export');
   });
 
   it('fails safely when desktop operations are unavailable in a browser', () => {
     window.qdbConverter = undefined;
     const service = TestBed.inject(DesktopApi);
-    expect(() => service.listDatasets()).toThrow(/unavailable/);
+    expect(() => service.listImportedDatasets()).toThrow(/unavailable/);
     expect(service.onImportProgress(() => undefined)).toBeTypeOf('function');
     expect(service.onConversionProgress(() => undefined)).toBeTypeOf('function');
   });

@@ -1,8 +1,11 @@
 import { Service } from '@angular/core';
 import type {
-  ConversionRequest,
+  CreateConvertedDatasetRequest,
   DatasetImportRequest,
   DatasetImportValidationRequest,
+  DatasetKind,
+  DatasetValidationRequest,
+  ExportDatasetRequest,
   QdbConverterApi,
   T3dbSourcePreparationRequest,
 } from '../../../shared/contracts';
@@ -15,11 +18,11 @@ export class DesktopApi {
     return window.qdbConverter;
   }
 
-  listDatasets() {
-    return this.api.listDatasets();
+  listImportedDatasets() {
+    return this.api.listImportedDatasets();
   }
-  validateDataset(id: string) {
-    return this.api.validateDataset(id);
+  validateDataset(request: DatasetValidationRequest) {
+    return this.api.validateDataset(request);
   }
   validateImportSource(request: DatasetImportValidationRequest) {
     return this.api.validateImportSource(request);
@@ -42,32 +45,44 @@ export class DesktopApi {
   cancelImport() {
     return this.api.cancelImport();
   }
-  renameDataset(id: string, name: string) {
-    return this.api.renameDataset(id, name);
+  renameImportedDataset(id: string, name: string) {
+    return this.api.renameImportedDataset(id, name);
   }
-  removeDataset(id: string) {
-    return this.api.removeDataset(id);
+  removeImportedDataset(id: string) {
+    return this.api.removeImportedDataset(id);
   }
-  removeDatasets(ids: string[]) {
-    return this.api.removeDatasets(ids);
+  removeImportedDatasets(ids: string[]) {
+    return this.api.removeImportedDatasets(ids);
   }
-  selectOutputDirectory() {
-    return this.api.selectOutputDirectory();
+  removeAllDatasets(kinds: DatasetKind[]) {
+    return this.api.removeAllDatasets(kinds);
   }
-  runConversion(request: ConversionRequest) {
-    return this.api.runConversion(request);
+  listConvertedDatasets() {
+    return this.api.listConvertedDatasets();
+  }
+  createConvertedDataset(request: CreateConvertedDatasetRequest) {
+    return this.api.createConvertedDataset(request);
   }
   cancelConversion(requestId: string) {
     return this.api.cancelConversion(requestId);
   }
-  listConversions() {
-    return this.api.listConversions();
+  renameConvertedDataset(id: string, name: string) {
+    return this.api.renameConvertedDataset(id, name);
   }
-  removeConversion(id: string) {
-    return this.api.removeConversion(id);
+  removeConvertedDataset(id: string) {
+    return this.api.removeConvertedDataset(id);
   }
-  revealOutput(path: string) {
-    return this.api.revealOutput(path);
+  removeConvertedDatasets(ids: string[]) {
+    return this.api.removeConvertedDatasets(ids);
+  }
+  selectExportDirectory() {
+    return this.api.selectExportDirectory();
+  }
+  exportDataset(request: ExportDatasetRequest) {
+    return this.api.exportDataset(request);
+  }
+  revealExport(path: string) {
+    return this.api.revealExport(path);
   }
   onImportProgress(listener: (message: string) => void) {
     return window.qdbConverter?.onImportProgress(listener) ?? (() => undefined);

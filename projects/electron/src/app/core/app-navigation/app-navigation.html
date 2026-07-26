@@ -1,23 +1,25 @@
-<a class="brand" routerLink="/" aria-label="QDB Converter datasets">
+<a class="brand" routerLink="/" aria-label="QDB Converter imported datasets">
   <img ngSrc="qdb-converter-icon.png" width="28" height="28" alt="" priority />
   <span>QDB Converter</span>
 </a>
 
 <nav aria-label="Primary navigation">
-  @for (link of links; track link.path) {
-    <a
-      matButton
-      routerLinkActive="active"
-      ariaCurrentWhenActive="page"
-      [routerLink]="link.path"
-      [routerLinkActiveOptions]="{ exact: link.exact ?? false }"
-    >
-      <mat-icon>{{ link.icon }}</mat-icon>
-      <span>{{ link.label }}</span>
-    </a>
-    @if (link.dividerAfter) {
-      <mat-divider />
-    }
+  @for (group of linkGroups; track group.id) {
+    <div class="nav-group" role="group" [attr.aria-labelledby]="'nav-group-' + group.id">
+      <span class="nav-group-label" [id]="'nav-group-' + group.id">{{ group.label }}</span>
+      @for (link of group.links; track link.path) {
+        <a
+          matButton
+          routerLinkActive="active"
+          ariaCurrentWhenActive="page"
+          [routerLink]="link.path"
+          [routerLinkActiveOptions]="{ exact: link.exact ?? false }"
+        >
+          <mat-icon>{{ link.icon }}</mat-icon>
+          <span>{{ link.label }}</span>
+        </a>
+      }
+    </div>
   }
 </nav>
 

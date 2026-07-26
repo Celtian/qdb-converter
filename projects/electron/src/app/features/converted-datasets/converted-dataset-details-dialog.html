@@ -1,0 +1,115 @@
+<h2 mat-dialog-title>{{ dataset.name }}</h2>
+
+<mat-dialog-content>
+  <dl class="details">
+    <dt>Status</dt>
+    <dd><app-status-badge [status]="dataset.status" /></dd>
+
+    <dt>Source dataset</dt>
+    <dd>{{ dataset.sourceDatasetName }}</dd>
+
+    <dt>Source version</dt>
+    <dd>FIFA {{ dataset.sourceVersion }}</dd>
+
+    <dt>Target version</dt>
+    <dd>FIFA {{ dataset.fifaVersion }}</dd>
+
+    <dt>Created</dt>
+    <dd>
+      <time [attr.datetime]="dataset.createdAt">
+        {{ dataset.createdAt | date: 'medium' }}
+      </time>
+    </dd>
+
+    <dt>{{ dataset.tableCount === 1 ? 'Table' : 'Tables' }}</dt>
+    <dd>{{ dataset.tableCount | number }}</dd>
+
+    <dt>{{ dataset.rowCount === 1 ? 'Row' : 'Rows' }}</dt>
+    <dd>{{ dataset.rowCount | number }}</dd>
+  </dl>
+
+  @if (dataset.error) {
+    <section class="notice notice--error" aria-labelledby="converted-dataset-error-heading">
+      <h3 id="converted-dataset-error-heading">Dataset unavailable</h3>
+      <p>{{ dataset.error }}</p>
+    </section>
+  }
+
+  <section class="detail-section" aria-labelledby="converted-table-details-heading">
+    <h3 id="converted-table-details-heading">Table conversion details</h3>
+
+    @if (dataset.tableSummaries.length) {
+      <ul class="table-summary-list">
+        @for (summary of dataset.tableSummaries; track summary.table) {
+          <li>
+            <h4>{{ summary.table }}</h4>
+            <dl class="table-summary">
+              <div>
+                <dt>{{ summary.rows === 1 ? 'Row' : 'Rows' }}</dt>
+                <dd>{{ summary.rows | number }}</dd>
+              </div>
+              <div>
+                <dt>Default substitutions</dt>
+                <dd>{{ summary.defaultSubstitutions | number }}</dd>
+              </div>
+              <div>
+                <dt>Rating differences</dt>
+                <dd>{{ summary.ratingDifferences | number }}</dd>
+              </div>
+            </dl>
+
+            @if (summary.warnings.length) {
+              <div class="table-warnings">
+                <strong>
+                  {{ summary.warnings.length === 1 ? 'Warning' : 'Warnings' }} ({{
+                    summary.warnings.length | number
+                  }})
+                </strong>
+                <ul class="warning-list">
+                  @for (warning of summary.warnings; track $index) {
+                    <li>{{ warning }}</li>
+                  }
+                </ul>
+              </div>
+            }
+          </li>
+        }
+      </ul>
+    } @else if (dataset.tableNames.length) {
+      <p class="fallback-message">
+        Detailed conversion statistics were not recorded for this dataset.
+      </p>
+      <ul class="table-name-list">
+        @for (tableName of dataset.tableNames; track tableName) {
+          <li>
+            <code>{{ tableName }}</code>
+          </li>
+        }
+      </ul>
+    } @else {
+      <p class="fallback-message">No table details were recorded for this dataset.</p>
+    }
+  </section>
+
+  @if (dataset.warnings.length) {
+    <section class="detail-section" aria-labelledby="converted-dataset-warnings-heading">
+      <h3 id="converted-dataset-warnings-heading">
+        Conversion {{ dataset.warnings.length === 1 ? 'warning' : 'warnings' }} ({{
+          dataset.warnings.length | number
+        }})
+      </h3>
+      <ul class="warning-list">
+        @for (warning of dataset.warnings; track $index) {
+          <li>{{ warning }}</li>
+        }
+      </ul>
+    </section>
+  }
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button type="button" matButton [mat-dialog-close]="closeResult">Close</button>
+  <button type="button" matButton="filled" aria-haspopup="dialog" [mat-dialog-close]="renameResult">
+    Rename
+  </button>
+</mat-dialog-actions>

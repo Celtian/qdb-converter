@@ -12,7 +12,12 @@ interface NavigationLink {
   icon: string;
   label: string;
   exact?: boolean;
-  dividerAfter?: boolean;
+}
+
+interface NavigationGroup {
+  id: string;
+  label: string;
+  links: readonly NavigationLink[];
 }
 
 @Component({
@@ -31,16 +36,36 @@ interface NavigationLink {
 export class AppNavigation {
   private readonly dialog = inject(MatDialog);
 
-  protected readonly links: readonly NavigationLink[] = [
-    { path: '/import', icon: 'upload_file', label: 'Import' },
-    { path: '/', icon: 'storage', label: 'Datasets', exact: true, dividerAfter: true },
-    { path: '/convert', icon: 'transform', label: 'Convert' },
-    { path: '/conversions', icon: 'history', label: 'Conversions' },
+  protected readonly linkGroups: readonly NavigationGroup[] = [
+    {
+      id: 'data',
+      label: 'Imports',
+      links: [
+        { path: '/import', icon: 'upload_file', label: 'Import' },
+        { path: '/', icon: 'storage', label: 'Datasets', exact: true },
+      ],
+    },
+    {
+      id: 'conversion',
+      label: 'Conversion',
+      links: [
+        { path: '/convert', icon: 'transform', label: 'Convert' },
+        { path: '/datasets', icon: 'storage', label: 'Datasets' },
+      ],
+    },
+    {
+      id: 'dataset-tools',
+      label: 'Dataset Tools',
+      links: [
+        { path: '/validate', icon: 'fact_check', label: 'Validate' },
+        { path: '/export', icon: 'drive_file_move', label: 'Export' },
+      ],
+    },
   ];
 
   protected openAbout(): void {
     this.dialog.open(AboutDialog, {
-      width: '440px',
+      width: '700px',
       maxWidth: 'calc(100vw - 2rem)',
       autoFocus: 'dialog',
     });

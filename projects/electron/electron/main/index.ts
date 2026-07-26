@@ -13,21 +13,30 @@ import { basename, dirname, isAbsolute, join, resolve } from 'node:path';
 import { Worker } from 'node:worker_threads';
 import { updateElectronApp } from 'update-electron-app';
 import type {
-  ConversionRecord,
-  ConversionRequest,
-  ConversionResult,
+  CreateConvertedDatasetRequest,
+  CreateConvertedDatasetResult,
   DatasetImportCandidate,
   DatasetImportRequest,
   DatasetImportResult,
   DatasetImportValidationRequest,
   DatasetImportValidationResult,
   DatasetSourceFileSelection,
+  DatasetValidationRequest,
   DatasetValidationResult,
+  ExportDatasetRequest,
+  ExportDatasetResult,
+  TableConversionSummary,
   T3dbSourcePreparationRequest,
   ValidationError,
 } from '../../shared/contracts';
-import { isSupportedTable, isSupportedVersion } from '../../shared/table-config';
-import { DatasetLibrary, type DatasetRecord } from '../dataset-library';
+import { isSupportedVersion } from '../../shared/table-config';
+import { parseDatasetKinds } from '../dataset-cleanup';
+import {
+  DatasetLibrary,
+  type ConvertedDatasetRecord,
+  type ImportedDatasetRecord,
+} from '../dataset-library';
+import { exportDatasetSnapshot } from '../dataset-exporter';
 import type { InspectedSource } from '../source-inspection';
 import {
   SourceSelections,
@@ -38,7 +47,8 @@ import {
 let mainWindow: BrowserWindow | undefined;
 let library: DatasetLibrary;
 const selections = new SourceSelections();
-const outputSelections = new Set<string>();
+const exportSelections = new Set<string>();
+const revealedExports = new Set<string>();
 let activeImportWorker: Worker | undefined;
 let importCancelled = false;
 let activeConversionWorker: Worker | undefined;
@@ -115,7 +125,7 @@ const inspectSource = (
   });
 
 type ValidationWorkerData =
-  | { kind: 'dataset'; dataset: DatasetRecord }
+  | { kind: 'dataset'; dataset: ImportedDatasetRecord | ConvertedDatasetRecord }
   | { kind: 'import-source'; source: SelectedSource; fifaVersion: number };
 
 type ValidationWorkerResult = DatasetValidationResult | DatasetImportValidationResult;
@@ -155,11 +165,23 @@ const runValidationWorker = (data: ValidationWorkerData): Promise<ValidationWork
 
 const validateDataset = async (
   event: IpcMainInvokeEvent,
-  id: string,
+  request: DatasetValidationRequest,
 ): Promise<DatasetValidationResult> => {
   trustedSender(event);
-  validateId(id);
-  const result = await runValidationWorker({ kind: 'dataset', dataset: library.dataset(id) });
+  if (
+    !request ||
+    typeof request !== 'object' ||
+    (request.datasetKind !== 'imported' && request.datasetKind !== 'converted')
+  )
+    throw new Error('Choose a dataset type.');
+  validateId(request.datasetId);
+  const result = await runValidationWorker({
+    kind: 'dataset',
+    dataset:
+      request.datasetKind === 'imported'
+        ? library.importedDataset(request.datasetId)
+        : library.convertedDataset(request.datasetId),
+  });
   if (!('datasetId' in result)) throw new Error('Dataset validation returned an invalid result.');
   return result;
 };
@@ -268,7 +290,7 @@ const prepareT3dbSource = async (
 
 interface ImportWorkerResult {
   status: 'completed' | 'failed' | 'cancelled';
-  record?: DatasetRecord;
+  record?: ImportedDatasetRecord;
   message?: string;
 }
 
@@ -292,15 +314,18 @@ const runImportWorker = (
       activeImportWorker = undefined;
       resolve(result);
     };
-    worker.on('message', (message: { type?: string; message?: string; record?: DatasetRecord }) => {
-      if (message.type === 'progress' && message.message) {
-        event.sender.send('qdb:datasets:import-progress', message.message);
-      } else if (message.type === 'completed' && message.record) {
-        finish({ status: 'completed', record: message.record });
-      } else if (message.type === 'failed') {
-        finish({ status: 'failed', message: message.message });
-      }
-    });
+    worker.on(
+      'message',
+      (message: { type?: string; message?: string; record?: ImportedDatasetRecord }) => {
+        if (message.type === 'progress' && message.message) {
+          event.sender.send('qdb:imported-datasets:import-progress', message.message);
+        } else if (message.type === 'completed' && message.record) {
+          finish({ status: 'completed', record: message.record });
+        } else if (message.type === 'failed') {
+          finish({ status: 'failed', message: message.message });
+        }
+      },
+    );
     worker.on('error', (error) => finish({ status: 'failed', message: error.message }));
     worker.on('exit', (code) => {
       if (!settled)
@@ -346,19 +371,19 @@ const importDatasets = async (
         throw new Error('The selected FIFA version does not match the source schema.');
       if (!selections.canImport(request.selectionId, request.fifaVersion))
         throw new Error('Run validations successfully for this source before importing.');
-      const name = library.ensureUniqueName(request.name);
+      const name = library.ensureUniqueImportedName(request.name);
       const workerResult = await runImportWorker(event, {
         id,
         name,
         fifaVersion: request.fifaVersion,
         source,
-        temporaryDirectory: library.temporaryDirectory(id),
+        temporaryDirectory: library.importedTemporaryDirectory(id),
       });
       if (workerResult.status === 'cancelled') {
-        library.discardTemporary(id);
+        library.discardImportedTemporary(id);
         results.push({ selectionId: request.selectionId, status: 'cancelled' });
       } else if (workerResult.status === 'failed' || !workerResult.record) {
-        library.discardTemporary(id);
+        library.discardImportedTemporary(id);
         results.push({
           selectionId: request.selectionId,
           status: 'failed',
@@ -371,12 +396,12 @@ const importDatasets = async (
         results.push({
           selectionId: request.selectionId,
           status: 'completed',
-          dataset: library.install(workerResult.record),
+          dataset: library.installImported(workerResult.record),
         });
         selections.delete(request.selectionId);
       }
     } catch (error) {
-      library.discardTemporary(id);
+      library.discardImportedTemporary(id);
       results.push({
         selectionId: request.selectionId,
         status: 'failed',
@@ -391,29 +416,28 @@ const importDatasets = async (
 };
 
 interface WorkerConversionOutput {
-  outputPath: string;
-  tables: ConversionResult['tables'];
+  tables: TableConversionSummary[];
   warnings: string[];
 }
 
 const runConversionWorker = (
   event: IpcMainInvokeEvent,
-  dataset: DatasetRecord,
-  request: ConversionRequest,
-  completedDatasets: number,
+  dataset: ImportedDatasetRecord,
+  request: CreateConvertedDatasetRequest,
+  outputDirectory: string,
 ): Promise<{
-  status: ConversionResult['status'];
+  status: CreateConvertedDatasetResult['status'];
   output?: WorkerConversionOutput;
   message?: string;
 }> =>
   new Promise((resolve) => {
     const worker = new Worker(join(__dirname, '..', 'conversion-worker.js'), {
-      workerData: { dataset, request },
+      workerData: { dataset, request, outputDirectory },
     });
     activeConversionWorker = worker;
     let settled = false;
     const finish = (result: {
-      status: ConversionResult['status'];
+      status: CreateConvertedDatasetResult['status'];
       output?: WorkerConversionOutput;
       message?: string;
     }): void => {
@@ -428,9 +452,7 @@ const runConversionWorker = (
         if (message.type === 'progress' && message.message) {
           event.sender.send('qdb:conversion:progress', {
             requestId: request.requestId,
-            datasetId: dataset.id,
-            completedDatasets,
-            totalDatasets: request.datasetIds.length,
+            sourceDatasetId: dataset.id,
             message: message.message,
           });
         } else if (message.type === 'completed' && message.output) {
@@ -451,132 +473,128 @@ const runConversionWorker = (
     });
   });
 
-const validateConversionRequest = (request: ConversionRequest): void => {
+const validateConversionRequest = (request: CreateConvertedDatasetRequest): string => {
+  if (!request || typeof request !== 'object') throw new Error('Invalid conversion request.');
   validateId(request.requestId);
-  if (!Array.isArray(request.datasetIds) || request.datasetIds.length < 1)
-    throw new Error('Select at least one dataset.');
-  request.datasetIds.forEach(validateId);
+  validateId(request.sourceDatasetId);
   if (!isSupportedVersion(request.targetVersion))
     throw new Error('Unsupported target FIFA version.');
-  if (
-    !Array.isArray(request.tables) ||
-    !request.tables.length ||
-    !request.tables.every(isSupportedTable)
-  )
-    throw new Error('Select at least one supported table.');
-  if (
-    typeof request.outputParentPath !== 'string' ||
-    !request.outputParentPath.trim() ||
-    !isAbsolute(request.outputParentPath)
-  )
-    throw new Error('Choose an output folder.');
-  const outputPath = resolve(request.outputParentPath);
-  const knownFromHistory = library
-    .listConversions()
-    .some((record) => record.outputPath && dirname(record.outputPath) === outputPath);
-  if (!outputSelections.has(outputPath) && !knownFromHistory)
-    throw new Error('Choose the output folder again before converting.');
-  if (typeof request.extendContracts !== 'boolean') throw new Error('Invalid transform settings.');
+  if (typeof request.name !== 'string') throw new Error('Invalid converted dataset name.');
+  return library.ensureUniqueConvertedName(request.name);
 };
 
 const runConversion = async (
   event: IpcMainInvokeEvent,
-  request: ConversionRequest,
-): Promise<ConversionResult[]> => {
+  request: CreateConvertedDatasetRequest,
+): Promise<CreateConvertedDatasetResult> => {
   trustedSender(event);
   if (activeConversionWorker) throw new Error('Another conversion is already running.');
-  validateConversionRequest(request);
+  const name = validateConversionRequest(request);
   cancelledConversions.delete(request.requestId);
-  const results: ConversionResult[] = [];
-
-  for (const datasetId of request.datasetIds) {
-    const dataset = library.dataset(datasetId);
-    const started = new Date();
-    if (cancelledConversions.has(request.requestId)) {
-      results.push({ datasetId, status: 'cancelled', tables: [], warnings: [] });
-      continue;
-    }
-    const workerResult = await runConversionWorker(event, dataset, request, results.length);
-    const completed = new Date();
-    const error =
-      workerResult.status === 'failed'
-        ? validationError(
-            'conversion-failed',
-            workerResult.message ?? 'The dataset could not be converted.',
-          )
-        : workerResult.status === 'cancelled'
+  const source = library.importedDataset(request.sourceDatasetId);
+  const id = randomUUID();
+  const temporaryDirectory = library.convertedTemporaryDirectory(id);
+  try {
+    const workerResult = await runConversionWorker(event, source, request, temporaryDirectory);
+    const tables = workerResult.output?.tables ?? [];
+    const warnings = workerResult.output?.warnings ?? [];
+    if (workerResult.status !== 'completed' || !workerResult.output) {
+      library.discardConvertedTemporary(id);
+      const error =
+        workerResult.status === 'cancelled'
           ? validationError('cancelled', 'Conversion was cancelled.')
-          : undefined;
-    const result: ConversionResult = {
-      datasetId,
-      status: workerResult.status,
-      outputPath: workerResult.output?.outputPath,
-      tables: workerResult.output?.tables ?? [],
-      warnings: workerResult.output?.warnings ?? [],
-      error,
+          : validationError(
+              'conversion-failed',
+              workerResult.message ?? 'The dataset could not be converted.',
+            );
+      return {
+        sourceDatasetId: source.id,
+        status: workerResult.status,
+        tables,
+        warnings,
+        error,
+      };
+    }
+    const record: ConvertedDatasetRecord = {
+      id,
+      name,
+      sourceDatasetId: source.id,
+      sourceDatasetName: source.name,
+      sourceVersion: source.fifaVersion,
+      fifaVersion: request.targetVersion,
+      createdAt: new Date().toISOString(),
+      status: 'available',
+      tableNames: tables.map((table) => table.table),
+      tableCount: tables.length,
+      rowCount: tables.reduce((total, table) => total + table.rows, 0),
+      tableSummaries: tables,
+      warnings,
+      snapshotDirectory: temporaryDirectory,
     };
-    results.push(result);
-    const record: ConversionRecord = {
-      id: randomUUID(),
-      requestId: request.requestId,
-      datasetId,
-      datasetName: dataset.name,
-      sourceVersion: dataset.fifaVersion,
-      targetVersion: request.targetVersion,
-      source: structuredClone(dataset.source),
-      status: result.status,
-      outputPath: result.outputPath,
-      selectedTables: [...request.tables],
-      tableSummaries: result.tables,
-      warnings: result.warnings,
-      error: result.error,
-      startedAt: started.toISOString(),
-      completedAt: completed.toISOString(),
-      durationMs: completed.getTime() - started.getTime(),
-    };
-    library.addConversion(record);
+    const dataset = library.installConverted(record);
     event.sender.send('qdb:conversion:progress', {
       requestId: request.requestId,
-      datasetId,
-      completedDatasets: results.length,
-      totalDatasets: request.datasetIds.length,
-      message: `${dataset.name}: ${result.status}.`,
+      sourceDatasetId: source.id,
+      message: `${dataset.name} created.`,
     });
+    return {
+      sourceDatasetId: source.id,
+      status: 'completed',
+      dataset,
+      tables,
+      warnings,
+    };
+  } catch (error) {
+    library.discardConvertedTemporary(id);
+    return {
+      sourceDatasetId: source.id,
+      status: 'failed',
+      tables: [],
+      warnings: [],
+      error: validationError(
+        /already exists/i.test(String(error)) ? 'duplicate-name' : 'conversion-failed',
+        error instanceof Error ? error.message : String(error),
+      ),
+    };
+  } finally {
+    cancelledConversions.delete(request.requestId);
   }
-  cancelledConversions.delete(request.requestId);
-  return results;
 };
 
 const registerIpc = (): void => {
-  ipcMain.handle('qdb:datasets:list', (event) => {
+  ipcMain.handle('qdb:imported-datasets:list', (event) => {
     trustedSender(event);
-    return library.listDatasets();
+    return library.listImportedDatasets();
   });
   ipcMain.handle('qdb:datasets:validate', validateDataset);
-  ipcMain.handle('qdb:datasets:validate-import-source', validateImportSource);
-  ipcMain.handle('qdb:datasets:select-text', selectTextSources);
-  ipcMain.handle('qdb:datasets:select-t3db-database', (event) => selectT3dbFile(event, 'database'));
-  ipcMain.handle('qdb:datasets:select-t3db-metadata', (event) => selectT3dbFile(event, 'metadata'));
-  ipcMain.handle('qdb:datasets:prepare-t3db', prepareT3dbSource);
-  ipcMain.handle('qdb:datasets:import', importDatasets);
-  ipcMain.handle('qdb:datasets:cancel-import', (event) => {
+  ipcMain.handle('qdb:imported-datasets:validate-source', validateImportSource);
+  ipcMain.handle('qdb:imported-datasets:select-text', selectTextSources);
+  ipcMain.handle('qdb:imported-datasets:select-t3db-database', (event) =>
+    selectT3dbFile(event, 'database'),
+  );
+  ipcMain.handle('qdb:imported-datasets:select-t3db-metadata', (event) =>
+    selectT3dbFile(event, 'metadata'),
+  );
+  ipcMain.handle('qdb:imported-datasets:prepare-t3db', prepareT3dbSource);
+  ipcMain.handle('qdb:imported-datasets:import', importDatasets);
+  ipcMain.handle('qdb:imported-datasets:cancel-import', (event) => {
     trustedSender(event);
     importCancelled = true;
     void activeImportWorker?.terminate();
     return activeImportWorker !== undefined;
   });
-  ipcMain.handle('qdb:datasets:rename', (event, id: string, name: string) => {
+  ipcMain.handle('qdb:imported-datasets:rename', (event, id: string, name: string) => {
     trustedSender(event);
     validateId(id);
     if (typeof name !== 'string') throw new Error('Invalid dataset name.');
-    return library.rename(id, name);
+    return library.renameImported(id, name);
   });
-  ipcMain.handle('qdb:datasets:remove', (event, id: string) => {
+  ipcMain.handle('qdb:imported-datasets:remove', (event, id: string) => {
     trustedSender(event);
     validateId(id);
-    return library.remove(id);
+    return library.removeImported(id);
   });
-  ipcMain.handle('qdb:datasets:remove-many', (event, ids: unknown) => {
+  ipcMain.handle('qdb:imported-datasets:remove-many', (event, ids: unknown) => {
     trustedSender(event);
     if (
       !Array.isArray(ids) ||
@@ -586,18 +604,40 @@ const registerIpc = (): void => {
     )
       throw new Error('Invalid dataset identifiers.');
     ids.forEach(validateId);
-    return library.removeMany(ids);
+    return library.removeImportedMany(ids);
   });
-  ipcMain.handle('qdb:conversion:select-output', async (event) => {
-    const paths = await openDialog(event, {
-      title: 'Select conversion output folder',
-      properties: ['openDirectory', 'createDirectory'],
-    });
-    const path = paths[0] ? resolve(paths[0]) : undefined;
-    if (path) outputSelections.add(path);
-    return path;
+  ipcMain.handle('qdb:converted-datasets:list', (event) => {
+    trustedSender(event);
+    return library.listConvertedDatasets();
   });
-  ipcMain.handle('qdb:conversion:run', runConversion);
+  ipcMain.handle('qdb:converted-datasets:create', runConversion);
+  ipcMain.handle('qdb:converted-datasets:rename', (event, id: string, name: string) => {
+    trustedSender(event);
+    validateId(id);
+    if (typeof name !== 'string') throw new Error('Invalid dataset name.');
+    return library.renameConverted(id, name);
+  });
+  ipcMain.handle('qdb:converted-datasets:remove', (event, id: string) => {
+    trustedSender(event);
+    validateId(id);
+    return library.removeConverted(id);
+  });
+  ipcMain.handle('qdb:converted-datasets:remove-many', (event, ids: unknown) => {
+    trustedSender(event);
+    if (
+      !Array.isArray(ids) ||
+      ids.length < 1 ||
+      ids.length > 100 ||
+      !ids.every((id): id is string => typeof id === 'string')
+    )
+      throw new Error('Invalid dataset identifiers.');
+    ids.forEach(validateId);
+    return library.removeConvertedMany(ids);
+  });
+  ipcMain.handle('qdb:datasets:remove-all', (event, kinds: unknown) => {
+    trustedSender(event);
+    return library.removeAll(parseDatasetKinds(kinds));
+  });
   ipcMain.handle('qdb:conversion:cancel', (event, requestId: string) => {
     trustedSender(event);
     validateId(requestId);
@@ -605,22 +645,45 @@ const registerIpc = (): void => {
     void activeConversionWorker?.terminate();
     return activeConversionWorker !== undefined;
   });
-  ipcMain.handle('qdb:conversion:list', (event) => {
-    trustedSender(event);
-    return library.listConversions();
+  ipcMain.handle('qdb:export:select-directory', async (event) => {
+    const paths = await openDialog(event, {
+      title: 'Select dataset export folder',
+      properties: ['openDirectory', 'createDirectory'],
+    });
+    const path = paths[0] ? resolve(paths[0]) : undefined;
+    if (path) exportSelections.add(path);
+    return path;
   });
-  ipcMain.handle('qdb:conversion:remove', (event, id: string) => {
+  ipcMain.handle(
+    'qdb:export:run',
+    async (event, request: ExportDatasetRequest): Promise<ExportDatasetResult> => {
+      trustedSender(event);
+      if (!request || typeof request !== 'object') throw new Error('Invalid export request.');
+      if (request.datasetKind !== 'imported' && request.datasetKind !== 'converted')
+        throw new Error('Choose a dataset type.');
+      validateId(request.datasetId);
+      if (
+        typeof request.targetParentPath !== 'string' ||
+        !request.targetParentPath.trim() ||
+        !isAbsolute(request.targetParentPath)
+      )
+        throw new Error('Choose an export folder.');
+      const targetParentPath = resolve(request.targetParentPath);
+      if (!exportSelections.has(targetParentPath))
+        throw new Error('Choose the export folder again before exporting.');
+      const dataset =
+        request.datasetKind === 'imported'
+          ? library.importedDataset(request.datasetId)
+          : library.convertedDataset(request.datasetId);
+      const outputPath = await exportDatasetSnapshot(dataset, targetParentPath);
+      revealedExports.add(outputPath);
+      return { datasetId: dataset.id, outputPath };
+    },
+  );
+  ipcMain.handle('qdb:export:reveal', (event, path: string) => {
     trustedSender(event);
-    validateId(id);
-    return library.removeConversion(id);
-  });
-  ipcMain.handle('qdb:conversion:reveal', (event, path: string) => {
-    trustedSender(event);
-    if (
-      typeof path !== 'string' ||
-      !library.listConversions().some((record) => record.outputPath === path)
-    )
-      throw new Error('Unknown conversion output path.');
+    if (typeof path !== 'string' || !revealedExports.has(path))
+      throw new Error('Unknown export path.');
     shell.showItemInFolder(path);
     return true;
   });
