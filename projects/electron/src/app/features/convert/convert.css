@@ -1,15 +1,53 @@
+.wizard-card {
+  overflow: hidden;
+}
+
+.qdb-wizard {
+  --mat-stepper-container-color: transparent;
+}
+
+.step-content {
+  display: grid;
+  gap: 1.5rem;
+  padding: 1.5rem 0 0.5rem;
+}
+
+.step-content h2,
+.step-content p {
+  margin: 0;
+}
+
+.step-content h2 {
+  font-size: 1.35rem;
+}
+
 .choice-grid,
 .table-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
   gap: 0.75rem;
-  margin-block: 1rem;
+}
+
+.choice-grid {
+  margin-block: 0.5rem;
+}
+
+.table-grid {
+  margin-top: 0.75rem;
+}
+
+.output-options {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
 }
 
 .step-actions {
+  align-items: center;
   display: flex;
+  justify-content: flex-end;
   gap: 0.5rem;
-  margin-top: 1.5rem;
 }
 
 .field-label {
@@ -27,4 +65,14 @@
 .path {
   overflow-wrap: anywhere;
   color: var(--mat-sys-on-surface-variant);
+}
+
+@media (max-width: 600px) {
+  .step-actions {
+    flex-wrap: wrap;
+  }
+
+  .step-actions button {
+    flex: 1 1 auto;
+  }
 }

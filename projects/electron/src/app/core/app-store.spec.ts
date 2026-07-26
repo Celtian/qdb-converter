@@ -44,8 +44,12 @@ const conversion: ConversionRecord = {
 
 const api = (): QdbConverterApi => ({
   listDatasets: vi.fn(async () => [dataset]),
+  validateDataset: vi.fn(),
+  validateImportSource: vi.fn(),
   selectTextSources: vi.fn(async () => []),
-  selectT3dbSource: vi.fn(async () => undefined),
+  selectT3dbDatabaseFile: vi.fn(async () => undefined),
+  selectT3dbMetadataFile: vi.fn(async () => undefined),
+  prepareT3dbSource: vi.fn(),
   importDatasets: vi.fn(
     async () =>
       [{ selectionId: 'selection', status: 'completed', dataset }] satisfies DatasetImportResult[],
@@ -53,6 +57,7 @@ const api = (): QdbConverterApi => ({
   cancelImport: vi.fn(async () => true),
   renameDataset: vi.fn(async () => dataset),
   removeDataset: vi.fn(async () => true),
+  removeDatasets: vi.fn(async () => 1),
   selectOutputDirectory: vi.fn(async () => '/output'),
   runConversion: vi.fn(async () => [
     {
@@ -89,9 +94,11 @@ describe('AppStore', () => {
     await service.importDatasets([{ selectionId: 'selection', name: 'Fixture', fifaVersion: 23 }]);
     await service.renameDataset(dataset.id, 'Renamed');
     await service.removeDataset(dataset.id);
+    await service.removeDatasets([dataset.id]);
     expect(desktop.importDatasets).toHaveBeenCalled();
     expect(desktop.renameDataset).toHaveBeenCalled();
-    expect(desktop.removeDataset).toHaveBeenCalled();
+    expect(desktop.removeDatasets).toHaveBeenNthCalledWith(1, [dataset.id]);
+    expect(desktop.removeDatasets).toHaveBeenNthCalledWith(2, [dataset.id]);
   });
 
   it('runs conversions and removes history entries', async () => {
@@ -112,6 +119,17 @@ describe('AppStore', () => {
     vi.mocked(desktop.listDatasets).mockRejectedValueOnce(new Error('offline'));
     await service.refresh();
     expect(service.error()).toBe('offline');
+    expect(service.loading()).toBe(false);
+  });
+
+  it('reports batch deletion failures and leaves catalog state available', async () => {
+    await service.refresh();
+    vi.mocked(desktop.removeDatasets).mockRejectedValueOnce(new Error('delete failed'));
+
+    await expect(service.removeDatasets([dataset.id])).resolves.toBe(false);
+
+    expect(service.datasets()).toEqual([dataset]);
+    expect(service.error()).toBe('delete failed');
     expect(service.loading()).toBe(false);
   });
 });

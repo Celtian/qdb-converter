@@ -9,76 +9,98 @@
   <mat-form-field appearance="outline" class="search" subscriptSizing="dynamic">
     <mat-label>Search conversion history</mat-label>
     <mat-icon matPrefix>search</mat-icon>
-    <input matInput type="search" (input)="setQuery($event)" />
+    <input matInput type="search" [value]="query()" (input)="setQuery($event)" />
   </mat-form-field>
 
   <div class="table-container">
-    <table mat-table [dataSource]="filtered()">
-      <ng-container matColumnDef="dataset">
-        <th mat-header-cell *matHeaderCellDef>Dataset</th>
-        <td mat-cell *matCellDef="let record">
-          <strong>{{ record.datasetName }}</strong>
-        </td>
-      </ng-container>
-      <ng-container matColumnDef="versions">
-        <th mat-header-cell *matHeaderCellDef>Conversion</th>
-        <td mat-cell *matCellDef="let record">
-          FIFA {{ record.sourceVersion }} → {{ record.targetVersion }}
-        </td>
-      </ng-container>
-      <ng-container matColumnDef="status">
-        <th mat-header-cell *matHeaderCellDef>Status</th>
-        <td mat-cell *matCellDef="let record">
-          <mat-chip>{{ record.status }}</mat-chip>
-        </td>
-      </ng-container>
-      <ng-container matColumnDef="tables">
-        <th mat-header-cell *matHeaderCellDef>Tables</th>
-        <td mat-cell *matCellDef="let record">
-          {{ record.tableSummaries.length }} / {{ record.selectedTables.length }}
-        </td>
-      </ng-container>
-      <ng-container matColumnDef="completed">
-        <th mat-header-cell *matHeaderCellDef>Completed</th>
-        <td mat-cell *matCellDef="let record">{{ record.completedAt | date: 'medium' }}</td>
-      </ng-container>
-      <ng-container matColumnDef="duration">
-        <th mat-header-cell *matHeaderCellDef>Duration</th>
-        <td mat-cell *matCellDef="let record">
-          {{ record.durationMs / 1000 | number: '1.1-1' }} s
-        </td>
-      </ng-container>
-      <ng-container matColumnDef="actions">
-        <th mat-header-cell *matHeaderCellDef><span class="visually-hidden">Actions</span></th>
-        <td mat-cell *matCellDef="let record">
-          <button
-            matIconButton
-            [matMenuTriggerFor]="actions"
-            [attr.aria-label]="'Actions for ' + record.datasetName"
-          >
-            <mat-icon>more_vert</mat-icon>
-          </button>
-          <mat-menu #actions="matMenu">
-            <button mat-menu-item [disabled]="!record.outputPath" (click)="reveal(record)">
-              <mat-icon>folder_open</mat-icon>Reveal output
+    @if (filtered().length) {
+      <table mat-table [dataSource]="paged()">
+        <ng-container matColumnDef="dataset">
+          <th mat-header-cell *matHeaderCellDef>Dataset</th>
+          <td mat-cell *matCellDef="let record">
+            <strong>{{ record.datasetName }}</strong>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="versions">
+          <th mat-header-cell *matHeaderCellDef>Conversion</th>
+          <td mat-cell *matCellDef="let record">
+            FIFA {{ record.sourceVersion }} → {{ record.targetVersion }}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef>Status</th>
+          <td mat-cell *matCellDef="let record">
+            <app-status-badge [status]="record.status" />
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="tables">
+          <th mat-header-cell *matHeaderCellDef>Tables</th>
+          <td mat-cell *matCellDef="let record">
+            {{ record.tableSummaries.length }} / {{ record.selectedTables.length }}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="completed">
+          <th mat-header-cell *matHeaderCellDef>Completed</th>
+          <td mat-cell *matCellDef="let record">{{ record.completedAt | date: 'medium' }}</td>
+        </ng-container>
+        <ng-container matColumnDef="duration">
+          <th mat-header-cell *matHeaderCellDef>Duration</th>
+          <td mat-cell *matCellDef="let record">
+            {{ record.durationMs / 1000 | number: '1.1-1' }} s
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef><span class="visually-hidden">Actions</span></th>
+          <td mat-cell *matCellDef="let record">
+            <button
+              matIconButton
+              [matMenuTriggerFor]="actions"
+              [attr.aria-label]="'Actions for ' + record.datasetName"
+            >
+              <mat-icon>more_vert</mat-icon>
             </button>
-            <button mat-menu-item [disabled]="!record.outputPath" (click)="retry(record)">
-              <mat-icon>refresh</mat-icon>Retry
-            </button>
-            <button mat-menu-item (click)="remove(record)">
-              <mat-icon>delete</mat-icon>Remove history
-            </button>
-          </mat-menu>
-        </td>
-      </ng-container>
-      <tr mat-header-row *matHeaderRowDef="columns"></tr>
-      <tr mat-row *matRowDef="let row; columns: columns"></tr>
-    </table>
-    @if (!filtered().length) {
+            <mat-menu #actions="matMenu">
+              <button mat-menu-item [disabled]="!record.outputPath" (click)="reveal(record)">
+                <mat-icon>folder_open</mat-icon>Reveal output
+              </button>
+              <button mat-menu-item [disabled]="!record.outputPath" (click)="retry(record)">
+                <mat-icon>refresh</mat-icon>Retry
+              </button>
+              <button mat-menu-item (click)="remove(record)">
+                <mat-icon>delete</mat-icon>Remove history
+              </button>
+            </mat-menu>
+          </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="columns"></tr>
+        <tr mat-row *matRowDef="let row; columns: columns"></tr>
+      </table>
+
+      <mat-paginator
+        aria-label="Select conversions page"
+        [length]="filtered().length"
+        [pageIndex]="effectivePageIndex()"
+        [pageSize]="pageSize()"
+        [pageSizeOptions]="pageSizeOptions"
+        (page)="pageChanged($event)"
+      />
+    } @else if (!store.loading()) {
       <div class="empty-state">
-        <mat-icon>history</mat-icon>
-        <h2>No conversion history</h2>
-        <p>Completed, failed, and cancelled conversion attempts will appear here.</p>
+        @if (!store.conversions().length) {
+          <div role="status">
+            <mat-icon>history</mat-icon>
+            <h2>No conversion history</h2>
+            <p>Completed, failed, and cancelled conversion attempts will appear here.</p>
+          </div>
+        } @else {
+          <div role="status">
+            <mat-icon>search_off</mat-icon>
+            <h2>No conversions match your search</h2>
+            <p>Try a different search or clear it to show all conversion history.</p>
+          </div>
+
+          <button matButton (click)="clearSearch()">Clear search</button>
+        }
       </div>
     }
   </div>

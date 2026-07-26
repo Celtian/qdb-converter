@@ -1,0 +1,68 @@
+<h2 mat-dialog-title>{{ dataset.name }}</h2>
+
+<mat-dialog-content>
+  <dl class="details">
+    <dt>Status</dt>
+    <dd><app-status-badge [status]="dataset.status" /></dd>
+
+    <dt>FIFA version</dt>
+    <dd>FIFA {{ dataset.fifaVersion }}</dd>
+
+    <dt>Source</dt>
+    <dd>{{ dataset.source.kind === 't3db' ? 't3db' : 'Text folder' }}</dd>
+
+    <dt>Imported</dt>
+    <dd>
+      <time [attr.datetime]="dataset.source.importedAt">
+        {{ dataset.source.importedAt | date: 'medium' }}
+      </time>
+    </dd>
+
+    <dt>Contents</dt>
+    <dd>
+      {{ dataset.tableCount | number }}
+      {{ dataset.tableCount === 1 ? 'table' : 'tables' }} ·
+      {{ dataset.rowCount | number }}
+      {{ dataset.rowCount === 1 ? 'row' : 'rows' }}
+    </dd>
+  </dl>
+
+  @if (dataset.status === 'corrupt' && dataset.error) {
+    <section class="notice notice--error" aria-labelledby="dataset-error-heading">
+      <h3 id="dataset-error-heading">Dataset unavailable</h3>
+      <p>{{ dataset.error }}</p>
+    </section>
+  }
+
+  <section class="detail-section" aria-labelledby="dataset-source-heading">
+    <h3 id="dataset-source-heading">Original source</h3>
+    <ul class="path-list">
+      @for (path of dataset.source.originalPaths; track $index) {
+        <li>
+          <code>{{ path }}</code>
+        </li>
+      } @empty {
+        <li>Source location unavailable.</li>
+      }
+    </ul>
+  </section>
+
+  @if (dataset.warnings.length) {
+    <section class="detail-section" aria-labelledby="dataset-warnings-heading">
+      <h3 id="dataset-warnings-heading">
+        Import {{ dataset.warnings.length === 1 ? 'warning' : 'warnings' }} ({{
+          dataset.warnings.length | number
+        }})
+      </h3>
+      <ul class="warning-list">
+        @for (warning of dataset.warnings; track $index) {
+          <li>{{ warning }}</li>
+        }
+      </ul>
+    </section>
+  }
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button type="button" matButton mat-dialog-close>Close</button>
+</mat-dialog-actions>

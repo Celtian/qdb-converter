@@ -1,0 +1,50 @@
+:host {
+  display: block;
+}
+
+mat-dialog-content {
+  width: min(52rem, 80vw);
+  max-height: min(70vh, 50rem);
+}
+
+.loading-state {
+  display: grid;
+  justify-items: center;
+  gap: 1rem;
+  min-height: 12rem;
+  padding: 2rem;
+}
+
+.loading-state p,
+.validation-summary p {
+  margin: 0;
+}
+
+.validation-summary {
+  display: flex;
+  gap: 1rem;
+  padding: 1rem;
+  border: 1px solid;
+  border-radius: 0.75rem;
+}
+
+.validation-summary mat-icon {
+  flex: 0 0 auto;
+}
+
+.validation-summary h3 {
+  margin: 0 0 0.25rem;
+}
+
+.validation-summary--error {
+  background: var(--mat-sys-error-container);
+  border-color: var(--mat-sys-error);
+  color: var(--mat-sys-on-error-container);
+}
+
+@media (width <= 640px) {
+  mat-dialog-content {
+    width: auto;
+    max-height: 65vh;
+  }
+}

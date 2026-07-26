@@ -63,9 +63,23 @@ export class AppStore {
     await this.refresh();
   }
 
-  async removeDataset(id: string): Promise<void> {
-    await this.desktop.removeDataset(id);
-    await this.refresh();
+  async removeDataset(id: string): Promise<boolean> {
+    return this.removeDatasets([id]);
+  }
+
+  async removeDatasets(ids: string[]): Promise<boolean> {
+    this.loading.set(true);
+    this.error.set('');
+    try {
+      await this.desktop.removeDatasets(ids);
+      await this.refresh();
+      return true;
+    } catch (error) {
+      this.error.set(error instanceof Error ? error.message : String(error));
+      return false;
+    } finally {
+      this.loading.set(false);
+    }
   }
 
   async runConversion(request: ConversionRequest) {

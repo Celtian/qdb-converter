@@ -22,6 +22,11 @@ export interface DatasetDescriptor {
   error?: string;
 }
 
+export interface DatasetImportTableSummary {
+  table: string;
+  rows: number;
+}
+
 export interface DatasetImportCandidate {
   selectionId: string;
   suggestedName: string;
@@ -29,8 +34,19 @@ export interface DatasetImportCandidate {
   originalPaths: string[];
   detectedVersion?: number;
   matchingVersions: number[];
-  tableNames: string[];
+  tables: DatasetImportTableSummary[];
   warnings: string[];
+}
+
+export interface DatasetSourceFileSelection {
+  id: string;
+  displayPath: string;
+  fileName: string;
+}
+
+export interface T3dbSourcePreparationRequest {
+  databaseFileId: string;
+  metadataFileId: string;
 }
 
 export interface DatasetImportRequest {
@@ -44,6 +60,42 @@ export interface DatasetImportResult {
   status: OperationStatus;
   dataset?: DatasetDescriptor;
   error?: ValidationError;
+}
+
+export interface DatasetValidationSample {
+  row: number;
+  value: string | number;
+}
+
+export interface DatasetValidationIssue {
+  table: string;
+  field?: string;
+  message: string;
+  occurrences: number;
+  samples: DatasetValidationSample[];
+}
+
+export interface DatasetValidationReport {
+  validatedAt: string;
+  tablesChecked: number;
+  rowsChecked: number;
+  errorCount: number;
+  warningCount: number;
+  errors: DatasetValidationIssue[];
+  warnings: DatasetValidationIssue[];
+}
+
+export interface DatasetValidationResult extends DatasetValidationReport {
+  datasetId: string;
+}
+
+export interface DatasetImportValidationRequest {
+  selectionId: string;
+  fifaVersion: number;
+}
+
+export interface DatasetImportValidationResult extends DatasetValidationReport {
+  selectionId: string;
 }
 
 export interface ValidationError {
@@ -114,12 +166,19 @@ export interface ConversionRecord {
 
 export interface QdbConverterApi {
   listDatasets(): Promise<DatasetDescriptor[]>;
+  validateDataset(id: string): Promise<DatasetValidationResult>;
+  validateImportSource(
+    request: DatasetImportValidationRequest,
+  ): Promise<DatasetImportValidationResult>;
   selectTextSources(): Promise<DatasetImportCandidate[]>;
-  selectT3dbSource(): Promise<DatasetImportCandidate | undefined>;
+  selectT3dbDatabaseFile(): Promise<DatasetSourceFileSelection | undefined>;
+  selectT3dbMetadataFile(): Promise<DatasetSourceFileSelection | undefined>;
+  prepareT3dbSource(request: T3dbSourcePreparationRequest): Promise<DatasetImportCandidate>;
   importDatasets(requests: DatasetImportRequest[]): Promise<DatasetImportResult[]>;
   cancelImport(): Promise<boolean>;
   renameDataset(id: string, name: string): Promise<DatasetDescriptor>;
   removeDataset(id: string): Promise<boolean>;
+  removeDatasets(ids: string[]): Promise<number>;
   selectOutputDirectory(): Promise<string | undefined>;
   runConversion(request: ConversionRequest): Promise<ConversionResult[]>;
   cancelConversion(requestId: string): Promise<boolean>;

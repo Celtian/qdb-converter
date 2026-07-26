@@ -1,3 +1,7 @@
+.page.has-selection {
+  padding-bottom: 8rem;
+}
+
 .filters {
   display: grid;
   grid-template-columns: minmax(16rem, 2fr) repeat(2, minmax(10rem, 1fr));
@@ -5,14 +9,110 @@
   margin-bottom: 1rem;
 }
 
-.secondary {
-  display: block;
-  color: var(--mat-sys-on-surface-variant);
-  font-size: 0.75rem;
+.table-container {
+  overflow: hidden;
+}
+
+.table-scroll {
+  overflow-x: auto;
+}
+
+.table-scroll:focus-visible {
+  outline: 3px solid var(--mat-sys-primary);
+  outline-offset: -3px;
+}
+
+.table-scroll table {
+  width: max-content;
+  min-width: 100%;
+}
+
+.dataset-name-button {
+  padding: 0;
+  border: 0;
+  border-radius: 0.25rem;
+  background: transparent;
+  color: var(--mat-sys-primary);
+  cursor: pointer;
+  font: inherit;
+  font-weight: 700;
+  line-height: inherit;
+  min-height: 1.5rem;
+  min-width: 1.5rem;
+  text-align: start;
+  text-decoration: none;
+}
+
+.dataset-name-button:focus-visible {
+  outline: 3px solid var(--mat-sys-primary);
+  outline-offset: 2px;
+}
+
+.mat-column-select {
+  overflow: initial;
+  text-align: center;
+  width: 4rem;
+}
+
+.mat-column-version,
+.mat-column-source,
+.mat-column-tables,
+.mat-column-rows,
+.mat-column-imported,
+.mat-column-status,
+.mat-column-actions {
+  white-space: nowrap;
+}
+
+.mat-column-tables,
+.mat-column-rows {
+  text-align: end;
+}
+
+.mat-column-tables .mat-sort-header-container,
+.mat-column-rows .mat-sort-header-container {
+  justify-content: flex-end;
+}
+
+.selected-row {
+  background: var(--mat-sys-secondary-container);
+}
+
+.selection-footer {
+  align-items: center;
+  background: var(--mat-sys-surface-container-high);
+  border-top: 1px solid var(--mat-sys-outline-variant);
+  bottom: 0;
+  box-shadow: var(--mat-sys-level3);
+  display: flex;
+  gap: 1rem;
+  inset-inline-end: 0;
+  inset-inline-start: 15.5rem;
+  justify-content: space-between;
+  min-height: 5rem;
+  padding: 0.75rem clamp(1rem, 4vw, 3.5rem);
+  position: fixed;
+  z-index: 100;
+}
+
+.bulk-delete-button:not(:disabled) {
+  background-color: var(--mat-sys-error);
+  color: var(--mat-sys-on-error);
 }
 
 @media (max-width: 800px) {
   .filters {
     grid-template-columns: 1fr;
+  }
+
+  .selection-footer {
+    inset-inline-start: 0;
+  }
+}
+
+@media (max-width: 640px) {
+  .selection-footer {
+    align-items: stretch;
+    flex-direction: column;
   }
 }

@@ -1,0 +1,108 @@
+@if (report(); as validation) {
+  <section
+    class="validation-summary"
+    [class.validation-summary--error]="validation.errorCount > 0"
+    [class.validation-summary--success]="validation.errorCount === 0"
+    role="status"
+  >
+    <mat-icon aria-hidden="true">{{ summaryIcon() }}</mat-icon>
+    <div>
+      <h3>{{ summaryTitle() }}</h3>
+      <p>
+        {{ validation.errorCount | number }} blocking
+        {{ validation.errorCount === 1 ? 'error' : 'errors' }} and
+        {{ validation.warningCount | number }}
+        {{ validation.warningCount === 1 ? 'warning' : 'warnings' }} found.
+      </p>
+      <p class="validation-metadata">
+        {{ validation.tablesChecked | number }}
+        {{ validation.tablesChecked === 1 ? 'table' : 'tables' }} and
+        {{ validation.rowsChecked | number }}
+        {{ validation.rowsChecked === 1 ? 'row' : 'rows' }} checked.
+      </p>
+    </div>
+  </section>
+
+  @if (validation.errors.length) {
+    <section class="issue-section" [attr.aria-labelledby]="errorsHeadingId()">
+      <h3 [id]="errorsHeadingId()">
+        Blocking errors <span class="visually-hidden">for {{ subject() }}</span>
+      </h3>
+      <p>
+        {{
+          mode() === 'source'
+            ? 'Correct the source and run validations again before importing.'
+            : 'The dataset should not be used until these problems are corrected and reimported.'
+        }}
+      </p>
+      <div class="issue-list">
+        @for (issue of validation.errors; track issueLabel(issue)) {
+          <details class="issue issue--error">
+            <summary>
+              <strong>{{ issueLabel(issue) }}</strong>
+              <span>
+                — {{ issue.message }} ({{ issue.occurrences | number }}
+                {{ issue.occurrences === 1 ? 'occurrence' : 'occurrences' }})
+              </span>
+            </summary>
+            <ul>
+              @for (sample of issue.samples; track sample.row) {
+                <li>
+                  {{
+                    sample.row > 0
+                      ? 'Row ' + sample.row
+                      : mode() === 'source'
+                        ? 'Source'
+                        : 'Dataset'
+                  }}:
+                  <code>{{ sample.value }}</code>
+                </li>
+              }
+            </ul>
+            @if (issue.samples.length < issue.occurrences) {
+              <p class="sample-note">
+                Showing the first {{ issue.samples.length | number }} occurrences.
+              </p>
+            }
+          </details>
+        }
+      </div>
+    </section>
+  }
+
+  @if (validation.warnings.length) {
+    <section class="issue-section" [attr.aria-labelledby]="warningsHeadingId()">
+      <h3 [id]="warningsHeadingId()">
+        Warnings <span class="visually-hidden">for {{ subject() }}</span>
+      </h3>
+      <p>Modified databases may intentionally exceed the published FIFA table metadata.</p>
+      <div class="issue-list">
+        @for (issue of validation.warnings; track issueLabel(issue)) {
+          <details class="issue issue--warning">
+            <summary>
+              <strong>{{ issueLabel(issue) }}</strong>
+              <span>
+                — {{ issue.message }} ({{ issue.occurrences | number }}
+                {{ issue.occurrences === 1 ? 'occurrence' : 'occurrences' }})
+              </span>
+            </summary>
+            <ul>
+              @for (sample of issue.samples; track sample.row) {
+                <li>
+                  Row {{ sample.row | number }}: <code>{{ sample.value }}</code>
+                </li>
+              }
+            </ul>
+            @if (issue.samples.length < issue.occurrences) {
+              <p class="sample-note">
+                Showing the first {{ issue.samples.length | number }} occurrences.
+              </p>
+            }
+          </details>
+        }
+      </div>
+    </section>
+  } @else if (!validation.errors.length) {
+    <p class="no-issues">No validation issues were found.</p>
+  }
+}

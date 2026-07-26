@@ -35,6 +35,10 @@ nav a,
   justify-content: flex-start;
 }
 
+nav mat-divider {
+  margin: 0.5rem 0;
+}
+
 .active {
   background: var(--mat-sys-secondary-container);
   color: var(--mat-sys-on-secondary-container);

@@ -58,6 +58,19 @@ describe('Convert', () => {
     expect(component).toBeTruthy();
   });
 
+  it('renders the sibling-style numbered wizard shell', () => {
+    const element = fixture.nativeElement as HTMLElement;
+
+    expect(element.querySelector('mat-card.wizard-card')).toBeTruthy();
+    const stepper = element.querySelector('mat-stepper');
+    expect(stepper?.classList.contains('qdb-wizard')).toBe(true);
+    expect(stepper?.getAttribute('aria-label')).toBe('Dataset conversion wizard');
+    expect(
+      [...element.querySelectorAll('.mat-step-icon-content')].map((icon) => icon.textContent),
+    ).toEqual(['1', '2', '3', '4']);
+    expect(element.querySelectorAll('.step-actions')).toHaveLength(4);
+  });
+
   it('selects compatible tables, output, and runs a batch', async () => {
     await TestBed.inject(AppStore).refresh();
     const controls = component as unknown as {

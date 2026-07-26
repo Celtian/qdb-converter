@@ -38,4 +38,22 @@ by catalog actions.
 - Optional expiry extension for contracts and loans
 - Stored overall ratings are preserved; target-formula differences are reported
 
+## Versioning and changelog
+
+Release commands use Bun's version lifecycle:
+
+```sh
+bun run release:patch
+bun run release:minor
+bun run release:major
+```
+
+Each command checks out `master`, updates `package.json`, refreshes the generated application
+version, regenerates and stages [CHANGELOG.md](CHANGELOG.md), creates the release commit and `v*`
+tag, and then pushes the commit and tags. The pushed tag starts the existing Release workflow.
+
+Run release commands only from a clean working tree. Review the generated changelog before
+publishing because the `postversion` lifecycle intentionally pushes to the configured Git remote.
+To regenerate the changelog without creating a release, run `bun run changelog`.
+
 QDB Converter is not affiliated with or endorsed by Electronic Arts.

@@ -34,6 +34,21 @@ describe('AppNavigation', () => {
   it('exposes Material navigation actions through component harnesses', async () => {
     const loader = TestbedHarnessEnvironment.loader(fixture);
     const actions = await loader.getAllHarnesses(MatButtonHarness);
-    expect(actions.length).toBeGreaterThanOrEqual(5);
+    expect(actions.length).toBeGreaterThanOrEqual(6);
+    expect((fixture.nativeElement as HTMLElement).querySelector('a[href="/import"]')).toBeTruthy();
+  });
+
+  it('orders import and datasets before the primary navigation divider', () => {
+    const nav = (fixture.nativeElement as HTMLElement).querySelector('nav');
+    const items = Array.from(nav?.children ?? []);
+
+    expect(items.map((item) => item.getAttribute('href') ?? item.tagName)).toEqual([
+      '/import',
+      '/',
+      'MAT-DIVIDER',
+      '/convert',
+      '/conversions',
+    ]);
+    expect(items[2]?.tagName).toBe('MAT-DIVIDER');
   });
 });

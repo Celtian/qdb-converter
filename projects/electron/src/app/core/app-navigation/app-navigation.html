@@ -15,6 +15,9 @@
       <mat-icon>{{ link.icon }}</mat-icon>
       <span>{{ link.label }}</span>
     </a>
+    @if (link.dividerAfter) {
+      <mat-divider />
+    }
   }
 </nav>
 

@@ -1,9 +1,14 @@
 import { readFile, readdir } from 'node:fs/promises';
 import { basename, dirname, extname, join } from 'node:path';
 import { openFifaDatabase, type FifaDatabase } from 'fifa-t3db';
-import type { DatasetImportCandidate } from '../shared/contracts';
+import type { DatasetImportCandidate, DatasetImportTableSummary } from '../shared/contracts';
 import { fieldsFor, SUPPORTED_FIFA_VERSIONS, SUPPORTED_TABLES } from '../shared/table-config';
 import { parseTextTable } from '../shared/text-format';
+
+interface InspectedTable {
+  headers: string[];
+  rows: number;
+}
 
 const sameFields = (actual: readonly string[], expected: readonly string[]): boolean => {
   if (actual.length !== expected.length) return false;
@@ -11,15 +16,20 @@ const sameFields = (actual: readonly string[], expected: readonly string[]): boo
   return actual.every((field) => expectedSet.has(field));
 };
 
-const matchingVersionsFor = (tables: Map<string, string[]>): number[] =>
+const matchingVersionsFor = (tables: Map<string, InspectedTable>): number[] =>
   SUPPORTED_FIFA_VERSIONS.filter((version) =>
-    [...tables].every(([table, headers]) =>
+    [...tables].every(([table, summary]) =>
       sameFields(
-        headers,
+        summary.headers,
         fieldsFor(version, table).map((field) => field.name),
       ),
     ),
   );
+
+const tableSummaries = (tables: Map<string, InspectedTable>): DatasetImportTableSummary[] =>
+  [...tables]
+    .map(([table, summary]) => ({ table, rows: summary.rows }))
+    .sort((left, right) => left.table.localeCompare(right.table, 'en'));
 
 export interface InspectedSource {
   suggestedName: string;
@@ -27,7 +37,7 @@ export interface InspectedSource {
   originalPaths: string[];
   detectedVersion?: number;
   matchingVersions: number[];
-  tableNames: string[];
+  tables: DatasetImportTableSummary[];
   warnings: string[];
 }
 
@@ -37,12 +47,12 @@ export const inspectTextSource = async (path: string): Promise<InspectedSource> 
     .map((entry) => entry.name);
   if (!files.length) throw new Error('The selected folder contains no .txt table files.');
 
-  const supported = new Map<string, string[]>();
+  const supported = new Map<string, InspectedTable>();
   for (const file of files) {
     const table = file.slice(0, -4).toLocaleLowerCase('en');
     const parsed = parseTextTable(await readFile(join(path, file)));
     if (!SUPPORTED_TABLES.includes(table as (typeof SUPPORTED_TABLES)[number])) continue;
-    supported.set(table, parsed.headers);
+    supported.set(table, { headers: parsed.headers, rows: parsed.rows.length });
   }
   if (!supported.size) throw new Error('The folder contains no supported FIFA table files.');
 
@@ -61,20 +71,20 @@ export const inspectTextSource = async (path: string): Promise<InspectedSource> 
     originalPaths: [path],
     detectedVersion: matchingVersions.length === 1 ? matchingVersions[0] : undefined,
     matchingVersions,
-    tableNames: [...supported.keys()].sort(),
+    tables: tableSummaries(supported),
     warnings,
   };
 };
 
-const t3dbTables = (database: FifaDatabase): Map<string, string[]> => {
-  const result = new Map<string, string[]>();
+const t3dbTables = (database: FifaDatabase): Map<string, InspectedTable> => {
+  const result = new Map<string, InspectedTable>();
   for (const table of database.schema.tables) {
     const name = table.name.toLocaleLowerCase('en');
     if (!SUPPORTED_TABLES.includes(name as (typeof SUPPORTED_TABLES)[number])) continue;
-    result.set(
-      name,
-      table.fields.map((field) => field.name.toLocaleLowerCase('en')),
-    );
+    result.set(name, {
+      headers: table.fields.map((field) => field.name.toLocaleLowerCase('en')),
+      rows: 0,
+    });
   }
   return result;
 };
@@ -93,13 +103,17 @@ export const inspectT3dbSource = async (
   const matchingVersions = matchingVersionsFor(tables);
   if (!matchingVersions.length)
     throw new Error('The t3db schema does not match any supported FIFA 11–23 schema.');
+  for (const table of database.listTables()) {
+    const inspected = tables.get(table.name.toLocaleLowerCase('en'));
+    if (inspected) inspected.rows = table.validRecordCount;
+  }
   return {
     suggestedName: basename(databasePath, extname(databasePath)),
     sourceKind: 't3db',
     originalPaths: [databasePath, metadataPath],
     detectedVersion: matchingVersions.length === 1 ? matchingVersions[0] : undefined,
     matchingVersions,
-    tableNames: [...tables.keys()].sort(),
+    tables: tableSummaries(tables),
     warnings: [],
   };
 };

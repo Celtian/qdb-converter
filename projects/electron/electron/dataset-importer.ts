@@ -24,7 +24,7 @@ export const importDatasetSnapshot = async (
   await mkdir(temporaryDirectory, { recursive: true });
   const hashes: Record<string, string> = {};
   let rowCount = 0;
-  let tableNames: string[] = [];
+  const tableNames = source.inspection.tables.map((table) => table.table);
 
   if (source.inspection.sourceKind === 'text-folder') {
     const sourcePath = source.inspection.originalPaths[0]!;
@@ -42,7 +42,6 @@ export const importDatasetSnapshot = async (
       if (!SUPPORTED_TABLES.includes(table as (typeof SUPPORTED_TABLES)[number])) continue;
       rowCount += parseTextTable(await readFile(inputPath)).rows.length;
     }
-    tableNames = source.inspection.tableNames;
   } else {
     const [databasePath, metadataPath] = source.inspection.originalPaths;
     if (!databasePath || !metadataPath) throw new Error('Both t3db source files are required.');
@@ -57,7 +56,6 @@ export const importDatasetSnapshot = async (
       database: await readFile(databasePath),
       metadataXml: await readFile(metadataPath, 'utf8'),
     });
-    tableNames = source.inspection.tableNames;
     rowCount = database
       .listTables()
       .filter((table) => tableNames.includes(table.name.toLocaleLowerCase('en')))

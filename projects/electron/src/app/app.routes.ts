@@ -12,6 +12,12 @@ export const routes: Routes = [
     loadComponent: () => import('./features/convert/convert').then((module) => module.Convert),
   },
   {
+    path: 'import',
+    title: 'Import · QDB Converter',
+    loadComponent: () =>
+      import('./features/import-datasets/import-datasets').then((module) => module.ImportDatasets),
+  },
+  {
     path: 'conversions',
     title: 'Conversions · QDB Converter',
     loadComponent: () =>

@@ -34,6 +34,12 @@
     "test:coverage": "ng test electron --watch=false --coverage && vitest run --coverage --config tools/vitest.config.ts",
     "validate:source": "bun run format:check && bun run lint && bun run typecheck",
     "validate": "bun run validate:source && bun run test",
+    "changelog": "auto-changelog -p",
+    "version": "bun run create-version && bun run changelog && git add CHANGELOG.md",
+    "postversion": "git push && git push --follow-tags",
+    "release:patch": "git checkout master && bun pm version patch --message \"chore(update): patch release %s 🐛\"",
+    "release:minor": "git checkout master && bun pm version minor --message \"chore(update): release %s 🚀\"",
+    "release:major": "git checkout master && bun pm version major --message \"chore(update): major release %s 💥\"",
     "forge": "cross-env npm_config_user_agent=npm/11.16.0 electron-forge",
     "package:desktop": "bun run build && bun run forge package",
     "release:windows": "bun run build && bun run forge make --platform=win32 --arch=x64",
@@ -78,6 +84,7 @@
     "@types/node": "24.13.3",
     "@vitest/coverage-v8": "4.1.10",
     "angular-eslint": "22.1.0",
+    "auto-changelog": "2.6.0",
     "axe-core": "4.12.1",
     "concurrently": "10.0.4",
     "cross-env": "10.1.0",
@@ -98,5 +105,12 @@
   "engines": {
     "node": ">=24.18 <25",
     "npm": "please-use-bun"
+  },
+  "auto-changelog": {
+    "remote": "none",
+    "commitUrl": "https://github.com/Celtian/qdb-converter/commit/{id}",
+    "issueUrl": "https://github.com/Celtian/qdb-converter/issues/{id}",
+    "mergeUrl": "https://github.com/Celtian/qdb-converter/pull/{id}",
+    "compareUrl": "https://github.com/Celtian/qdb-converter/compare/{from}...{to}"
   }
 }

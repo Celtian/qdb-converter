@@ -5,9 +5,10 @@ import {
   readdirSync,
   renameSync,
   rmSync,
+  statSync,
   writeFileSync,
 } from 'node:fs';
-import { join } from 'node:path';
+import { isAbsolute, join } from 'node:path';
 import type {
   ConversionRecord,
   DatasetDescriptor,
@@ -23,9 +24,17 @@ interface RegistryFile {
   schemaVersion: 1;
   datasets: DatasetRecord[];
   conversions: ConversionRecord[];
+  preferences: {
+    lastImportDirectory?: string;
+  };
 }
 
-const EMPTY_REGISTRY: RegistryFile = { schemaVersion: 1, datasets: [], conversions: [] };
+const EMPTY_REGISTRY: RegistryFile = {
+  schemaVersion: 1,
+  datasets: [],
+  conversions: [],
+  preferences: {},
+};
 const uuidPattern = /^[0-9a-f-]{36}$/i;
 
 export class DatasetLibrary {
@@ -45,6 +54,23 @@ export class DatasetLibrary {
     return this.registry.datasets
       .map((record) => this.describe(record))
       .sort((left, right) => left.name.localeCompare(right.name));
+  }
+
+  lastImportDirectory(): string | undefined {
+    const directory = this.registry.preferences.lastImportDirectory;
+    if (!directory) return undefined;
+    try {
+      return statSync(directory).isDirectory() ? directory : undefined;
+    } catch {
+      return undefined;
+    }
+  }
+
+  rememberImportDirectory(directory: string): void {
+    if (!isAbsolute(directory)) throw new Error('Import directory must be an absolute path.');
+    if (this.registry.preferences.lastImportDirectory === directory) return;
+    this.registry.preferences.lastImportDirectory = directory;
+    this.persist();
   }
 
   dataset(id: string): DatasetRecord {
@@ -98,12 +124,20 @@ export class DatasetLibrary {
   }
 
   remove(id: string): boolean {
-    const index = this.registry.datasets.findIndex((dataset) => dataset.id === id);
-    if (index < 0) return false;
-    const [record] = this.registry.datasets.splice(index, 1);
+    return this.removeMany([id]) === 1;
+  }
+
+  removeMany(ids: readonly string[]): number {
+    const selectedIds = new Set(ids);
+    const removed = this.registry.datasets.filter((dataset) => selectedIds.has(dataset.id));
+    if (!removed.length) return 0;
+    this.registry.datasets = this.registry.datasets.filter(
+      (dataset) => !selectedIds.has(dataset.id),
+    );
     this.persist();
-    if (record) rmSync(record.snapshotDirectory, { recursive: true, force: true });
-    return true;
+    for (const record of removed)
+      rmSync(record.snapshotDirectory, { recursive: true, force: true });
+    return removed.length;
   }
 
   listConversions(): ConversionRecord[] {
@@ -155,6 +189,11 @@ export class DatasetLibrary {
         schemaVersion: 1,
         datasets: parsed.datasets,
         conversions: Array.isArray(parsed.conversions) ? parsed.conversions : [],
+        preferences:
+          typeof parsed.preferences?.lastImportDirectory === 'string' &&
+          isAbsolute(parsed.preferences.lastImportDirectory)
+            ? { lastImportDirectory: parsed.preferences.lastImportDirectory }
+            : {},
       };
     } catch {
       const backup = `${this.registryPath}.corrupt-${Date.now()}`;

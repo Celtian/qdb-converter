@@ -25,11 +25,17 @@ select {
 }
 
 .page-header {
+  position: sticky;
+  top: 0;
+  z-index: 2;
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
   gap: 1rem;
-  margin-bottom: 1.5rem;
+  margin: -2rem -2rem 1.5rem;
+  padding: 2rem 2rem 1.5rem;
+  background: var(--mat-sys-surface);
+  border-bottom: 1px solid var(--mat-sys-outline-variant);
 }
 
 .page-header h1 {
@@ -71,6 +77,11 @@ select {
   width: 100%;
 }
 
+.table-container mat-paginator {
+  border-top: 1px solid var(--mat-sys-outline-variant);
+  background: transparent;
+}
+
 .visually-hidden {
   position: absolute;
   width: 1px;
@@ -90,5 +101,7 @@ select {
 
   .page-header {
     flex-direction: column;
+    margin: -1rem -1rem 1.5rem;
+    padding: 1rem 1rem 1.5rem;
   }
 }

@@ -41,6 +41,7 @@ describe('t3db source adapter', () => {
 
     const inspection = await inspectT3dbSource(databasePath, metadataPath);
     expect(inspection.matchingVersions).toContain(23);
+    expect(inspection.tables).toEqual([{ table: 'playernames', rows: 1 }]);
     const record = await importDatasetSnapshot(
       '11111111-1111-4111-8111-111111111111',
       't3db fixture',
@@ -97,7 +98,7 @@ describe('t3db source adapter', () => {
             sourceKind: 't3db',
             originalPaths: [],
             matchingVersions: [23],
-            tableNames: ['players'],
+            tables: [{ table: 'players', rows: 1 }],
             warnings: [],
           },
         },

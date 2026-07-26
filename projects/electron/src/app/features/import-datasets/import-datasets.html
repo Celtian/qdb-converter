@@ -1,0 +1,501 @@
+<section class="page" aria-labelledby="import-heading">
+  <header class="page-header">
+    <div>
+      <h1 id="import-heading">Import datasets</h1>
+      <p>Add DB Master text folders or paired t3db sources to the managed dataset library.</p>
+    </div>
+  </header>
+
+  @if (error()) {
+    <p class="error" role="alert">{{ error() }}</p>
+  }
+
+  <mat-card appearance="outlined" class="wizard-card">
+    <mat-card-header>
+      <mat-card-title>Import datasets</mat-card-title>
+      <mat-card-subtitle
+        >Choose a format and sources, review their details, and import them
+        independently.</mat-card-subtitle
+      >
+    </mat-card-header>
+    <mat-card-content>
+      <mat-stepper class="qdb-wizard" linear aria-label="Dataset import wizard">
+        <ng-template matStepperIcon="number" let-index="index">
+          <span aria-hidden="true">{{ index + 1 }}</span>
+        </ng-template>
+        <ng-template matStepperIcon="edit" let-index="index">
+          <span aria-hidden="true">{{ index + 1 }}</span>
+        </ng-template>
+        <ng-template matStepperIcon="done" let-index="index">
+          <span aria-hidden="true">{{ index + 1 }}</span>
+        </ng-template>
+
+        <mat-step [completed]="true">
+          <ng-template matStepLabel>Format</ng-template>
+          <div class="step-content">
+            <div>
+              <h2>Choose source format</h2>
+              <p>Every source in this import uses the selected format.</p>
+            </div>
+
+            <mat-radio-group
+              class="format-options"
+              aria-label="Dataset source format"
+              [value]="format()"
+              [disabled]="validationRunning()"
+              (change)="changeFormat($event.value)"
+            >
+              <mat-radio-button value="text-folder">
+                <span class="choice-label">
+                  <strong>Text-table folders</strong>
+                  <small>Import exported FIFA 11–23 files such as players.txt and teams.txt.</small>
+                </span>
+              </mat-radio-button>
+              <mat-radio-button value="t3db">
+                <span class="choice-label">
+                  <strong>t3db database</strong>
+                  <small>Import a .db file together with its matching metadata XML schema.</small>
+                </span>
+              </mat-radio-button>
+            </mat-radio-group>
+
+            <div class="step-actions">
+              <button type="button" matButton="filled" matStepperNext>Next</button>
+            </div>
+          </div>
+        </mat-step>
+
+        <mat-step [completed]="candidates().length > 0">
+          <ng-template matStepLabel>Source</ng-template>
+          <div class="step-content">
+            <div>
+              <h2>Select sources</h2>
+              <p>
+                {{
+                  format() === 'text-folder'
+                    ? 'Choose one or more folders that directly contain exported FIFA table files.'
+                    : 'Choose both the PC t3db database and its matching metadata XML file.'
+                }}
+              </p>
+            </div>
+
+            @if (format() === 'text-folder') {
+              <mat-form-field class="source-picker" appearance="outline">
+                <mat-label>Source folders</mat-label>
+                <input matInput readonly [value]="textSourceDisplay()" />
+                <button
+                  type="button"
+                  matIconButton
+                  matSuffix
+                  [attr.aria-label]="
+                    candidates().length ? 'Change source folders' : 'Select source folders'
+                  "
+                  [disabled]="preparing() || store.loading() || validationRunning()"
+                  (click)="selectTextFolders()"
+                >
+                  <mat-icon>folder_open</mat-icon>
+                </button>
+              </mat-form-field>
+            } @else {
+              <div class="source-fields">
+                <mat-form-field class="source-picker" appearance="outline">
+                  <mat-label>t3db database</mat-label>
+                  <input matInput readonly [value]="t3dbDatabaseFile()?.displayPath ?? ''" />
+                  <button
+                    type="button"
+                    matIconButton
+                    matSuffix
+                    [attr.aria-label]="
+                      t3dbDatabaseFile() ? 'Change t3db database file' : 'Select t3db database file'
+                    "
+                    [disabled]="preparing() || store.loading() || validationRunning()"
+                    (click)="selectT3dbDatabase()"
+                  >
+                    <mat-icon>folder_open</mat-icon>
+                  </button>
+                </mat-form-field>
+                <mat-form-field class="source-picker" appearance="outline">
+                  <mat-label>Metadata XML</mat-label>
+                  <input matInput readonly [value]="t3dbMetadataFile()?.displayPath ?? ''" />
+                  <button
+                    type="button"
+                    matIconButton
+                    matSuffix
+                    [attr.aria-label]="
+                      t3dbMetadataFile() ? 'Change metadata XML file' : 'Select metadata XML file'
+                    "
+                    [disabled]="preparing() || store.loading() || validationRunning()"
+                    (click)="selectT3dbMetadata()"
+                  >
+                    <mat-icon>folder_open</mat-icon>
+                  </button>
+                </mat-form-field>
+              </div>
+            }
+
+            @if (preparing()) {
+              <div aria-live="polite">
+                <mat-progress-bar
+                  mode="indeterminate"
+                  [attr.aria-label]="
+                    format() === 'text-folder'
+                      ? 'Inspecting selected folders'
+                      : 'Preparing t3db source'
+                  "
+                />
+                <p>
+                  {{
+                    format() === 'text-folder'
+                      ? 'Inspecting selected folders…'
+                      : 'Preparing t3db source…'
+                  }}
+                </p>
+              </div>
+            }
+
+            <div class="candidate-list" aria-live="polite">
+              @for (candidate of candidates(); track candidate.selectionId) {
+                <mat-card appearance="outlined" class="source-card candidate-card">
+                  <div class="source-card-header">
+                    <div class="source-identity">
+                      <span class="source-icon" aria-hidden="true">
+                        <mat-icon>{{
+                          candidate.sourceKind === 't3db' ? 'storage' : 'folder'
+                        }}</mat-icon>
+                      </span>
+                      <div class="source-title">
+                        <h3>{{ candidate.name }}</h3>
+                        <span class="source-kind">
+                          {{ candidate.sourceKind === 't3db' ? 't3db pair' : 'Text folder' }}
+                        </span>
+                      </div>
+                    </div>
+                    <button
+                      class="remove-source"
+                      type="button"
+                      matIconButton
+                      [disabled]="validationRunning()"
+                      (click)="remove(candidate.selectionId)"
+                      [attr.aria-label]="'Remove ' + candidate.name"
+                    >
+                      <mat-icon>close</mat-icon>
+                    </button>
+                  </div>
+
+                  <div class="source-metadata" role="group" aria-label="Source details">
+                    <span>
+                      <mat-icon aria-hidden="true">table_chart</mat-icon>
+                      {{ candidate.tables.length }} tables
+                    </span>
+                    <span>
+                      <mat-icon aria-hidden="true">sports_soccer</mat-icon>
+                      FIFA {{ candidate.version }}
+                    </span>
+                  </div>
+
+                  <p class="source-path" [title]="candidate.originalPaths.join(' · ')">
+                    <mat-icon aria-hidden="true">folder_open</mat-icon>
+                    <span>{{ candidate.originalPaths.join(' · ') }}</span>
+                  </p>
+
+                  @if (candidate.warnings.length) {
+                    <div class="source-warnings">
+                      @for (warning of candidate.warnings; track warning) {
+                        <div class="source-warning">
+                          <mat-icon aria-hidden="true">warning_amber</mat-icon>
+                          <p>{{ warning }}</p>
+                        </div>
+                      }
+                    </div>
+                  }
+                </mat-card>
+              } @empty {
+                <p class="empty-step">No sources selected yet.</p>
+              }
+            </div>
+
+            <div class="step-actions">
+              <button
+                type="button"
+                matButton
+                matStepperPrevious
+                [disabled]="preparing() || store.loading() || validationRunning()"
+              >
+                Back
+              </button>
+              <button
+                type="button"
+                matButton="filled"
+                [disabled]="!sourceReady() || preparing() || store.loading() || validationRunning()"
+                (click)="continueSource()"
+              >
+                Review sources
+              </button>
+            </div>
+          </div>
+        </mat-step>
+
+        <mat-step [completed]="reviewReady()">
+          <ng-template matStepLabel>Review</ng-template>
+          <div class="step-content">
+            <div>
+              <h2>Review dataset details</h2>
+              <p>Choose a unique name and a FIFA version supported by each source.</p>
+            </div>
+
+            <div class="review-list">
+              @for (candidate of candidates(); track candidate.selectionId) {
+                <mat-card appearance="outlined" class="source-card review-card">
+                  <div class="source-card-header">
+                    <div class="source-identity">
+                      <span class="source-icon" aria-hidden="true">
+                        <mat-icon>{{
+                          candidate.sourceKind === 't3db' ? 'storage' : 'folder'
+                        }}</mat-icon>
+                      </span>
+                      <div class="source-title">
+                        <h3>{{ candidate.name }}</h3>
+                        <span class="source-kind">
+                          {{ candidate.sourceKind === 't3db' ? 't3db pair' : 'Text folder' }}
+                        </span>
+                      </div>
+                    </div>
+                    <div class="source-metadata" role="group" aria-label="Source details">
+                      <span>
+                        <mat-icon aria-hidden="true">table_chart</mat-icon>
+                        {{ candidate.tables.length }} tables
+                      </span>
+                      <span>
+                        <mat-icon aria-hidden="true">sports_soccer</mat-icon>
+                        FIFA {{ candidate.version }}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div class="review-fields">
+                    <mat-form-field appearance="outline">
+                      <mat-label>Dataset name</mat-label>
+                      <input
+                        matInput
+                        autocomplete="off"
+                        [value]="candidate.name"
+                        [errorStateMatcher]="
+                          nameHasError(candidate) ? showErrorStateMatcher : hideErrorStateMatcher
+                        "
+                        [attr.aria-invalid]="nameHasError(candidate) ? 'true' : 'false'"
+                        [disabled]="validationRunning()"
+                        (input)="changeName(candidate.selectionId, $event)"
+                      />
+                      @if (nameHasError(candidate)) {
+                        <mat-error>{{ firstValidationMessage(candidate) }}</mat-error>
+                      }
+                    </mat-form-field>
+                    <mat-form-field appearance="outline">
+                      <mat-label>FIFA version</mat-label>
+                      <mat-select
+                        [value]="candidate.version"
+                        [errorStateMatcher]="
+                          versionHasError(candidate) ? showErrorStateMatcher : hideErrorStateMatcher
+                        "
+                        [attr.aria-invalid]="versionHasError(candidate) ? 'true' : 'false'"
+                        [disabled]="validationRunning()"
+                        (valueChange)="changeVersion(candidate.selectionId, $event)"
+                      >
+                        @for (version of candidate.matchingVersions; track version) {
+                          <mat-option [value]="version">FIFA {{ version }}</mat-option>
+                        }
+                      </mat-select>
+                      @if (versionHasError(candidate)) {
+                        <mat-error>Select a matching FIFA version.</mat-error>
+                      }
+                    </mat-form-field>
+                  </div>
+
+                  <p class="source-path" [title]="candidate.originalPaths.join(' · ')">
+                    <mat-icon aria-hidden="true">folder_open</mat-icon>
+                    <span>{{ candidate.originalPaths.join(' · ') }}</span>
+                  </p>
+
+                  @if (candidate.warnings.length) {
+                    <div class="source-warnings">
+                      @for (warning of candidate.warnings; track warning) {
+                        <div class="source-warning">
+                          <mat-icon aria-hidden="true">warning_amber</mat-icon>
+                          <p>{{ warning }}</p>
+                        </div>
+                      }
+                    </div>
+                  }
+                </mat-card>
+              }
+            </div>
+
+            <div class="step-actions">
+              <button type="button" matButton matStepperPrevious [disabled]="validationRunning()">
+                Back
+              </button>
+              <button
+                type="button"
+                matButton="filled"
+                [disabled]="!reviewReady() || validationRunning()"
+                (click)="reviewImport()"
+              >
+                Review import
+              </button>
+            </div>
+          </div>
+        </mat-step>
+
+        <mat-step>
+          <ng-template matStepLabel>Import</ng-template>
+          <div class="step-content">
+            <div>
+              <h2>Import datasets</h2>
+              <p>
+                Review validation results before importing. Warnings are allowed, but blocking
+                errors must be corrected first.
+              </p>
+            </div>
+
+            @if (validationRunning() && validationProgress(); as progress) {
+              <div class="validation-progress" role="status" aria-live="polite">
+                <mat-progress-bar mode="indeterminate" aria-label="Validating selected sources" />
+                <p>
+                  Validating {{ progress.name }} ({{ progress.current }} of {{ progress.total }})…
+                </p>
+              </div>
+            }
+
+            @if (candidates().length) {
+              <div class="import-tables">
+                @for (candidate of candidates(); track candidate.selectionId) {
+                  <section
+                    class="import-dataset"
+                    [attr.aria-labelledby]="'import-tables-' + candidate.selectionId"
+                  >
+                    <h3 [id]="'import-tables-' + candidate.selectionId">{{ candidate.name }}</h3>
+                    @if (validationState(candidate.selectionId); as state) {
+                      <div class="import-validation">
+                        @switch (state.status) {
+                          @case ('pending') {
+                            <p class="validation-pending" role="status">
+                              Waiting to validate this source…
+                            </p>
+                          }
+                          @case ('running') {
+                            <p class="validation-pending" role="status">Validating this source…</p>
+                          }
+                          @case ('failed') {
+                            <div class="validation-failed" role="alert">
+                              <mat-icon aria-hidden="true">error</mat-icon>
+                              <div>
+                                <strong>Validation could not be completed</strong>
+                                <p>{{ state.error }}</p>
+                              </div>
+                            </div>
+                          }
+                          @case ('completed') {
+                            @if (state.result; as validation) {
+                              <app-validation-report
+                                mode="source"
+                                [report]="validation"
+                                [subject]="candidate.name"
+                                [headingIdPrefix]="'import-validation-' + candidate.selectionId"
+                              />
+                            }
+                          }
+                        }
+                      </div>
+                    }
+                    <div class="import-table-container">
+                      <table [attr.aria-labelledby]="'import-tables-' + candidate.selectionId">
+                        <thead>
+                          <tr>
+                            <th scope="col">Table</th>
+                            <th scope="col" class="row-count">Rows</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          @for (summary of candidate.tables; track summary.table) {
+                            <tr>
+                              <td>{{ summary.table }}</td>
+                              <td class="row-count">{{ summary.rows | number: '1.0-0' }}</td>
+                            </tr>
+                          }
+                        </tbody>
+                      </table>
+                    </div>
+                  </section>
+                }
+              </div>
+            }
+
+            @if (store.loading()) {
+              <div aria-live="polite">
+                <mat-progress-bar mode="indeterminate" aria-label="Importing datasets" />
+                <p>{{ store.importProgress() || 'Importing datasets…' }}</p>
+              </div>
+            }
+
+            @if (results().length) {
+              <div class="results" aria-live="polite">
+                <h3>Import results</h3>
+                <ul>
+                  @for (result of results(); track result.selectionId) {
+                    <li [class.result-success]="result.status === 'completed'">
+                      <mat-icon aria-hidden="true">
+                        {{ result.status === 'completed' ? 'check_circle' : 'error' }}
+                      </mat-icon>
+                      <span>
+                        <strong>{{ resultLabel(result) }}</strong> ·
+                        {{
+                          result.status === 'completed'
+                            ? 'Imported successfully'
+                            : (result.error?.message ?? result.status)
+                        }}
+                      </span>
+                    </li>
+                  }
+                </ul>
+              </div>
+            }
+
+            <div class="step-actions">
+              @if (candidates().length && !store.loading()) {
+                <button type="button" matButton matStepperPrevious [disabled]="validationRunning()">
+                  Review remaining
+                </button>
+              }
+              @if (store.loading()) {
+                <button type="button" matButton (click)="cancelImport()">Cancel import</button>
+              } @else if (candidates().length) {
+                <button
+                  type="button"
+                  matButton
+                  [disabled]="validationRunning()"
+                  (click)="runValidations()"
+                >
+                  Run validations again
+                </button>
+                <button
+                  type="button"
+                  matButton="filled"
+                  (click)="importAll()"
+                  [disabled]="!canImport()"
+                >
+                  Import {{ candidates().length }}
+                </button>
+              }
+              @if (results().length && !store.loading()) {
+                <a type="button" matButton routerLink="/">View datasets</a>
+                <button type="button" matButton (click)="startAnotherImport()">
+                  Start another import
+                </button>
+              }
+            </div>
+          </div>
+        </mat-step>
+      </mat-stepper>
+    </mat-card-content>
+  </mat-card>
+</section>

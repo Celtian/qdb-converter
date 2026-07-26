@@ -9,8 +9,7 @@ import {
   type OpenDialogOptions,
 } from 'electron';
 import { randomUUID } from 'node:crypto';
-import { existsSync } from 'node:fs';
-import { dirname, isAbsolute, join, resolve } from 'node:path';
+import { basename, dirname, isAbsolute, join, resolve } from 'node:path';
 import { Worker } from 'node:worker_threads';
 import { updateElectronApp } from 'update-electron-app';
 import type {
@@ -20,13 +19,21 @@ import type {
   DatasetImportCandidate,
   DatasetImportRequest,
   DatasetImportResult,
+  DatasetImportValidationRequest,
+  DatasetImportValidationResult,
+  DatasetSourceFileSelection,
+  DatasetValidationResult,
+  T3dbSourcePreparationRequest,
   ValidationError,
 } from '../../shared/contracts';
 import { isSupportedTable, isSupportedVersion } from '../../shared/table-config';
 import { DatasetLibrary, type DatasetRecord } from '../dataset-library';
 import type { InspectedSource } from '../source-inspection';
-import { defaultMetadataPath } from '../source-inspection';
-import { SourceSelections } from '../source-selections';
+import {
+  SourceSelections,
+  type SelectedSource,
+  type SelectedT3dbFileKind,
+} from '../source-selections';
 
 let mainWindow: BrowserWindow | undefined;
 let library: DatasetLibrary;
@@ -67,6 +74,21 @@ const openDialog = async (
   return result.canceled ? [] : result.filePaths;
 };
 
+const openImportDialog = async (
+  event: IpcMainInvokeEvent,
+  options: OpenDialogOptions,
+  selectionKind: 'directory' | 'file',
+): Promise<string[]> => {
+  const defaultPath = library.lastImportDirectory();
+  const paths = await openDialog(event, defaultPath ? { ...options, defaultPath } : options);
+  const selectedPath = paths[0];
+  if (selectedPath)
+    library.rememberImportDirectory(
+      selectionKind === 'directory' ? selectedPath : dirname(selectedPath),
+    );
+  return paths;
+};
+
 const validationError = (
   code: ValidationError['code'],
   message: string,
@@ -92,15 +114,94 @@ const inspectSource = (
     });
   });
 
+type ValidationWorkerData =
+  | { kind: 'dataset'; dataset: DatasetRecord }
+  | { kind: 'import-source'; source: SelectedSource; fifaVersion: number };
+
+type ValidationWorkerResult = DatasetValidationResult | DatasetImportValidationResult;
+
+const runValidationWorker = (data: ValidationWorkerData): Promise<ValidationWorkerResult> =>
+  new Promise((resolveValidation, rejectValidation) => {
+    const worker = new Worker(join(__dirname, '..', 'validation-worker.js'), {
+      workerData: data,
+    });
+    let settled = false;
+    const finish = (callback: () => void): void => {
+      if (settled) return;
+      settled = true;
+      callback();
+    };
+    worker.once(
+      'message',
+      (message: { type?: string; result?: ValidationWorkerResult; message?: string }) => {
+        const result = message.result;
+        if (message.type === 'completed' && result) finish(() => resolveValidation(result));
+        else
+          finish(() =>
+            rejectValidation(new Error(message.message ?? 'Dataset validation failed.')),
+          );
+      },
+    );
+    worker.once('error', (error) => finish(() => rejectValidation(error)));
+    worker.once('exit', (code) => {
+      if (settled) return;
+      const message =
+        code === 0
+          ? 'Validation worker exited before returning a result.'
+          : `Validation worker exited with code ${code}.`;
+      finish(() => rejectValidation(new Error(message)));
+    });
+  });
+
+const validateDataset = async (
+  event: IpcMainInvokeEvent,
+  id: string,
+): Promise<DatasetValidationResult> => {
+  trustedSender(event);
+  validateId(id);
+  const result = await runValidationWorker({ kind: 'dataset', dataset: library.dataset(id) });
+  if (!('datasetId' in result)) throw new Error('Dataset validation returned an invalid result.');
+  return result;
+};
+
+const validateImportSource = async (
+  event: IpcMainInvokeEvent,
+  request: DatasetImportValidationRequest,
+): Promise<DatasetImportValidationResult> => {
+  trustedSender(event);
+  if (
+    !request ||
+    typeof request.selectionId !== 'string' ||
+    !isSupportedVersion(request.fifaVersion)
+  )
+    throw new Error('Invalid source validation request.');
+  const source = selections.get(request.selectionId);
+  if (!source) throw new Error('Select this source again before validating.');
+  if (!source.inspection.matchingVersions.includes(request.fifaVersion))
+    throw new Error('The selected FIFA version does not match the source schema.');
+  const result = await runValidationWorker({
+    kind: 'import-source',
+    source,
+    fifaVersion: request.fifaVersion,
+  });
+  if (!('selectionId' in result)) throw new Error('Source validation returned an invalid result.');
+  selections.recordValidation(result.selectionId, request.fifaVersion, result.errorCount);
+  return result;
+};
+
 const validateId = (id: string): void => {
   if (!uuidPattern.test(id)) throw new Error('Invalid identifier.');
 };
 
 const selectTextSources = async (event: IpcMainInvokeEvent): Promise<DatasetImportCandidate[]> => {
-  const paths = await openDialog(event, {
-    title: 'Select FIFA text dataset folders',
-    properties: ['openDirectory', 'multiSelections'],
-  });
+  const paths = await openImportDialog(
+    event,
+    {
+      title: 'Select FIFA text dataset folders',
+      properties: ['openDirectory', 'multiSelections'],
+    },
+    'directory',
+  );
   const candidates: DatasetImportCandidate[] = [];
   const errors: string[] = [];
   for (const path of paths) {
@@ -124,26 +225,45 @@ const selectTextSources = async (event: IpcMainInvokeEvent): Promise<DatasetImpo
   return candidates;
 };
 
-const selectT3dbSource = async (
+const selectT3dbFile = async (
   event: IpcMainInvokeEvent,
-): Promise<DatasetImportCandidate | undefined> => {
-  const [databasePath] = await openDialog(event, {
-    title: 'Select FIFA t3db database',
-    properties: ['openFile'],
-    filters: [{ name: 'FIFA t3db database', extensions: ['db'] }],
-  });
-  if (!databasePath) return undefined;
-  const automaticMetadata = defaultMetadataPath(databasePath);
-  let metadataPath = existsSync(automaticMetadata) ? automaticMetadata : undefined;
-  if (!metadataPath) {
-    [metadataPath] = await openDialog(event, {
-      title: 'Select matching FIFA metadata XML',
+  kind: SelectedT3dbFileKind,
+): Promise<DatasetSourceFileSelection | undefined> => {
+  const [path] = await openImportDialog(
+    event,
+    {
+      title:
+        kind === 'database' ? 'Select FIFA t3db database' : 'Select matching FIFA metadata XML',
       properties: ['openFile'],
-      filters: [{ name: 'FIFA metadata XML', extensions: ['xml'] }],
-    });
-  }
-  if (!metadataPath) return undefined;
-  return selections.add(await inspectSource({ kind: 't3db', paths: [databasePath, metadataPath] }));
+      filters:
+        kind === 'database'
+          ? [{ name: 'FIFA t3db database', extensions: ['db'] }]
+          : [{ name: 'FIFA metadata XML', extensions: ['xml'] }],
+    },
+    'file',
+  );
+  if (!path) return undefined;
+  return { id: selections.addT3dbFile(kind, path), displayPath: path, fileName: basename(path) };
+};
+
+const prepareT3dbSource = async (
+  event: IpcMainInvokeEvent,
+  request: T3dbSourcePreparationRequest,
+): Promise<DatasetImportCandidate> => {
+  trustedSender(event);
+  if (
+    !request ||
+    typeof request.databaseFileId !== 'string' ||
+    typeof request.metadataFileId !== 'string'
+  )
+    throw new Error('Invalid t3db source selection.');
+  const pair = selections.resolveT3dbPair(request.databaseFileId, request.metadataFileId);
+  if (!pair) throw new Error('Select the t3db database and metadata XML again.');
+  const inspection = await inspectSource({
+    kind: 't3db',
+    paths: [pair.databasePath, pair.metadataPath],
+  });
+  return selections.addT3dbSource(inspection, request.databaseFileId, request.metadataFileId);
 };
 
 interface ImportWorkerResult {
@@ -224,6 +344,8 @@ const importDatasets = async (
         !source.inspection.matchingVersions.includes(request.fifaVersion)
       )
         throw new Error('The selected FIFA version does not match the source schema.');
+      if (!selections.canImport(request.selectionId, request.fifaVersion))
+        throw new Error('Run validations successfully for this source before importing.');
       const name = library.ensureUniqueName(request.name);
       const workerResult = await runImportWorker(event, {
         id,
@@ -430,8 +552,12 @@ const registerIpc = (): void => {
     trustedSender(event);
     return library.listDatasets();
   });
+  ipcMain.handle('qdb:datasets:validate', validateDataset);
+  ipcMain.handle('qdb:datasets:validate-import-source', validateImportSource);
   ipcMain.handle('qdb:datasets:select-text', selectTextSources);
-  ipcMain.handle('qdb:datasets:select-t3db', selectT3dbSource);
+  ipcMain.handle('qdb:datasets:select-t3db-database', (event) => selectT3dbFile(event, 'database'));
+  ipcMain.handle('qdb:datasets:select-t3db-metadata', (event) => selectT3dbFile(event, 'metadata'));
+  ipcMain.handle('qdb:datasets:prepare-t3db', prepareT3dbSource);
   ipcMain.handle('qdb:datasets:import', importDatasets);
   ipcMain.handle('qdb:datasets:cancel-import', (event) => {
     trustedSender(event);
@@ -449,6 +575,18 @@ const registerIpc = (): void => {
     trustedSender(event);
     validateId(id);
     return library.remove(id);
+  });
+  ipcMain.handle('qdb:datasets:remove-many', (event, ids: unknown) => {
+    trustedSender(event);
+    if (
+      !Array.isArray(ids) ||
+      ids.length < 1 ||
+      ids.length > 100 ||
+      !ids.every((id): id is string => typeof id === 'string')
+    )
+      throw new Error('Invalid dataset identifiers.');
+    ids.forEach(validateId);
+    return library.removeMany(ids);
   });
   ipcMain.handle('qdb:conversion:select-output', async (event) => {
     const paths = await openDialog(event, {

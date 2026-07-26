@@ -12,6 +12,7 @@ interface NavigationLink {
   icon: string;
   label: string;
   exact?: boolean;
+  dividerAfter?: boolean;
 }
 
 @Component({
@@ -31,7 +32,8 @@ export class AppNavigation {
   private readonly dialog = inject(MatDialog);
 
   protected readonly links: readonly NavigationLink[] = [
-    { path: '/', icon: 'storage', label: 'Datasets', exact: true },
+    { path: '/import', icon: 'upload_file', label: 'Import' },
+    { path: '/', icon: 'storage', label: 'Datasets', exact: true, dividerAfter: true },
     { path: '/convert', icon: 'transform', label: 'Convert' },
     { path: '/conversions', icon: 'history', label: 'Conversions' },
   ];

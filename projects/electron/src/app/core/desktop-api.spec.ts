@@ -7,12 +7,17 @@ describe('DesktopApi', () => {
     const fake = Object.fromEntries(
       [
         'listDatasets',
+        'validateDataset',
+        'validateImportSource',
         'selectTextSources',
-        'selectT3dbSource',
+        'selectT3dbDatabaseFile',
+        'selectT3dbMetadataFile',
+        'prepareT3dbSource',
         'importDatasets',
         'cancelImport',
         'renameDataset',
         'removeDataset',
+        'removeDatasets',
         'selectOutputDirectory',
         'runConversion',
         'cancelConversion',
@@ -35,12 +40,20 @@ describe('DesktopApi', () => {
       extendContracts: false,
     };
     await service.listDatasets();
+    await service.validateDataset(request.datasetIds[0]!);
+    await service.validateImportSource({ selectionId: 'selection', fifaVersion: 23 });
     await service.selectTextSources();
-    await service.selectT3dbSource();
+    await service.selectT3dbDatabaseFile();
+    await service.selectT3dbMetadataFile();
+    await service.prepareT3dbSource({
+      databaseFileId: 'database-file',
+      metadataFileId: 'metadata-file',
+    });
     await service.importDatasets([]);
     await service.cancelImport();
     await service.renameDataset(request.datasetIds[0]!, 'Name');
     await service.removeDataset(request.datasetIds[0]!);
+    await service.removeDatasets(request.datasetIds);
     await service.selectOutputDirectory();
     await service.runConversion(request);
     await service.cancelConversion(request.requestId);
@@ -49,6 +62,12 @@ describe('DesktopApi', () => {
     await service.revealOutput('/output');
     service.onImportProgress(() => undefined)();
     service.onConversionProgress(() => undefined)();
+    expect(fake.removeDatasets).toHaveBeenCalledWith(request.datasetIds);
+    expect(fake.validateDataset).toHaveBeenCalledWith(request.datasetIds[0]);
+    expect(fake.validateImportSource).toHaveBeenCalledWith({
+      selectionId: 'selection',
+      fifaVersion: 23,
+    });
     expect(fake.revealOutput).toHaveBeenCalledWith('/output');
   });
 
