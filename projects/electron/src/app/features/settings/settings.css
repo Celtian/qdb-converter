@@ -14,7 +14,11 @@ mat-radio-group {
 }
 
 .column-card mat-card-content {
-  padding-top: 1.5rem;
+  padding: 1rem 0 0;
+}
+
+.column-tab-content {
+  padding: 1.25rem 1rem 1rem;
 }
 
 .column-actions {

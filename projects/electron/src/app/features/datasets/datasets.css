@@ -34,6 +34,16 @@
   padding: 0 0.25rem;
 }
 
+.row-count {
+  color: var(--mat-sys-on-surface-variant);
+  font-variant-numeric: tabular-nums;
+  font-weight: 500;
+  margin: 0;
+  margin-inline-start: auto;
+  text-align: end;
+  white-space: nowrap;
+}
+
 .table-container {
   overflow: hidden;
 }
@@ -135,6 +145,11 @@
   .search-field,
   .filter-button,
   .column-button {
+    width: 100%;
+  }
+
+  .row-count {
+    margin-inline-start: 0;
     width: 100%;
   }
 

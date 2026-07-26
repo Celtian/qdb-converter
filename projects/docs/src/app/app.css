@@ -1,0 +1,209 @@
+:host {
+  display: flex;
+  min-height: 100dvh;
+  flex-direction: column;
+  background: var(--mat-sys-surface);
+}
+
+.skip-link {
+  position: fixed;
+  z-index: 100;
+  top: 0.5rem;
+  left: 0.5rem;
+  padding: 0.7rem 1rem;
+  border-radius: 0.5rem;
+  background: var(--mat-sys-inverse-surface);
+  color: var(--mat-sys-inverse-on-surface);
+  font-weight: 700;
+  text-decoration: none;
+  transform: translateY(-160%);
+}
+
+.skip-link:focus {
+  transform: translateY(0);
+}
+
+.site-header {
+  position: sticky;
+  z-index: 20;
+  top: 0;
+  flex: 0 0 auto;
+}
+
+mat-toolbar {
+  min-height: 56px;
+  border-bottom: 1px solid var(--mat-sys-outline-variant);
+  background: var(--mat-sys-surface-container-low);
+  color: var(--mat-sys-on-surface);
+}
+
+.navigation-trigger {
+  display: none;
+  margin-right: 0.25rem;
+}
+
+.brand {
+  display: inline-flex;
+  min-width: 0;
+  align-items: center;
+  gap: 0.65rem;
+  color: inherit;
+  font-size: 1rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.brand img {
+  border-radius: 0.4rem;
+}
+
+.documentation-label {
+  color: var(--mat-sys-on-surface-variant);
+  font-weight: 400;
+}
+
+.documentation-label::before {
+  content: '·';
+  margin-right: 0.65rem;
+}
+
+.toolbar-spacer {
+  flex: 1;
+}
+
+mat-sidenav-container {
+  min-height: calc(100dvh - 56px);
+  flex: 1 0 auto;
+  background:
+    radial-gradient(
+      circle at top right,
+      color-mix(in srgb, var(--mat-sys-primary) 12%, transparent),
+      transparent 35rem
+    ),
+    var(--mat-sys-surface);
+}
+
+mat-sidenav {
+  width: 15.5rem;
+  border-right: 1px solid var(--mat-sys-outline-variant);
+  border-radius: 0;
+  background: var(--mat-sys-surface-container-low);
+}
+
+.navigation-heading {
+  margin: 1.5rem 1rem 0.5rem;
+  color: var(--mat-sys-on-surface-variant);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+mat-nav-list {
+  padding: 0 0.5rem;
+}
+
+mat-nav-list a {
+  margin-bottom: 0.15rem;
+  border-radius: 0.5rem;
+}
+
+mat-nav-list a.active {
+  background: var(--mat-sys-primary-container);
+  color: var(--mat-sys-on-primary-container);
+}
+
+.content-shell {
+  display: flex;
+  min-height: calc(100dvh - 56px);
+  flex-direction: column;
+}
+
+main {
+  min-width: 0;
+  flex: 1;
+}
+
+main:focus {
+  outline: none;
+}
+
+footer {
+  flex: 0 0 auto;
+  border-top: 1px solid var(--mat-sys-outline-variant);
+  background: var(--mat-sys-surface-container-low);
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.footer-inner {
+  display: flex;
+  max-width: 90rem;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 2rem;
+  margin: auto;
+  padding: 1.5rem clamp(1rem, 5vw, 4rem);
+}
+
+.footer-inner strong {
+  color: var(--mat-sys-on-surface);
+}
+
+.footer-inner p {
+  margin: 0.35rem 0 0;
+}
+
+.footer-meta {
+  font-size: 0.875rem;
+}
+
+.footer-meta a,
+.footer-links a {
+  color: var(--mat-sys-primary);
+}
+
+.footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.25rem;
+}
+
+@media (max-width: 900px) {
+  .navigation-trigger {
+    display: inline-flex;
+  }
+}
+
+@media (max-width: 620px) {
+  .documentation-label {
+    display: none;
+  }
+
+  .site-header a[aria-label*='GitHub'] {
+    min-width: 48px;
+    padding: 0;
+    font-size: 0;
+  }
+
+  .site-header a[aria-label*='GitHub'] mat-icon {
+    margin: 0;
+  }
+
+  .footer-inner {
+    flex-direction: column;
+  }
+
+  .footer-links {
+    justify-content: flex-start;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skip-link,
+  mat-sidenav,
+  mat-sidenav-container,
+  mat-sidenav-content {
+    transition-duration: 0.01ms !important;
+  }
+}

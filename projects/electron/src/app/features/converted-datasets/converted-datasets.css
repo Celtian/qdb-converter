@@ -34,6 +34,16 @@
   padding: 0 0.25rem;
 }
 
+.row-count {
+  color: var(--mat-sys-on-surface-variant);
+  font-variant-numeric: tabular-nums;
+  font-weight: 500;
+  margin: 0;
+  margin-inline-start: auto;
+  text-align: end;
+  white-space: nowrap;
+}
+
 .table-container {
   overflow: hidden;
 }
@@ -56,92 +66,6 @@
   overflow: initial;
   text-align: center;
   width: 4rem;
-}
-
-.mat-column-expand {
-  overflow: initial;
-  text-align: center;
-  width: 3rem;
-}
-
-.record-count-toggle {
-  --mat-icon-button-state-layer-size: 2.5rem;
-}
-
-.dataset-row--expanded td {
-  border-bottom-width: 0;
-}
-
-.record-detail-row {
-  display: none;
-  height: 0;
-}
-
-.record-detail-row--expanded {
-  display: table-row;
-}
-
-.record-details-cell {
-  padding: 0;
-}
-
-.record-details {
-  border-bottom: 1px solid var(--mat-sys-outline-variant);
-  background: var(--mat-sys-surface-container-lowest);
-  padding: 1rem 1.5rem 1.25rem 7rem;
-}
-
-.record-details h2 {
-  font-size: 1rem;
-  margin: 0;
-}
-
-.record-count-grid {
-  display: grid;
-  gap: 0.75rem;
-  grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr));
-  margin: 0.75rem 0 0;
-}
-
-.record-count-grid > div {
-  background: var(--mat-sys-surface-container-low);
-  border: 1px solid var(--mat-sys-outline-variant);
-  border-radius: 0.75rem;
-  display: grid;
-  gap: 0.25rem;
-  min-width: 0;
-  padding: 0.75rem;
-}
-
-.record-count-grid dt {
-  color: var(--mat-sys-on-surface-variant);
-  min-width: 0;
-}
-
-.record-count-grid code {
-  overflow-wrap: anywhere;
-  user-select: text;
-}
-
-.record-count-grid dd {
-  font-size: 1.05rem;
-  font-variant-numeric: tabular-nums;
-  font-weight: 700;
-  margin: 0;
-}
-
-.record-count-grid--unavailable dd,
-.record-count-fallback {
-  color: var(--mat-sys-on-surface-variant);
-}
-
-.record-count-grid--unavailable dd {
-  font-size: 0.875rem;
-  font-weight: 500;
-}
-
-.record-count-fallback {
-  margin: 0.5rem 0 0;
 }
 
 .dataset-name-button {
@@ -204,12 +128,13 @@
     width: 100%;
   }
 
+  .row-count {
+    margin-inline-start: 0;
+    width: 100%;
+  }
+
   .selection-footer {
     align-items: stretch;
     flex-direction: column;
-  }
-
-  .record-details {
-    padding-inline: 1rem;
   }
 }

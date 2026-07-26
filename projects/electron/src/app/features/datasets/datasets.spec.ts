@@ -89,6 +89,54 @@ describe('ImportedDatasets', () => {
     expect(component).toBeTruthy();
   });
 
+  it('shows the total filtered row count independently of pagination', async () => {
+    await TestBed.inject(AppStore).refresh();
+    await fixture.whenStable();
+    const controls = component as unknown as {
+      applyFilters(filters: {
+        kind: 'imported';
+        fifaVersion: number | 'all';
+        sourceKind: 'text-folder' | 't3db' | 'all';
+      }): void;
+      clearFilters(): void;
+      pageChanged(event: { pageIndex: number; pageSize: number; length: number }): void;
+      setQuery(event: Event): void;
+    };
+    const element = fixture.nativeElement as HTMLElement;
+    const rowCount = (): HTMLElement => element.querySelector<HTMLElement>('.row-count')!;
+    const search = (value: string): void => {
+      controls.setQuery({
+        target: Object.assign(document.createElement('input'), { value }),
+      } as unknown as Event);
+    };
+
+    expect(rowCount().textContent?.trim()).toBe('2 rows');
+    expect(rowCount().getAttribute('role')).toBe('status');
+    expect(rowCount().getAttribute('aria-live')).toBe('polite');
+    expect(rowCount().getAttribute('aria-atomic')).toBe('true');
+
+    controls.pageChanged({ pageIndex: 1, pageSize: 1, length: 2 });
+    await fixture.whenStable();
+    expect(rowCount().textContent?.trim()).toBe('2 rows');
+
+    search('fixture');
+    await fixture.whenStable();
+    expect(rowCount().textContent?.trim()).toBe('1 row');
+
+    controls.clearFilters();
+    controls.applyFilters({ kind: 'imported', fifaVersion: 22, sourceKind: 'all' });
+    await fixture.whenStable();
+    expect(rowCount().textContent?.trim()).toBe('1 row');
+
+    search('missing');
+    await fixture.whenStable();
+    expect(rowCount().textContent?.trim()).toBe('0 rows');
+
+    controls.clearFilters();
+    await fixture.whenStable();
+    expect(rowCount().textContent?.trim()).toBe('2 rows');
+  });
+
   it('renders dataset statuses as non-interactive badges', async () => {
     await TestBed.inject(AppStore).refresh();
     await fixture.whenStable();

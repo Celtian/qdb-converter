@@ -78,16 +78,13 @@ export class ConvertedDatasets {
   protected readonly pageSizeOptions = [10, 25, 50, 100];
   protected readonly selectedIds = signal<ReadonlySet<string>>(new Set());
   protected readonly deletionPending = signal(false);
-  protected readonly expandedDatasetId = signal<string | undefined>(undefined);
   protected readonly columnDefinitions = columnsByDatasetTable.converted;
   private readonly columnPreference = signal(this.columnPreferences.load('converted'));
   protected readonly columns = computed(() => visibleDatasetColumns(this.columnPreference()));
   protected readonly displayedColumns = computed<readonly string[]>(() => [
     'select',
-    'expand',
     ...this.columns(),
   ]);
-  protected readonly expandedDetailColumns = ['expandedDetail'];
   protected readonly hiddenColumnCount = computed(
     () => this.columnDefinitions.length - this.columns().length,
   );
@@ -140,7 +137,7 @@ export class ConvertedDatasets {
   });
 
   protected setQuery(event: Event): void {
-    this.resetRowState();
+    this.clearSelection();
     this.pageIndex.set(0);
     this.query.set((event.target as HTMLInputElement).value);
   }
@@ -203,30 +200,16 @@ export class ConvertedDatasets {
   }
 
   protected clearFilters(): void {
-    this.resetRowState();
+    this.clearSelection();
     this.query.set('');
     this.filters.set(emptyConvertedDatasetFilters());
     this.pageIndex.set(0);
   }
 
   protected pageChanged(event: PageEvent): void {
-    this.resetRowState();
+    this.clearSelection();
     this.pageIndex.set(event.pageIndex);
     this.pageSize.set(event.pageSize);
-  }
-
-  protected isExpanded(dataset: ConvertedDatasetDescriptor): boolean {
-    return this.expandedDatasetId() === dataset.id;
-  }
-
-  protected toggleExpanded(dataset: ConvertedDatasetDescriptor): void {
-    this.expandedDatasetId.update((expandedId) =>
-      expandedId === dataset.id ? undefined : dataset.id,
-    );
-  }
-
-  protected recordDetailsId(dataset: ConvertedDatasetDescriptor): string {
-    return `converted-dataset-records-${dataset.id}`;
   }
 
   protected showDetails(dataset: ConvertedDatasetDescriptor): void {
@@ -319,13 +302,12 @@ export class ConvertedDatasets {
       });
   }
 
-  private resetRowState(): void {
+  private clearSelection(): void {
     this.selectedIds.set(new Set());
-    this.expandedDatasetId.set(undefined);
   }
 
   private applyFilters(filters: ConvertedDatasetFilters): void {
-    this.resetRowState();
+    this.clearSelection();
     this.filters.set({ ...filters });
     this.pageIndex.set(0);
   }
@@ -333,7 +315,7 @@ export class ConvertedDatasets {
   private async deleteDataset(id: string): Promise<void> {
     this.deletionPending.set(true);
     try {
-      if (await this.store.removeConvertedDataset(id)) this.resetRowState();
+      if (await this.store.removeConvertedDataset(id)) this.clearSelection();
     } finally {
       this.deletionPending.set(false);
     }
@@ -344,7 +326,7 @@ export class ConvertedDatasets {
     if (!ids.length || this.deletionPending()) return;
     this.deletionPending.set(true);
     try {
-      if (await this.store.removeConvertedDatasets(ids)) this.resetRowState();
+      if (await this.store.removeConvertedDatasets(ids)) this.clearSelection();
     } finally {
       this.deletionPending.set(false);
     }

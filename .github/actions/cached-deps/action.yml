@@ -1,0 +1,35 @@
+name: 💾 Get & Cache Dependencies
+description: Install Bun dependencies and cache node_modules
+runs:
+  using: composite
+  steps:
+    - name: 💾 Cache dependencies
+      id: cache
+      uses: actions/cache@v4
+      with:
+        path: node_modules
+        key: ${{ runner.os }}-bun-1.3.14-${{ hashFiles('bun.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-bun-1.3.14-
+
+    - name: 🛠️ Install dependencies
+      if: steps.cache.outputs.cache-hit != 'true' && runner.os != 'Windows'
+      shell: bash
+      run: bun install --frozen-lockfile
+
+    - name: 🛠️ Install Windows dependencies
+      if: steps.cache.outputs.cache-hit != 'true' && runner.os == 'Windows'
+      shell: bash
+      run: bun install --frozen-lockfile --ignore-scripts
+
+    - name: 🐿️ Restore Squirrel packaging tools
+      if: runner.os == 'Windows'
+      shell: bash
+      run: |
+        cp node_modules/electron-winstaller/vendor/7z-x64.exe node_modules/electron-winstaller/vendor/7z.exe
+        cp node_modules/electron-winstaller/vendor/7z-x64.dll node_modules/electron-winstaller/vendor/7z.dll
+
+    - name: 🪝 Restore lifecycle setup
+      if: steps.cache.outputs.cache-hit == 'true' && runner.os != 'Windows'
+      shell: bash
+      run: bun run prepare

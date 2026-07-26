@@ -29,25 +29,10 @@ const dataset: ConvertedDatasetDescriptor = {
   fifaVersion: 22,
   createdAt: new Date(1).toISOString(),
   status: 'available',
-  tableNames: ['players', 'teams'],
-  tableCount: 2,
+  tableNames: ['players'],
+  tableCount: 1,
   rowCount: 2,
-  tableSummaries: [
-    {
-      table: 'players',
-      rows: 2,
-      defaultSubstitutions: 0,
-      ratingDifferences: 0,
-      warnings: [],
-    },
-    {
-      table: 'teams',
-      rows: 0,
-      defaultSubstitutions: 0,
-      ratingDifferences: 0,
-      warnings: [],
-    },
-  ],
+  tableSummaries: [],
   warnings: [],
 };
 
@@ -60,18 +45,6 @@ const secondDataset: ConvertedDatasetDescriptor = {
   fifaVersion: 20,
   createdAt: new Date(2).toISOString(),
   status: 'corrupt',
-  tableNames: ['leagues'],
-  tableCount: 1,
-  rowCount: 500,
-  tableSummaries: [
-    {
-      table: 'leagues',
-      rows: 500,
-      defaultSubstitutions: 0,
-      ratingDifferences: 0,
-      warnings: [],
-    },
-  ],
 };
 
 describe('ConvertedDatasets', () => {
@@ -104,6 +77,60 @@ describe('ConvertedDatasets', () => {
     await fixture.whenStable();
   });
 
+  it('shows the total filtered row count independently of pagination', async () => {
+    await TestBed.inject(AppStore).refresh();
+    await fixture.whenStable();
+    const controls = component as unknown as {
+      applyFilters(filters: {
+        kind: 'converted';
+        sourceVersion: number | 'all';
+        targetVersion: number | 'all';
+        status: 'available' | 'corrupt' | 'all';
+      }): void;
+      clearFilters(): void;
+      pageChanged(event: { pageIndex: number; pageSize: number; length: number }): void;
+      setQuery(event: Event): void;
+    };
+    const element = fixture.nativeElement as HTMLElement;
+    const rowCount = (): HTMLElement => element.querySelector<HTMLElement>('.row-count')!;
+    const search = (value: string): void => {
+      controls.setQuery({
+        target: Object.assign(document.createElement('input'), { value }),
+      } as unknown as Event);
+    };
+
+    expect(rowCount().textContent?.trim()).toBe('2 rows');
+    expect(rowCount().getAttribute('role')).toBe('status');
+    expect(rowCount().getAttribute('aria-live')).toBe('polite');
+    expect(rowCount().getAttribute('aria-atomic')).toBe('true');
+
+    controls.pageChanged({ pageIndex: 1, pageSize: 1, length: 2 });
+    await fixture.whenStable();
+    expect(rowCount().textContent?.trim()).toBe('2 rows');
+
+    search('fixture');
+    await fixture.whenStable();
+    expect(rowCount().textContent?.trim()).toBe('1 row');
+
+    controls.clearFilters();
+    controls.applyFilters({
+      kind: 'converted',
+      sourceVersion: 21,
+      targetVersion: 'all',
+      status: 'all',
+    });
+    await fixture.whenStable();
+    expect(rowCount().textContent?.trim()).toBe('1 row');
+
+    search('missing');
+    await fixture.whenStable();
+    expect(rowCount().textContent?.trim()).toBe('0 rows');
+
+    controls.clearFilters();
+    await fixture.whenStable();
+    expect(rowCount().textContent?.trim()).toBe('2 rows');
+  });
+
   it('lists converted metadata with an accessible table', async () => {
     await TestBed.inject(AppStore).refresh();
     await fixture.whenStable();
@@ -117,6 +144,12 @@ describe('ConvertedDatasets', () => {
     expect(
       [...element.querySelectorAll('td.mat-column-target')].map((cell) => cell.textContent?.trim()),
     ).toEqual(['FIFA 20', 'FIFA 22']);
+    expect(element.querySelector('th.mat-column-rows')?.textContent?.trim()).toBe('Records');
+    expect(element.querySelector('.mat-column-expand')).toBeNull();
+    expect(
+      [...element.querySelectorAll('td.mat-column-rows')].map((cell) => cell.textContent?.trim()),
+    ).toEqual(['2', '2']);
+    expect(element.querySelector('.record-count-toggle')).toBeNull();
     expect(element.querySelector('.source-name')).toBeNull();
     expect(element.textContent).not.toContain('From Fixture');
     const nameButtons = element.querySelectorAll<HTMLButtonElement>('.dataset-name-button');
@@ -165,120 +198,6 @@ describe('ConvertedDatasets', () => {
     open.mockReturnValueOnce({ afterClosed: () => of(undefined) } as never);
     nameButton!.click();
     expect(open).toHaveBeenCalledTimes(1);
-  });
-
-  it('expands one accessible per-table record summary at a time', async () => {
-    await TestBed.inject(AppStore).refresh();
-    await fixture.whenStable();
-    const element = fixture.nativeElement as HTMLElement;
-    const fixtureToggle = element.querySelector<HTMLButtonElement>(
-      `button[aria-label="Expand record counts for ${dataset.name}"]`,
-    )!;
-    const secondToggle = element.querySelector<HTMLButtonElement>(
-      `button[aria-label="Expand record counts for ${secondDataset.name}"]`,
-    )!;
-
-    expect(fixtureToggle.getAttribute('aria-expanded')).toBe('false');
-    expect(element.querySelector('.record-detail-row--expanded')).toBeNull();
-
-    fixtureToggle.click();
-    await fixture.whenStable();
-
-    const fixtureDetails = document.getElementById(`converted-dataset-records-${dataset.id}`)!;
-    expect(fixtureToggle.getAttribute('aria-expanded')).toBe('true');
-    expect(fixtureToggle.getAttribute('aria-controls')).toBe(fixtureDetails.id);
-    expect(
-      [...fixtureDetails.querySelectorAll('.record-count-grid > div')].map((metric) => ({
-        table: metric.querySelector('dt')?.textContent?.trim(),
-        records: metric.querySelector('dd')?.textContent?.trim(),
-      })),
-    ).toEqual([
-      { table: 'players', records: '2' },
-      { table: 'teams', records: '0' },
-    ]);
-    expect((await axe.run(element)).violations).toEqual([]);
-
-    secondToggle.click();
-    await fixture.whenStable();
-
-    expect(fixtureToggle.getAttribute('aria-expanded')).toBe('false');
-    expect(secondToggle.getAttribute('aria-expanded')).toBe('true');
-    expect(element.querySelectorAll('.record-detail-row--expanded')).toHaveLength(1);
-    expect(
-      document
-        .getElementById(`converted-dataset-records-${secondDataset.id}`)
-        ?.querySelector('dd')
-        ?.textContent?.trim(),
-    ).toBe('500');
-
-    secondToggle.click();
-    await fixture.whenStable();
-    expect(secondToggle.getAttribute('aria-expanded')).toBe('false');
-    expect(element.querySelector('.record-detail-row--expanded')).toBeNull();
-  });
-
-  it('lists known tables when legacy per-table record counts are unavailable', async () => {
-    const legacyDataset: ConvertedDatasetDescriptor = {
-      ...dataset,
-      tableSummaries: [],
-    };
-    vi.mocked(window.qdbConverter!.listConvertedDatasets).mockResolvedValueOnce([legacyDataset]);
-    await TestBed.inject(AppStore).refresh();
-    await fixture.whenStable();
-    const element = fixture.nativeElement as HTMLElement;
-
-    element
-      .querySelector<HTMLButtonElement>(
-        `button[aria-label="Expand record counts for ${legacyDataset.name}"]`,
-      )!
-      .click();
-    await fixture.whenStable();
-
-    const details = document.getElementById(`converted-dataset-records-${legacyDataset.id}`)!;
-    expect(details.querySelector('.record-count-fallback')?.textContent).toContain(
-      'Per-table record counts were not recorded',
-    );
-    expect(
-      [...details.querySelectorAll('.record-count-grid--unavailable > div')].map((metric) => ({
-        table: metric.querySelector('dt')?.textContent?.trim(),
-        records: metric.querySelector('dd')?.textContent?.trim(),
-      })),
-    ).toEqual([
-      { table: 'players', records: 'Unavailable' },
-      { table: 'teams', records: 'Unavailable' },
-    ]);
-    expect((await axe.run(element)).violations).toEqual([]);
-  });
-
-  it('collapses record details when the table context changes or a deletion succeeds', async () => {
-    await TestBed.inject(AppStore).refresh();
-    await fixture.whenStable();
-    const controls = component as unknown as {
-      expandedDatasetId(): string | undefined;
-      toggleExpanded(value: ConvertedDatasetDescriptor): void;
-      setQuery(event: Event): void;
-      pageChanged(event: { pageIndex: number; pageSize: number; length: number }): void;
-      applyFilters(filters: { sourceVersion: 'all'; targetVersion: 'all'; status: 'all' }): void;
-      deleteDataset(id: string): Promise<void>;
-    };
-
-    controls.toggleExpanded(dataset);
-    controls.setQuery({
-      target: Object.assign(document.createElement('input'), { value: '' }),
-    } as unknown as Event);
-    expect(controls.expandedDatasetId()).toBeUndefined();
-
-    controls.toggleExpanded(dataset);
-    controls.pageChanged({ pageIndex: 0, pageSize: 10, length: 2 });
-    expect(controls.expandedDatasetId()).toBeUndefined();
-
-    controls.toggleExpanded(dataset);
-    controls.applyFilters({ sourceVersion: 'all', targetVersion: 'all', status: 'all' });
-    expect(controls.expandedDatasetId()).toBeUndefined();
-
-    controls.toggleExpanded(dataset);
-    await controls.deleteDataset(dataset.id);
-    expect(controls.expandedDatasetId()).toBeUndefined();
   });
 
   it('searches, renames, and removes converted datasets independently', async () => {
@@ -430,6 +349,8 @@ describe('ConvertedDatasets', () => {
     expect(await drawer.getAriaLabelledby()).toBe('dataset-column-title');
     const panel = document.querySelector<HTMLElement>('.dataset-column-drawer-panel')!;
     const target = await documentLoader.getHarness(MatCheckboxHarness.with({ label: 'Target' }));
+    const records = await documentLoader.getHarness(MatCheckboxHarness.with({ label: 'Records' }));
+    expect(await records.isChecked()).toBe(true);
     expect((await axe.run(panel)).violations).toEqual([]);
 
     await target.uncheck();

@@ -1,0 +1,49 @@
+:root {
+  --qdb-brand: var(--mat-sys-primary);
+  --qdb-accent: var(--mat-sys-tertiary);
+  --qdb-panel: var(--mat-sys-surface-container-low);
+  color-scheme: light dark;
+  font-family: Roboto, 'Helvetica Neue', sans-serif;
+  font-synthesis: none;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--mat-sys-surface);
+  scroll-behavior: smooth;
+}
+
+body {
+  min-height: 100%;
+  margin: 0;
+  background: var(--mat-sys-surface);
+  color: var(--mat-sys-on-surface);
+}
+
+button,
+input {
+  font: inherit;
+}
+
+a:focus-visible,
+button:focus-visible,
+[tabindex='0']:focus-visible {
+  outline: 0.2rem solid var(--mat-sys-primary);
+  outline-offset: 0.2rem;
+}
+
+::selection {
+  background: var(--mat-sys-primary-container);
+  color: var(--mat-sys-on-primary-container);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}

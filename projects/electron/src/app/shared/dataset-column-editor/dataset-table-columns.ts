@@ -54,7 +54,7 @@ export const columnsByDatasetTable: Record<DatasetTableKind, readonly DatasetCol
     defineColumn('source', 'Source'),
     defineColumn('target', 'Target'),
     defineColumn('tables', 'Tables'),
-    defineColumn('rows', 'Rows'),
+    defineColumn('rows', 'Records'),
     defineColumn('created', 'Created'),
     defineColumn('status', 'Status'),
     defineColumn('actions', 'Actions', true),

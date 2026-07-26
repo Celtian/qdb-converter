@@ -46,6 +46,9 @@
         <span class="column-count" aria-hidden="true">{{ hiddenColumnCount() | number }}</span>
       }
     </button>
+    <p class="row-count" role="status" aria-live="polite" aria-atomic="true">
+      {{ filtered().length | number }} {{ filtered().length === 1 ? 'row' : 'rows' }}
+    </p>
   </div>
 
   @if (store.loading()) {
@@ -58,7 +61,7 @@
   <div class="table-container">
     @if (filtered().length) {
       <div class="table-scroll" role="region" aria-label="Converted datasets table" tabindex="0">
-        <table mat-table [dataSource]="paged()" multiTemplateDataRows>
+        <table mat-table [dataSource]="paged()">
           <ng-container matColumnDef="select">
             <th mat-header-cell *matHeaderCellDef>
               <mat-checkbox
@@ -85,30 +88,6 @@
               />
             </td>
           </ng-container>
-          <ng-container matColumnDef="expand">
-            <th mat-header-cell *matHeaderCellDef>
-              <span class="visually-hidden">Record details</span>
-            </th>
-            <td mat-cell *matCellDef="let dataset">
-              <button
-                class="record-count-toggle"
-                matIconButton
-                type="button"
-                [attr.aria-controls]="recordDetailsId(dataset)"
-                [attr.aria-expanded]="isExpanded(dataset)"
-                [attr.aria-label]="
-                  (isExpanded(dataset) ? 'Collapse' : 'Expand') +
-                  ' record counts for ' +
-                  dataset.name
-                "
-                (click)="toggleExpanded(dataset)"
-              >
-                <mat-icon aria-hidden="true">
-                  {{ isExpanded(dataset) ? 'expand_less' : 'expand_more' }}
-                </mat-icon>
-              </button>
-            </td>
-          </ng-container>
           <ng-container matColumnDef="name">
             <th mat-header-cell *matHeaderCellDef>Name</th>
             <td mat-cell *matCellDef="let dataset">
@@ -121,50 +100,6 @@
               >
                 {{ dataset.name }}
               </button>
-            </td>
-          </ng-container>
-          <ng-container matColumnDef="expandedDetail">
-            <td
-              class="record-details-cell"
-              mat-cell
-              *matCellDef="let dataset"
-              [attr.colspan]="displayedColumns().length"
-            >
-              <section
-                class="record-details"
-                [id]="recordDetailsId(dataset)"
-                [attr.aria-label]="'Record counts for ' + dataset.name"
-              >
-                <h2>Records by table</h2>
-                @if (dataset.tableSummaries.length) {
-                  <dl class="record-count-grid">
-                    @for (summary of dataset.tableSummaries; track summary.table) {
-                      <div>
-                        <dt>
-                          <code>{{ summary.table }}</code>
-                        </dt>
-                        <dd>{{ summary.rows | number: '1.0-0' }}</dd>
-                      </div>
-                    }
-                  </dl>
-                } @else {
-                  <p class="record-count-fallback">
-                    Per-table record counts were not recorded for this dataset.
-                  </p>
-                  @if (dataset.tableNames.length) {
-                    <dl class="record-count-grid record-count-grid--unavailable">
-                      @for (tableName of dataset.tableNames; track tableName) {
-                        <div>
-                          <dt>
-                            <code>{{ tableName }}</code>
-                          </dt>
-                          <dd>Unavailable</dd>
-                        </div>
-                      }
-                    </dl>
-                  }
-                }
-              </section>
             </td>
           </ng-container>
           <ng-container matColumnDef="source">
@@ -182,7 +117,7 @@
             </td>
           </ng-container>
           <ng-container matColumnDef="rows">
-            <th mat-header-cell *matHeaderCellDef>Rows</th>
+            <th mat-header-cell *matHeaderCellDef>Records</th>
             <td mat-cell *matCellDef="let dataset">
               {{ dataset.rowCount | number: '1.0-0' }}
             </td>
@@ -222,18 +157,9 @@
           </ng-container>
           <tr mat-header-row *matHeaderRowDef="displayedColumns()"></tr>
           <tr
-            class="dataset-row"
             mat-row
             *matRowDef="let row; columns: displayedColumns()"
             [class.selected-row]="isSelected(row)"
-            [class.dataset-row--expanded]="isExpanded(row)"
-          ></tr>
-          <tr
-            class="record-detail-row"
-            mat-row
-            *matRowDef="let row; columns: expandedDetailColumns"
-            [class.record-detail-row--expanded]="isExpanded(row)"
-            [attr.aria-hidden]="isExpanded(row) ? null : 'true'"
           ></tr>
         </table>
       </div>

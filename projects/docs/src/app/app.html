@@ -1,0 +1,123 @@
+<a class="skip-link" href="#main-content">Skip to content</a>
+<header class="site-header">
+  <mat-toolbar>
+    <button
+      class="navigation-trigger"
+      type="button"
+      matIconButton
+      aria-label="Open documentation navigation"
+      aria-controls="documentation-navigation"
+      [attr.aria-expanded]="navigationOpened()"
+      (click)="toggleNavigation()"
+    >
+      <mat-icon aria-hidden="true">menu</mat-icon>
+    </button>
+    <a class="brand" routerLink="/" aria-label="QDB Converter documentation home">
+      <img ngSrc="qdb-converter-icon.png" width="28" height="28" alt="" priority />
+      <span>QDB Converter</span>
+      <span class="documentation-label">Documentation</span>
+    </a>
+    <span class="toolbar-spacer"></span>
+    <a
+      matButton
+      [href]="site.links.repository"
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="QDB Converter source on GitHub (opens in a new tab)"
+    >
+      <mat-icon aria-hidden="true">code</mat-icon>
+      GitHub
+    </a>
+  </mat-toolbar>
+</header>
+
+<mat-sidenav-container>
+  <mat-sidenav
+    id="documentation-navigation"
+    aria-label="Documentation navigation"
+    [mode]="navigationMode()"
+    [opened]="navigationOpened()"
+    (openedChange)="navigationChanged($event)"
+  >
+    <p class="navigation-heading">Documentation</p>
+    <mat-nav-list aria-label="Documentation pages">
+      @for (page of pages; track page.path) {
+        <a
+          #activePage="routerLinkActive"
+          mat-list-item
+          routerLinkActive="active"
+          ariaCurrentWhenActive="page"
+          [activated]="activePage.isActive"
+          [routerLink]="'/' + page.path"
+          [routerLinkActiveOptions]="{ exact: true }"
+          (click)="closeNavigation()"
+        >
+          <mat-icon matListItemIcon aria-hidden="true">{{ page.icon }}</mat-icon>
+          <span matListItemTitle>{{ page.label }}</span>
+        </a>
+      }
+    </mat-nav-list>
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+    <div class="content-shell">
+      <main id="main-content" tabindex="-1">
+        <router-outlet />
+      </main>
+      <footer>
+        <div class="footer-inner">
+          <div>
+            <strong>QDB Converter</strong>
+            <p>Secure, deterministic FIFA 11–23 database conversion.</p>
+            <p class="footer-meta">
+              © {{ site.copyrightYear }} {{ site.author }} ·
+              <a
+                [href]="site.links.version"
+                target="_blank"
+                rel="noopener noreferrer"
+                [attr.aria-label]="
+                  'QDB Converter ' + site.versionLabel + ' source (opens in a new tab)'
+                "
+                >QDB Converter {{ site.versionLabel }}</a
+              >
+            </p>
+          </div>
+          <nav class="footer-links" aria-label="Project links">
+            <a
+              matButton
+              [href]="site.links.latestRelease"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Latest download (opens in a new tab)"
+              >Latest download</a
+            >
+            <a
+              matButton
+              [href]="site.links.changelog"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Changelog (opens in a new tab)"
+              >Changelog</a
+            >
+            <a
+              matButton
+              [href]="site.links.issues"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Report an issue (opens in a new tab)"
+              >Report an issue</a
+            >
+            <a
+              matButton
+              [href]="site.links.license"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="MIT License (opens in a new tab)"
+              >MIT License</a
+            >
+          </nav>
+        </div>
+      </footer>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>

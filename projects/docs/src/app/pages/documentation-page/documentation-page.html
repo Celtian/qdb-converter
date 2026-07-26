@@ -1,0 +1,152 @@
+<article>
+  <header class="hero">
+    <div class="hero-content">
+      <p class="eyebrow">{{ content.eyebrow }}</p>
+      <h1>{{ content.title }}</h1>
+      <p class="summary">{{ content.summary }}</p>
+      @if (content.actions?.length) {
+        <div class="actions" aria-label="Page actions">
+          @for (action of content.actions; track action.label) {
+            @if (action.route) {
+              <a
+                [matButton]="action.primary ? 'filled' : 'outlined'"
+                [class.primary-action]="action.primary"
+                [routerLink]="action.route"
+              >
+                {{ action.label }}
+                <mat-icon aria-hidden="true">arrow_forward</mat-icon>
+              </a>
+            } @else {
+              <a
+                [matButton]="action.primary ? 'filled' : 'outlined'"
+                [class.primary-action]="action.primary"
+                [href]="action.href"
+                target="_blank"
+                rel="noopener noreferrer"
+                [attr.aria-label]="action.label + ' (opens in a new tab)'"
+              >
+                {{ action.label }}
+                <mat-icon aria-hidden="true">open_in_new</mat-icon>
+              </a>
+            }
+          }
+        </div>
+      }
+    </div>
+  </header>
+
+  <div class="page-content">
+    @if (content.facts?.length) {
+      <mat-card appearance="outlined" class="facts-card">
+        <mat-card-content>
+          <dl class="facts" aria-label="At a glance">
+            @for (fact of content.facts; track fact.label) {
+              <div>
+                <dt>{{ fact.label }}</dt>
+                <dd>{{ fact.value }}</dd>
+              </div>
+            }
+          </dl>
+        </mat-card-content>
+      </mat-card>
+    }
+
+    <div class="sections">
+      @for (section of content.sections; track section.title) {
+        <mat-card appearance="outlined" class="documentation-card" [class.wide]="section.wide">
+          <mat-card-content>
+            <section>
+              @if (section.eyebrow) {
+                <p class="section-eyebrow">{{ section.eyebrow }}</p>
+              }
+              <h2>{{ section.title }}</h2>
+              @for (paragraph of section.paragraphs; track paragraph) {
+                <p>{{ paragraph }}</p>
+              }
+              @if (section.items?.length) {
+                <ul>
+                  @for (item of section.items; track item) {
+                    <li>{{ item }}</li>
+                  }
+                </ul>
+              }
+              @if (section.steps?.length) {
+                <ol>
+                  @for (step of section.steps; track step) {
+                    <li>{{ step }}</li>
+                  }
+                </ol>
+              }
+              @if (section.table; as table) {
+                <div
+                  class="table-scroll"
+                  role="region"
+                  tabindex="0"
+                  [attr.aria-label]="table.caption"
+                >
+                  <table>
+                    <caption>
+                      {{
+                        table.caption
+                      }}
+                    </caption>
+                    <thead>
+                      <tr>
+                        @for (column of table.columns; track column) {
+                          <th scope="col">{{ column }}</th>
+                        }
+                      </tr>
+                    </thead>
+                    <tbody>
+                      @for (row of table.rows; track $index) {
+                        <tr>
+                          @for (cell of row; track $index) {
+                            <td>{{ cell }}</td>
+                          }
+                        </tr>
+                      }
+                    </tbody>
+                  </table>
+                </div>
+              }
+              @if (section.code) {
+                <pre><code>{{ section.code }}</code></pre>
+              }
+              @if (section.note) {
+                <aside>
+                  <mat-icon aria-hidden="true">info</mat-icon>
+                  <div>
+                    <strong>Good to know</strong><span>{{ section.note }}</span>
+                  </div>
+                </aside>
+              }
+              @if (section.actions?.length) {
+                <div class="section-actions">
+                  @for (action of section.actions; track action.label) {
+                    @if (action.route) {
+                      <a matButton [routerLink]="action.route">
+                        {{ action.label }}
+                        <mat-icon aria-hidden="true">arrow_forward</mat-icon>
+                      </a>
+                    } @else {
+                      <a
+                        matButton
+                        [href]="action.href"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        [attr.aria-label]="action.label + ' (opens in a new tab)'"
+                      >
+                        {{ action.label }}
+                        <mat-icon aria-hidden="true">open_in_new</mat-icon>
+                      </a>
+                    }
+                  }
+                </div>
+              }
+            </section>
+          </mat-card-content>
+        </mat-card>
+      }
+    </div>
+  </div>
+</article>

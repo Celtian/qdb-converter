@@ -1,45 +1,94 @@
-name: Pull request
+name: 🧪 Test PR
 
-on:
-  pull_request:
-  workflow_dispatch:
+'on': pull_request
 
 permissions:
   contents: read
 
+concurrency:
+  group: pr-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
 jobs:
   validate:
+    name: 🛠️ Validate & Build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: oven-sh/setup-bun@v2
-        with:
-          bun-version: 1.3.14
-      - uses: actions/setup-node@v4
+      - name: 🗜️ Checkout
+        uses: actions/checkout@v4
+
+      - name: 🗜️ Setup Node
+        uses: actions/setup-node@v4
         with:
           node-version: 24.18.0
-      - run: bun install --frozen-lockfile
-      - run: bun run format:check
-      - run: bun run lint
-      - run: bun run typecheck
-      - run: bun run test:coverage
-      - run: bun run build
+
+      - name: 🥟 Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.3.14
+
+      - name: 🛠️ Install dependencies
+        uses: ./.github/actions/cached-deps
+
+      - name: 📤 Upload version info
+        uses: actions/upload-artifact@v4
+        with:
+          name: version-info
+          path: projects/version-info.ts
+          if-no-files-found: error
+          retention-days: 1
+
+      - name: ✅ Validate source
+        run: bun run validate:source
+
+      - name: 🧪 Test with coverage
+        run: bun run test:coverage
+
+      - name: 🏗️ Build applications
+        run: bun run build
+
+      - name: 🔎 Verify build layout
+        shell: bash
+        run: |
+          test -f dist/electron/browser/index.html
+          test -f dist/docs/browser/index.html
+          test -f .electron/electron/electron/main/index.js
+          test -f .electron/electron/electron/preload.js
 
   package-windows:
+    name: 🪟 Package Windows x64
+    needs: validate
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: oven-sh/setup-bun@v2
-        with:
-          bun-version: 1.3.14
-      - uses: actions/setup-node@v4
+      - name: 🗜️ Checkout
+        uses: actions/checkout@v4
+
+      - name: 🗜️ Setup Node
+        uses: actions/setup-node@v4
         with:
           node-version: 24.18.0
-      - run: bun install --frozen-lockfile
-      - run: bun run package:desktop
-      - name: Verify executable and ASAR layout
+
+      - name: 🥟 Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.3.14
+
+      - name: 🛠️ Install dependencies
+        uses: ./.github/actions/cached-deps
+
+      - name: 📥 Download version info
+        uses: actions/download-artifact@v4
+        with:
+          name: version-info
+          path: projects
+
+      - name: 📦 Make Windows release
+        run: bun run release:windows
+
+      - name: 🔎 Verify artifact layout
         shell: pwsh
         run: |
-          $exe = Get-ChildItem out -Filter "QDB Converter.exe" -Recurse
-          $asar = Get-ChildItem out -Filter app.asar -Recurse
-          if (!$exe -or !$asar) { throw "Packaged executable or app.asar is missing." }
+          if (-not (Test-Path 'out/make/squirrel.windows/x64/QDB-Converter-Setup.exe')) { throw 'Squirrel Setup.exe is missing.' }
+          if (-not (Get-ChildItem 'out/make/zip/win32/x64' -Filter '*.zip')) { throw 'Portable ZIP is missing.' }
+          if (-not (Test-Path 'out/qdb-converter-win32-x64/QDB Converter.exe')) { throw 'Packaged executable is missing.' }
+          if (-not (Test-Path 'out/qdb-converter-win32-x64/resources/app.asar')) { throw 'ASAR bundle is missing.' }

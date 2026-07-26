@@ -4,6 +4,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatButtonHarness } from '@angular/material/button/testing';
 import { MatCheckboxHarness } from '@angular/material/checkbox/testing';
 import { MatDialogHarness } from '@angular/material/dialog/testing';
+import { MatTabGroupHarness } from '@angular/material/tabs/testing';
 import axe from 'axe-core';
 import type {
   ConvertedDatasetDescriptor,
@@ -105,37 +106,52 @@ describe('Settings', () => {
 
   it('edits and resets independent default layouts for both dataset tables', async () => {
     const element = fixture.nativeElement as HTMLElement;
-    expect(element.textContent).toContain('Imported dataset columns');
-    expect(element.textContent).toContain('Converted dataset columns');
-    const version = await loader.getHarness(MatCheckboxHarness.with({ label: 'Version' }));
-    const target = await loader.getHarness(MatCheckboxHarness.with({ label: 'Target' }));
-    const requiredNames = await loader.getAllHarnesses(MatCheckboxHarness.with({ label: 'Name' }));
-    const requiredActions = await loader.getAllHarnesses(
+    const tabGroup = await loader.getHarness(
+      MatTabGroupHarness.with({ selector: '.dataset-column-tabs' }),
+    );
+    const tabs = await tabGroup.getTabs();
+    const [importedTab, convertedTab] = tabs;
+
+    expect(element.textContent).toContain('Dataset column layouts');
+    expect(await Promise.all(tabs.map((tab) => tab.getLabel()))).toEqual(['Imported', 'Converted']);
+    expect(await importedTab.isSelected()).toBe(true);
+
+    const version = await importedTab.getHarness(MatCheckboxHarness.with({ label: 'Version' }));
+    const importedName = await importedTab.getHarness(MatCheckboxHarness.with({ label: 'Name' }));
+    const importedActions = await importedTab.getHarness(
       MatCheckboxHarness.with({ label: 'Actions' }),
     );
-
-    expect(await Promise.all(requiredNames.map((checkbox) => checkbox.isDisabled()))).toEqual([
-      true,
-      true,
-    ]);
-    expect(await Promise.all(requiredActions.map((checkbox) => checkbox.isDisabled()))).toEqual([
-      true,
-      true,
-    ]);
+    expect(await importedName.isDisabled()).toBe(true);
+    expect(await importedActions.isDisabled()).toBe(true);
 
     await version.uncheck();
-    await target.uncheck();
     await fixture.whenStable();
 
     expect(TestBed.inject(DatasetColumnPreferences).load('imported').visible).not.toContain(
       'version',
     );
+
+    await convertedTab.select();
+    await fixture.whenStable();
+    const target = await convertedTab.getHarness(MatCheckboxHarness.with({ label: 'Target' }));
+    const convertedName = await convertedTab.getHarness(MatCheckboxHarness.with({ label: 'Name' }));
+    const convertedActions = await convertedTab.getHarness(
+      MatCheckboxHarness.with({ label: 'Actions' }),
+    );
+    expect(await convertedName.isDisabled()).toBe(true);
+    expect(await convertedActions.isDisabled()).toBe(true);
+
+    await target.uncheck();
+    await fixture.whenStable();
+
     expect(TestBed.inject(DatasetColumnPreferences).load('converted').visible).not.toContain(
       'target',
     );
 
+    await importedTab.select();
+    await fixture.whenStable();
     await (
-      await loader.getHarness(MatButtonHarness.with({ text: 'Reset imported columns' }))
+      await importedTab.getHarness(MatButtonHarness.with({ text: 'Reset imported columns' }))
     ).click();
     await fixture.whenStable();
 

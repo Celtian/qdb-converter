@@ -28,6 +28,13 @@ describe('DatasetColumnEditor', () => {
     };
   };
 
+  it('uses Records for converted datasets while imported datasets retain Rows', () => {
+    expect(columnsByDatasetTable.imported.find(({ key }) => key === 'rows')?.label).toBe('Rows');
+    expect(columnsByDatasetTable.converted.find(({ key }) => key === 'rows')?.label).toBe(
+      'Records',
+    );
+  });
+
   it('keeps required columns enabled and changes optional visibility accessibly', async () => {
     const { fixture, loader } = await createEditor();
     const name = await loader.getHarness(MatCheckboxHarness.with({ label: 'Name' }));

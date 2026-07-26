@@ -7,7 +7,7 @@
 [![Release](https://github.com/Celtian/qdb-converter/actions/workflows/main.yml/badge.svg)](https://github.com/Celtian/qdb-converter/actions/workflows/main.yml)
 [![Pull request](https://github.com/Celtian/qdb-converter/actions/workflows/pull-request.yml/badge.svg)](https://github.com/Celtian/qdb-converter/actions/workflows/pull-request.yml)
 
-[Releases](https://github.com/Celtian/qdb-converter/releases) · [Changelog](CHANGELOG.md) · [Source](https://github.com/Celtian/qdb-converter)
+[Documentation](https://celtian.github.io/qdb-converter/) · [Releases](https://github.com/Celtian/qdb-converter/releases) · [Changelog](CHANGELOG.md) · [Source](https://github.com/Celtian/qdb-converter)
 
 </div>
 
@@ -49,6 +49,7 @@ exports.
 - `projects/electron/electron` — Electron main process, preload bridge, workers, dataset library, and
   conversion engine.
 - `projects/electron/shared` — serializable IPC contracts and FIFA table configuration.
+- `projects/docs` — statically prerendered Angular documentation deployed to GitHub Pages.
 - `tools` — Node-side test configuration and supporting development tooling.
 
 The Angular renderer never receives direct filesystem access. Electron main-process handlers
@@ -71,6 +72,12 @@ bun run start
 Angular starts on `127.0.0.1:4200`, Electron main and preload code compile into `.electron`, and
 Electron opens the desktop window.
 
+Run the documentation site separately:
+
+```sh
+bun run start:docs
+```
+
 ## 🧪 Checks and builds
 
 Run the complete validation suite:
@@ -88,11 +95,13 @@ bun run typecheck
 bun run test
 bun run test:coverage
 bun run build
+bun run build:docs
 bun run package:desktop
 ```
 
-`bun run test` covers the Angular renderer, Electron main-process code, and shared logic. Pull
-requests also build the application and verify the packaged Windows executable and ASAR layout.
+`bun run test` covers the Angular renderer, documentation, Electron main-process code, and shared
+logic. Pull requests build both Angular applications and verify the packaged Windows executable and
+ASAR layout.
 
 ## 📦 Distribution
 
@@ -102,7 +111,8 @@ bun run package:desktop
 
 This packages Electron for the current host. Stable `vMAJOR.MINOR.PATCH` tags from `master` run the
 validation suite, build Windows x64 Squirrel and ZIP artifacts, publish them to GitHub Releases, and
-attach SHA-256 checksums. Prerelease versions are published as prereleases.
+attach a SHA-256 sidecar to every artifact. After the Windows release succeeds, the same workflow
+publishes the prerendered documentation to the `gh-pages` branch.
 
 ### 🪟 Installing on Windows
 

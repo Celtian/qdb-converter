@@ -1,51 +1,159 @@
-name: Release
+name: 🚀 Build & Publish
 
 on:
   push:
     tags:
-      - 'v*'
+      - 'v[0-9]+.[0-9]+.[0-9]+'
 
 permissions:
   contents: write
 
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
 jobs:
-  release:
-    runs-on: windows-latest
+  validate:
+    name: ✅ Validate & Build
+    runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: 🗜️ Checkout
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - uses: oven-sh/setup-bun@v2
-        with:
-          bun-version: 1.3.14
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 24.18.0
-      - name: Verify release tag
-        shell: pwsh
+
+      - name: 🔎 Verify tag targets master
+        shell: bash
         run: |
           git fetch origin master
-          if ((git rev-parse HEAD) -ne (git rev-parse origin/master)) {
-            throw "Release tags must point to the current master commit."
-          }
-          $version = (Get-Content package.json | ConvertFrom-Json).version
-          if ("v$version" -ne "${{ github.ref_name }}") {
-            throw "Tag ${{ github.ref_name }} does not match package.json version $version."
-          }
-      - run: bun install --frozen-lockfile
-      - run: bun run validate
-      - run: bun run release:publish
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: Create checksums
+          test "$GITHUB_SHA" = "$(git rev-parse origin/master)"
+
+      - name: 🔎 Verify package version
+        shell: bash
+        run: |
+          PACKAGE_VERSION=$(node -p "require('./package.json').version")
+          test "v${PACKAGE_VERSION}" = "${GITHUB_REF_NAME}"
+
+      - name: 🗜️ Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24.18.0
+
+      - name: 🥟 Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.3.14
+
+      - name: 🛠️ Install dependencies
+        uses: ./.github/actions/cached-deps
+
+      - name: 📤 Upload version info
+        uses: actions/upload-artifact@v4
+        with:
+          name: version-info
+          path: projects/version-info.ts
+          if-no-files-found: error
+          retention-days: 1
+
+      - name: ✅ Validate source
+        run: bun run validate
+
+      - name: 🏗️ Build applications
+        run: bun run build
+
+      - name: 🔎 Verify build layout
+        shell: bash
+        run: |
+          test -f dist/electron/browser/index.html
+          test -f dist/docs/browser/index.html
+          test -f .electron/electron/electron/main/index.js
+          test -f .electron/electron/electron/preload.js
+
+      - name: 🛠️ Copy index.html to 404.html
+        shell: bash
+        run: cp ./dist/docs/browser/index.html ./dist/docs/browser/404.html
+
+      - name: 📚 Upload documentation artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: documentation
+          path: dist/docs/browser
+          if-no-files-found: error
+
+  windows:
+    name: 🪟 Publish Windows x64
+    needs: validate
+    runs-on: windows-latest
+    steps:
+      - name: 🗜️ Checkout
+        uses: actions/checkout@v4
+
+      - name: 🗜️ Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24.18.0
+
+      - name: 🥟 Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.3.14
+
+      - name: 🛠️ Install dependencies
+        uses: ./.github/actions/cached-deps
+
+      - name: 📥 Download version info
+        uses: actions/download-artifact@v4
+        with:
+          name: version-info
+          path: projects
+
+      - name: 📦 Make Windows release
+        run: bun run release:windows
+
+      - name: 🔎 Verify release artifacts
         shell: pwsh
         run: |
-          Get-ChildItem out/make -File -Recurse |
-            Get-FileHash -Algorithm SHA256 |
-            ForEach-Object { "$($_.Hash.ToLower())  $($_.Path.Replace((Get-Location).Path + '\', ''))" } |
-            Set-Content out/make/SHA256SUMS.txt
-      - name: Attach checksums
+          if (-not (Test-Path 'out/make/squirrel.windows/x64/QDB-Converter-Setup.exe')) { throw 'Squirrel Setup.exe is missing.' }
+          if (-not (Get-ChildItem 'out/make/zip/win32/x64' -Filter '*.zip')) { throw 'Portable ZIP is missing.' }
+          if (-not (Test-Path 'out/make/squirrel.windows/x64/RELEASES')) { throw 'Squirrel update metadata is missing.' }
+          if (-not (Get-ChildItem 'out/make/squirrel.windows/x64' -Filter '*.nupkg')) { throw 'Squirrel update package is missing.' }
+          if (-not (Test-Path 'out/qdb-converter-win32-x64/QDB Converter.exe')) { throw 'Packaged executable is missing.' }
+          if (-not (Test-Path 'out/qdb-converter-win32-x64/resources/app.asar')) { throw 'ASAR bundle is missing.' }
+
+      - name: 🔐 Create checksums
         shell: pwsh
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: gh release upload "${{ github.ref_name }}" out/make/SHA256SUMS.txt --clobber
+        run: |
+          Get-ChildItem out/make -File -Recurse | ForEach-Object {
+            $hash = (Get-FileHash $_.FullName -Algorithm SHA256).Hash.ToLower()
+            "$hash  $($_.Name)" | Out-File -FilePath "$($_.FullName).sha256" -Encoding ascii
+          }
+
+      - name: 🚀 Publish GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          generate_release_notes: true
+          body: |
+            ## 🪟 Windows installation
+
+            Download and run `QDB-Converter-Setup.exe`, or download the ZIP for the portable build.
+
+            This release is currently unsigned, so Windows SmartScreen or antivirus software may show a warning. Verify the release URL and the supplied SHA-256 checksum before deciding whether to continue. Do not disable antivirus globally.
+          files: out/make/**/*
+
+  deploy-docs:
+    name: 📚 Deploy GitHub Pages
+    needs: [validate, windows]
+    runs-on: ubuntu-latest
+    steps:
+      - name: 📚 Download documentation artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: documentation
+          path: dist/docs/browser
+
+      - name: 🚀 Deploy GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          deploy_key: ${{ secrets.ACTIONS_DEPLOY_KEY }}
+          publish_branch: gh-pages
+          publish_dir: ./dist/docs/browser

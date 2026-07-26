@@ -28,48 +28,49 @@
   <mat-card class="column-card" appearance="outlined">
     <mat-card-header>
       <mat-icon mat-card-avatar>view_column</mat-icon>
-      <mat-card-title>Imported dataset columns</mat-card-title>
-      <mat-card-subtitle>
-        Set the default visibility and order for the imported datasets table.
-      </mat-card-subtitle>
+      <mat-card-title id="dataset-column-layouts-title">Dataset column layouts</mat-card-title>
+      <mat-card-subtitle>Set default visibility and order for dataset tables.</mat-card-subtitle>
     </mat-card-header>
     <mat-card-content>
-      <app-dataset-column-editor
-        [columns]="columnDefinitions.imported"
-        [defaultPreference]="defaultColumnPreference('imported')"
-        table="imported"
-        [preference]="importedColumnPreference()"
-        (preferenceChange)="saveColumns('imported', $event)"
-      />
-      <div class="column-actions">
-        <button matButton="outlined" type="button" (click)="resetColumns('imported')">
-          Reset imported columns
-        </button>
-      </div>
-    </mat-card-content>
-  </mat-card>
-
-  <mat-card class="column-card" appearance="outlined">
-    <mat-card-header>
-      <mat-icon mat-card-avatar>view_column</mat-icon>
-      <mat-card-title>Converted dataset columns</mat-card-title>
-      <mat-card-subtitle>
-        Set the default visibility and order for the converted datasets table.
-      </mat-card-subtitle>
-    </mat-card-header>
-    <mat-card-content>
-      <app-dataset-column-editor
-        [columns]="columnDefinitions.converted"
-        [defaultPreference]="defaultColumnPreference('converted')"
-        table="converted"
-        [preference]="convertedColumnPreference()"
-        (preferenceChange)="saveColumns('converted', $event)"
-      />
-      <div class="column-actions">
-        <button matButton="outlined" type="button" (click)="resetColumns('converted')">
-          Reset converted columns
-        </button>
-      </div>
+      <mat-tab-group
+        class="dataset-column-tabs"
+        animationDuration="0ms"
+        aria-labelledby="dataset-column-layouts-title"
+        [preserveContent]="true"
+      >
+        <mat-tab label="Imported">
+          <div class="column-tab-content">
+            <app-dataset-column-editor
+              [columns]="columnDefinitions.imported"
+              [defaultPreference]="defaultColumnPreference('imported')"
+              table="imported"
+              [preference]="importedColumnPreference()"
+              (preferenceChange)="saveColumns('imported', $event)"
+            />
+            <div class="column-actions">
+              <button matButton="outlined" type="button" (click)="resetColumns('imported')">
+                Reset imported columns
+              </button>
+            </div>
+          </div>
+        </mat-tab>
+        <mat-tab label="Converted">
+          <div class="column-tab-content">
+            <app-dataset-column-editor
+              [columns]="columnDefinitions.converted"
+              [defaultPreference]="defaultColumnPreference('converted')"
+              table="converted"
+              [preference]="convertedColumnPreference()"
+              (preferenceChange)="saveColumns('converted', $event)"
+            />
+            <div class="column-actions">
+              <button matButton="outlined" type="button" (click)="resetColumns('converted')">
+                Reset converted columns
+              </button>
+            </div>
+          </div>
+        </mat-tab>
+      </mat-tab-group>
     </mat-card-content>
   </mat-card>
 

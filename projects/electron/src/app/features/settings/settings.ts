@@ -5,6 +5,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatRadioModule } from '@angular/material/radio';
+import { MatTabsModule } from '@angular/material/tabs';
 import type { DatasetKind } from '../../../../shared/contracts';
 import { AppStore } from '../../core/app-store';
 import { ConfirmationDialog } from '../../core/confirmation-dialog/confirmation-dialog';
@@ -28,6 +29,7 @@ import {
     MatDialogModule,
     MatIconModule,
     MatRadioModule,
+    MatTabsModule,
   ],
   templateUrl: './settings.html',
   styleUrl: './settings.css',

@@ -46,6 +46,9 @@
         <span class="column-count" aria-hidden="true">{{ hiddenColumnCount() | number }}</span>
       }
     </button>
+    <p class="row-count" role="status" aria-live="polite" aria-atomic="true">
+      {{ filtered().length | number }} {{ filtered().length === 1 ? 'row' : 'rows' }}
+    </p>
   </div>
 
   @if (store.loading()) {
