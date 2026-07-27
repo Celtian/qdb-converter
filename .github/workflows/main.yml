@@ -18,7 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: 🗜️ Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
@@ -35,7 +35,7 @@ jobs:
           test "v${PACKAGE_VERSION}" = "${GITHUB_REF_NAME}"
 
       - name: 🗜️ Setup Node
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v7
         with:
           node-version: 24.18.0
 
@@ -86,10 +86,10 @@ jobs:
     runs-on: windows-latest
     steps:
       - name: 🗜️ Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: 🗜️ Setup Node
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v7
         with:
           node-version: 24.18.0
 
@@ -102,7 +102,7 @@ jobs:
         uses: ./.github/actions/cached-deps
 
       - name: 📥 Download version info
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: version-info
           path: projects
@@ -129,7 +129,7 @@ jobs:
           }
 
       - name: 🚀 Publish GitHub Release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         with:
           generate_release_notes: true
           body: |
@@ -146,7 +146,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: 📚 Download documentation artifact
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: documentation
           path: dist/docs/browser
