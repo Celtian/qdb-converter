@@ -4,6 +4,7 @@ module.exports = {
   packagerConfig: {
     asar: true,
     executableName: 'QDB Converter',
+    icon: 'resources/icons/qdb-converter.ico',
     ignore: [
       /^\/examples/,
       /^\/projects/,
@@ -22,6 +23,7 @@ module.exports = {
       config: {
         name: 'qdb_converter',
         setupExe: 'QDB-Converter-Setup.exe',
+        setupIcon: 'resources/icons/qdb-converter.ico',
       },
     },
     { name: '@electron-forge/maker-zip', platforms: ['win32'] },
