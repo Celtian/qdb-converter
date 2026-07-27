@@ -18,7 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: 🗜️ Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
@@ -35,7 +35,7 @@ jobs:
           test "v${PACKAGE_VERSION}" = "${GITHUB_REF_NAME}"
 
       - name: 🗜️ Setup Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: 24.18.0
 
@@ -48,7 +48,7 @@ jobs:
         uses: ./.github/actions/cached-deps
 
       - name: 📤 Upload version info
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: version-info
           path: projects/version-info.ts
@@ -74,7 +74,7 @@ jobs:
         run: cp ./dist/docs/browser/index.html ./dist/docs/browser/404.html
 
       - name: 📚 Upload documentation artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: documentation
           path: dist/docs/browser
@@ -86,10 +86,10 @@ jobs:
     runs-on: windows-latest
     steps:
       - name: 🗜️ Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: 🗜️ Setup Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: 24.18.0
 
