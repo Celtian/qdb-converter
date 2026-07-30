@@ -1,0 +1,3969 @@
+{
+  "version": 1,
+  "profiles": {
+    "electron": {
+      "files": [
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/ac.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/ad.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/ae.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/af.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/ag.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/ai.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/al.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/am.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/ao.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/aq.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/ar.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/as.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/at.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/au.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/aw.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/ax.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/az.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/ba.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/bb.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/bd.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/be.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/bf.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/bg.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/bh.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/bi.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/bj.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/bl.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/bm.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/bn.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/bo.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/bq.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/br.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/bs.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/bt.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/bv.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/bw.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/by.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/bz.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/ca.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/cc.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/cd.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/cf.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/cg.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/ch.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/ci.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/ck.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/cl.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/cm.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/cn.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/co.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/cp.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/cq.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/cr.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/cu.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/cv.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/cw.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/cx.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/cy.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/cz.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/de.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/dg.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/dj.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/dk.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/dm.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/do.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/dz.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/ea.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/ec.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/ee.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/eg.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/eh.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/er.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/es.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/et.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/eu.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/fi.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/fj.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/fk.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/fm.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/fo.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/fr.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/ga.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/gb-eng.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/gb-nir.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/gb-sct.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/gb-wls.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/gb.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/gd.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/ge.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/gf.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/gg.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/gh.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/gi.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/gl.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/gm.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/gn.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/gp.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/gq.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/gr.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/gs.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/gt.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/gu.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/gw.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/gy.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/hk.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/hm.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/hn.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/hr.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/ht.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/hu.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/ic.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/id.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/ie.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/il.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/im.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/in.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/io.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/iq.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/ir.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/is.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/it.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/je.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/jm.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/jo.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/jp.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/ke.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/kg.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/kh.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/ki.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/km.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/kn.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/kp.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/kr.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/kw.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/ky.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/kz.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/la.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/lb.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/lc.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/li.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/lk.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/lr.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/ls.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/lt.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/lu.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/lv.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/ly.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/ma.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/mc.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/md.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/me.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/mf.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/mg.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/mh.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/mk.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/ml.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/mm.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/mn.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/mo.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/mp.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/mq.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/mr.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/ms.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/mt.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/mu.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/mv.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/mw.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/mx.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/my.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/mz.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/na.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/nc.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/ne.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/nf.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/ng.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/ni.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/nl.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/no.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/np.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/nr.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/nu.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/nz.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/om.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/pa.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/pe.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/pf.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/pg.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/ph.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/pk.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/pl.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/pm.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/pn.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/pr.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/ps.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/pt.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/pw.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/py.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/qa.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/re.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/ro.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/rs.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/ru.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/rw.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/sa.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/sb.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/sc.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/sd.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/se.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/sg.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/sh.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/si.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/sj.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/sk.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/sl.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/sm.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/sn.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/so.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/sr.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/ss.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/st.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/sv.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/sx.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/sy.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/sz.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/ta.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/tc.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/td.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/tf.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/tg.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/th.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/tj.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/tk.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/tl.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/tm.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/tn.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/to.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/tr.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/tt.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/tv.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/tw.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/tz.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/ua.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/ug.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/um.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/un.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/us.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/uy.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/uz.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/va.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/vc.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/ve.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/vg.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/vi.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/vn.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/vu.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/wf.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/ws.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/xk.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/ye.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/yt.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/za.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/zm.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "20x15/zw.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/ac.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/ad.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/ae.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/af.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/ag.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/ai.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/al.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/am.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/ao.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/aq.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/ar.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/as.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/at.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/au.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/aw.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/ax.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/az.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/ba.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/bb.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/bd.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/be.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/bf.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/bg.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/bh.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/bi.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/bj.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/bl.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/bm.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/bn.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/bo.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/bq.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/br.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/bs.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/bt.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/bv.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/bw.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/by.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/bz.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/ca.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/cc.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/cd.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/cf.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/cg.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/ch.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/ci.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/ck.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/cl.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/cm.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/cn.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/co.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/cp.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/cq.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/cr.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/cu.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/cv.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/cw.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/cx.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/cy.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/cz.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/de.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/dg.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/dj.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/dk.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/dm.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/do.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/dz.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/ea.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/ec.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/ee.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/eg.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/eh.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/er.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/es.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/et.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/eu.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/fi.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/fj.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/fk.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/fm.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/fo.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/fr.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/ga.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/gb-eng.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/gb-nir.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/gb-sct.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/gb-wls.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/gb.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/gd.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/ge.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/gf.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/gg.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/gh.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/gi.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/gl.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/gm.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/gn.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/gp.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/gq.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/gr.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/gs.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/gt.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/gu.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/gw.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/gy.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/hk.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/hm.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/hn.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/hr.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/ht.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/hu.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/ic.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/id.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/ie.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/il.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/im.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/in.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/io.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/iq.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/ir.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/is.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/it.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/je.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/jm.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/jo.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/jp.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/ke.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/kg.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/kh.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/ki.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/km.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/kn.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/kp.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/kr.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/kw.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/ky.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/kz.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/la.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/lb.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/lc.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/li.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/lk.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/lr.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/ls.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/lt.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/lu.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/lv.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/ly.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/ma.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/mc.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/md.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/me.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/mf.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/mg.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/mh.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/mk.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/ml.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/mm.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/mn.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/mo.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/mp.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/mq.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/mr.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/ms.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/mt.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/mu.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/mv.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/mw.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/mx.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/my.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/mz.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/na.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/nc.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/ne.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/nf.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/ng.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/ni.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/nl.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/no.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/np.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/nr.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/nu.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/nz.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/om.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/pa.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/pe.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/pf.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/pg.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/ph.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/pk.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/pl.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/pm.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/pn.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/pr.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/ps.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/pt.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/pw.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/py.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/qa.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/re.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/ro.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/rs.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/ru.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/rw.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/sa.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/sb.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/sc.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/sd.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/se.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/sg.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/sh.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/si.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/sj.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/sk.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/sl.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/sm.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/sn.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/so.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/sr.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/ss.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/st.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/sv.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/sx.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/sy.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/sz.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/ta.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/tc.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/td.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/tf.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/tg.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/th.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/tj.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/tk.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/tl.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/tm.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/tn.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/to.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/tr.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/tt.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/tv.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/tw.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/tz.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/ua.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/ug.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/um.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/un.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/us.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/uy.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/uz.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/va.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/vc.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/ve.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/vg.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/vi.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/vn.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/vu.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/wf.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/ws.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/xk.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/ye.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/yt.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/za.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/zm.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "40x30/zw.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/ac.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/ad.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/ae.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/af.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/ag.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/ai.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/al.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/am.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/ao.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/aq.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/ar.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/as.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/at.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/au.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/aw.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/ax.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/az.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/ba.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/bb.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/bd.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/be.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/bf.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/bg.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/bh.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/bi.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/bj.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/bl.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/bm.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/bn.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/bo.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/bq.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/br.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/bs.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/bt.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/bv.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/bw.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/by.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/bz.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/ca.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/cc.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/cd.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/cf.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/cg.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/ch.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/ci.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/ck.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/cl.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/cm.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/cn.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/co.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/cp.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/cq.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/cr.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/cu.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/cv.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/cw.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/cx.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/cy.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/cz.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/de.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/dg.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/dj.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/dk.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/dm.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/do.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/dz.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/ea.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/ec.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/ee.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/eg.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/eh.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/er.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/es.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/et.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/eu.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/fi.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/fj.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/fk.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/fm.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/fo.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/fr.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/ga.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/gb-eng.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/gb-nir.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/gb-sct.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/gb-wls.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/gb.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/gd.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/ge.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/gf.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/gg.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/gh.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/gi.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/gl.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/gm.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/gn.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/gp.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/gq.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/gr.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/gs.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/gt.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/gu.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/gw.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/gy.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/hk.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/hm.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/hn.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/hr.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/ht.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/hu.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/ic.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/id.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/ie.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/il.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/im.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/in.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/io.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/iq.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/ir.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/is.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/it.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/je.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/jm.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/jo.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/jp.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/ke.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/kg.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/kh.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/ki.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/km.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/kn.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/kp.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/kr.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/kw.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/ky.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/kz.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/la.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/lb.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/lc.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/li.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/lk.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/lr.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/ls.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/lt.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/lu.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/lv.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/ly.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/ma.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/mc.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/md.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/me.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/mf.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/mg.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/mh.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/mk.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/ml.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/mm.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/mn.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/mo.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/mp.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/mq.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/mr.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/ms.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/mt.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/mu.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/mv.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/mw.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/mx.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/my.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/mz.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/na.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/nc.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/ne.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/nf.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/ng.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/ni.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/nl.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/no.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/np.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/nr.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/nu.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/nz.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/om.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/pa.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/pe.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/pf.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/pg.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/ph.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/pk.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/pl.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/pm.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/pn.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/pr.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/ps.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/pt.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/pw.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/py.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/qa.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/re.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/ro.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/rs.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/ru.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/rw.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/sa.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/sb.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/sc.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/sd.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/se.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/sg.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/sh.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/si.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/sj.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/sk.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/sl.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/sm.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/sn.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/so.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/sr.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/ss.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/st.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/sv.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/sx.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/sy.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/sz.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/ta.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/tc.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/td.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/tf.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/tg.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/th.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/tj.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/tk.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/tl.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/tm.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/tn.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/to.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/tr.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/tt.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/tv.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/tw.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/tz.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/ua.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/ug.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/um.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/un.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/us.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/uy.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/uz.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/va.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/vc.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/ve.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/vg.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/vi.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/vn.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/vu.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/wf.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/ws.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/xk.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/ye.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/yt.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/za.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/zm.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "60x45/zw.png",
+          "kind": "image"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "ATTRIBUTION.txt",
+          "kind": "attribution"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/public/flags",
+          "relativePath": "LICENSE-GRAPHICS",
+          "kind": "license"
+        },
+        {
+          "root": "/home/domin/development/celtian/qdb-converter/projects/electron/src/app/shared/country-flag",
+          "relativePath": "country-flags.generated.ts",
+          "kind": "typescript"
+        }
+      ]
+    }
+  }
+}

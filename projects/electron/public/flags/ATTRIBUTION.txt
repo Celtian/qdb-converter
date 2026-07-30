@@ -1,0 +1,25 @@
+Twemoji flag graphics
+Copyright (c) 2018 Twitter, Inc and other contributors.
+Source: https://github.com/jdecked/twemoji
+License: Creative Commons Attribution 4.0 International (CC-BY-4.0)
+License URI: https://creativecommons.org/licenses/by/4.0/
+
+The PNG and WebP files generated from the Twemoji source SVGs are resized and
+re-encoded versions of those graphics.
+
+Northern Ireland flag graphic (`gb-nir`)
+Copyright (c) 2013 Panayiotis Lipiridis
+Source: https://github.com/lipis/flag-icons
+License: MIT
+
+Canadian, Australian, German, Spanish, and Italian subdivision flag graphics
+(`ca-*`, `au-*`, `de-*`, `es-*`, `it-*`)
+Copyright (c) 2021 AJ McKenna
+Source: https://github.com/amckenna41/iso3166-flags
+License: MIT
+
+U.S. state flag graphics (`us-*`)
+Source: https://flagcdn.com/
+Original vector sources: https://commons.wikimedia.org/
+License status: Public domain
+Status reference: https://flagpedia.net/terms

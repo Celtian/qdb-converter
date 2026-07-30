@@ -9,6 +9,7 @@ import type {
   QdbConverterApi,
 } from '../../../../shared/contracts';
 import { AppStore } from '../../core/app-store';
+import { ConfettiService } from '../../core/confetti/confetti.service';
 
 import { Convert } from './convert';
 
@@ -47,9 +48,11 @@ const convertedDataset: ConvertedDatasetDescriptor = {
 
 describe('Convert', () => {
   let component: Convert;
+  let celebrate: ReturnType<typeof vi.fn>;
   let fixture: ComponentFixture<Convert>;
 
   beforeEach(async () => {
+    celebrate = vi.fn();
     window.qdbConverter = {
       listImportedDatasets: vi.fn(async () => [importedDataset]),
       listConvertedDatasets: vi.fn(async () => []),
@@ -66,7 +69,7 @@ describe('Convert', () => {
     } as unknown as QdbConverterApi;
     await TestBed.configureTestingModule({
       imports: [Convert],
-      providers: [provideRouter([])],
+      providers: [provideRouter([]), { provide: ConfettiService, useValue: { celebrate } }],
     }).compileComponents();
 
     fixture = TestBed.createComponent(Convert);
@@ -154,6 +157,7 @@ describe('Convert', () => {
       }),
     );
     expect(controls.result()?.status).toBe('completed');
+    expect(celebrate).toHaveBeenCalledOnce();
     expect(
       (fixture.nativeElement as HTMLElement).querySelector('a[href="/datasets"]')?.textContent,
     ).toContain('View datasets');

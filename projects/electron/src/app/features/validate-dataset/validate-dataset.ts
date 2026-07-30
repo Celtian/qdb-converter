@@ -15,6 +15,7 @@ import type {
   ImportedDatasetDescriptor,
 } from '../../../../shared/contracts';
 import { AppStore } from '../../core/app-store';
+import { ConfettiService } from '../../core/confetti/confetti.service';
 import { DesktopApi } from '../../core/desktop-api';
 import { StatusBadge } from '../../shared/status-badge/status-badge';
 import { ValidationReport } from '../../shared/validation-report/validation-report';
@@ -46,6 +47,7 @@ const datasetSearchDetails = (dataset: ValidatableDatasetDescriptor): string[] =
 })
 export class ValidateDataset {
   protected readonly store = inject(AppStore);
+  private readonly confetti = inject(ConfettiService);
   private readonly desktop = inject(DesktopApi);
   private validationRequestId = 0;
 
@@ -147,8 +149,10 @@ export class ValidateDataset {
         datasetKind,
         datasetId: dataset.id,
       });
-      if (requestId === this.validationRequestId && key === this.selectionKey())
+      if (requestId === this.validationRequestId && key === this.selectionKey()) {
         this.result.set(result);
+        if (result.errorCount === 0) this.confetti.celebrate();
+      }
     } catch (error) {
       if (requestId === this.validationRequestId && key === this.selectionKey())
         this.error.set(error instanceof Error ? error.message : String(error));

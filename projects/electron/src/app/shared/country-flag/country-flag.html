@@ -1,0 +1,4 @@
+<picture [attr.aria-hidden]="decorative() ? 'true' : null">
+  <source type="image/png" [attr.srcset]="image().srcset" />
+  <img [ngSrc]="image().src" [width]="image().width" [height]="image().height" [alt]="alt()" />
+</picture>

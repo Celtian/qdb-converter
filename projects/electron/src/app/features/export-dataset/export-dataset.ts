@@ -15,6 +15,7 @@ import type {
   ImportedDatasetDescriptor,
 } from '../../../../shared/contracts';
 import { AppStore } from '../../core/app-store';
+import { ConfettiService } from '../../core/confetti/confetti.service';
 
 type ExportableDatasetDescriptor = ImportedDatasetDescriptor | ConvertedDatasetDescriptor;
 
@@ -41,6 +42,7 @@ const datasetSearchDetails = (dataset: ExportableDatasetDescriptor): string[] =>
 })
 export class ExportDataset {
   protected readonly store = inject(AppStore);
+  private readonly confetti = inject(ConfettiService);
   protected readonly selectedDatasetKind = signal<DatasetKind | undefined>(undefined);
   protected readonly selectedDatasetId = signal('');
   protected readonly datasetQuery = signal('');
@@ -130,13 +132,13 @@ export class ExportDataset {
     if (!datasetKind || !dataset || !targetParentPath || this.store.loading()) return;
     this.result.set(undefined);
     try {
-      this.result.set(
-        await this.store.exportDataset({
-          datasetKind,
-          datasetId: dataset.id,
-          targetParentPath,
-        }),
-      );
+      const result = await this.store.exportDataset({
+        datasetKind,
+        datasetId: dataset.id,
+        targetParentPath,
+      });
+      this.result.set(result);
+      this.confetti.celebrate();
     } catch {
       // The store exposes the user-facing error.
     }

@@ -17,6 +17,7 @@
   "scripts": {
     "ng": "ng",
     "create-version": "package-version-info -o projects/version-info.ts",
+    "flags:build": "flag-resizer",
     "start": "bun run build:electron && concurrently --kill-others --names renderer,desktop \"bun run start:renderer\" \"bun run start:desktop\"",
     "start:renderer": "ng serve electron --host 127.0.0.1 --port 4200",
     "start:desktop": "wait-on http://127.0.0.1:4200 .electron/electron/electron/main/index.js .electron/electron/electron/preload.js && cross-env ELECTRON_RUN_AS_NODE= QDB_RENDERER_URL=http://127.0.0.1:4200 electron .",
@@ -97,6 +98,7 @@
     "electron": "43.2.0",
     "eslint": "^10.8.0",
     "eslint-config-prettier": "10.1.8",
+    "flag-resizer": "0.0.2",
     "husky": "9.1.7",
     "jsdom": "^30.0.0",
     "lint-staged": "17.2.0",

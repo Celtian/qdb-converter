@@ -11,6 +11,7 @@ import type {
   QdbConverterApi,
 } from '../../../../shared/contracts';
 import { AppStore } from '../../core/app-store';
+import { ConfettiService } from '../../core/confetti/confetti.service';
 
 import { ExportDataset } from './export-dataset';
 
@@ -49,9 +50,11 @@ const convertedDataset: ConvertedDatasetDescriptor = {
 
 describe('ExportDataset', () => {
   let component: ExportDataset;
+  let celebrate: ReturnType<typeof vi.fn>;
   let fixture: ComponentFixture<ExportDataset>;
 
   beforeEach(async () => {
+    celebrate = vi.fn();
     window.qdbConverter = {
       listImportedDatasets: vi.fn(async () => [importedDataset]),
       listConvertedDatasets: vi.fn(async () => [convertedDataset]),
@@ -66,6 +69,7 @@ describe('ExportDataset', () => {
     } as unknown as QdbConverterApi;
     await TestBed.configureTestingModule({
       imports: [ExportDataset],
+      providers: [{ provide: ConfettiService, useValue: { celebrate } }],
     }).compileComponents();
 
     fixture = TestBed.createComponent(ExportDataset);
@@ -203,6 +207,7 @@ describe('ExportDataset', () => {
       targetParentPath: '/exports',
     });
     expect(controls.result()?.outputPath).toContain('/exports/');
+    expect(celebrate).toHaveBeenCalledOnce();
     controls.reveal();
     expect(window.qdbConverter!.revealExport).toHaveBeenCalledWith(
       `/exports/${datasetKind}-fixture-20260726T120000Z`,

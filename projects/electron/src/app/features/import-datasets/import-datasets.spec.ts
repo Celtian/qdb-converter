@@ -9,6 +9,7 @@ import type {
   ImportedDatasetDescriptor,
   QdbConverterApi,
 } from '../../../../shared/contracts';
+import { ConfettiService } from '../../core/confetti/confetti.service';
 import { ImportDatasets } from './import-datasets';
 
 const candidate = (
@@ -49,11 +50,13 @@ const validationResult = (
 
 describe('ImportDatasets', () => {
   const formatStorageKey = 'qdb-converter-import-source-kind';
+  let celebrate: ReturnType<typeof vi.fn>;
   let component: ImportDatasets;
   let fixture: ComponentFixture<ImportDatasets>;
   let importResults: DatasetImportResult[];
 
   beforeEach(async () => {
+    celebrate = vi.fn();
     localStorage.removeItem(formatStorageKey);
     importResults = [];
     window.qdbConverter = {
@@ -86,7 +89,7 @@ describe('ImportDatasets', () => {
     } as unknown as QdbConverterApi;
     await TestBed.configureTestingModule({
       imports: [ImportDatasets],
-      providers: [provideRouter([])],
+      providers: [provideRouter([]), { provide: ConfettiService, useValue: { celebrate } }],
     }).compileComponents();
 
     fixture = TestBed.createComponent(ImportDatasets);
@@ -502,6 +505,7 @@ describe('ImportDatasets', () => {
     expect(controls.results()).toHaveLength(2);
     expect(controls.candidates()).toHaveLength(1);
     expect(controls.candidates()[0].selectionId).toBe('extra');
+    expect(celebrate).toHaveBeenCalledOnce();
     controls.cancelImport();
     expect(window.qdbConverter!.cancelImport).toHaveBeenCalled();
   });
