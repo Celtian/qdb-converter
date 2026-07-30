@@ -29,6 +29,7 @@ import type {
   DatasetSourceKind,
 } from '../../../../shared/contracts';
 import { AppStore } from '../../core/app-store';
+import { ConfettiService } from '../../core/confetti/confetti.service';
 import { DesktopApi } from '../../core/desktop-api';
 import { ValidationReport } from '../../shared/validation-report/validation-report';
 
@@ -72,6 +73,7 @@ const storedFormat = (): DatasetSourceKind => {
 })
 export class ImportDatasets {
   protected readonly store = inject(AppStore);
+  private readonly confetti = inject(ConfettiService);
   private readonly desktop = inject(DesktopApi);
   private readonly applicationRef = inject(ApplicationRef);
   private readonly stepper = viewChild(MatStepper);
@@ -362,6 +364,7 @@ export class ImportDatasets {
             ),
         ),
       );
+      if (imported.some((result) => result.status === 'completed')) this.confetti.celebrate();
     } catch (error) {
       this.error.set(error instanceof Error ? error.message : 'Dataset import failed.');
     }

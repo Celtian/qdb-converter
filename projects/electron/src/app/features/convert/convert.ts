@@ -13,6 +13,7 @@ import { RouterLink } from '@angular/router';
 import type { CreateConvertedDatasetResult } from '../../../../shared/contracts';
 import { fieldsFor, SUPPORTED_FIFA_VERSIONS } from '../../../../shared/table-config';
 import { AppStore } from '../../core/app-store';
+import { ConfettiService } from '../../core/confetti/confetti.service';
 
 @Component({
   selector: 'app-convert',
@@ -34,6 +35,7 @@ import { AppStore } from '../../core/app-store';
 })
 export class Convert {
   protected readonly store = inject(AppStore);
+  private readonly confetti = inject(ConfettiService);
   protected readonly fifaVersions = SUPPORTED_FIFA_VERSIONS;
   protected readonly selectedDatasetId = signal('');
   protected readonly datasetQuery = signal('');
@@ -129,14 +131,14 @@ export class Convert {
     this.runningRequestId.set(requestId);
     this.result.set(undefined);
     try {
-      this.result.set(
-        await this.store.createConvertedDataset({
-          requestId,
-          sourceDatasetId: source.id,
-          targetVersion: this.targetVersion(),
-          name: this.nameModel().name.trim(),
-        }),
-      );
+      const result = await this.store.createConvertedDataset({
+        requestId,
+        sourceDatasetId: source.id,
+        targetVersion: this.targetVersion(),
+        name: this.nameModel().name.trim(),
+      });
+      this.result.set(result);
+      if (result.status === 'completed') this.confetti.celebrate();
     } catch {
       // The store exposes the user-facing error.
     } finally {

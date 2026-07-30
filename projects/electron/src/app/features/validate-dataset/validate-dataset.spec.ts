@@ -13,6 +13,7 @@ import type {
   QdbConverterApi,
 } from '../../../../shared/contracts';
 import { AppStore } from '../../core/app-store';
+import { ConfettiService } from '../../core/confetti/confetti.service';
 import { ValidateDataset } from './validate-dataset';
 
 const importedDataset: ImportedDatasetDescriptor = {
@@ -69,9 +70,11 @@ const validationResult = (datasetId: string): DatasetValidationResult => ({
 
 describe('ValidateDataset', () => {
   let component: ValidateDataset;
+  let celebrate: ReturnType<typeof vi.fn>;
   let fixture: ComponentFixture<ValidateDataset>;
 
   beforeEach(async () => {
+    celebrate = vi.fn();
     window.qdbConverter = {
       listImportedDatasets: vi.fn(async () => [importedDataset, corruptImportedDataset]),
       listConvertedDatasets: vi.fn(async () => [convertedDataset]),
@@ -83,6 +86,7 @@ describe('ValidateDataset', () => {
     } as unknown as QdbConverterApi;
     await TestBed.configureTestingModule({
       imports: [ValidateDataset],
+      providers: [{ provide: ConfettiService, useValue: { celebrate } }],
     }).compileComponents();
 
     fixture = TestBed.createComponent(ValidateDataset);
@@ -169,6 +173,7 @@ describe('ValidateDataset', () => {
         datasetId: dataset.id,
       });
       expect(controls.result()?.datasetId).toBe(dataset.id);
+      expect(celebrate).toHaveBeenCalledOnce();
       expect((fixture.nativeElement as HTMLElement).textContent).toContain(
         'No validation issues were found',
       );

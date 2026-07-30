@@ -1,0 +1,9 @@
+:host,
+picture,
+img {
+  display: block;
+}
+
+:host {
+  flex: 0 0 auto;
+}
