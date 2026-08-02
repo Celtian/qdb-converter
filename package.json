@@ -124,6 +124,9 @@
     "node": ">=24.18 <25",
     "npm": "please-use-bun"
   },
+  "patchedDependencies": {
+    "eslint-plugin-tailwindcss@4.2.0": "patches/eslint-plugin-tailwindcss@4.2.0.patch"
+  },
   "auto-changelog": {
     "remote": "none",
     "commitUrl": "https://github.com/Celtian/qdb-converter/commit/{id}",
