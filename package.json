@@ -104,6 +104,7 @@
     "eslint-config-prettier": "10.1.8",
     "eslint-import-resolver-typescript": "^4.4.5",
     "eslint-plugin-boundaries": "^7.1.0",
+    "eslint-plugin-tailwindcss": "^4.2.0",
     "flag-resizer": "^0.0.3",
     "husky": "9.1.7",
     "jsdom": "^30.0.1",
