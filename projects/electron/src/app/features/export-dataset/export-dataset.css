@@ -8,6 +8,7 @@ mat-stepper h2 {
 
 mat-radio-group small {
   color: var(--mat-sys-on-surface-variant);
+  white-space: normal;
 }
 
 mat-radio-group mat-radio-button {
@@ -19,8 +20,4 @@ mat-radio-group mat-radio-button {
 mat-radio-group mat-radio-button:has(input:checked) {
   border-color: var(--mat-sys-primary);
   background: var(--mat-sys-secondary-container);
-}
-
-mat-radio-group small {
-  white-space: normal;
 }

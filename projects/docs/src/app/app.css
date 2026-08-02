@@ -90,7 +90,7 @@ footer a {
   color: var(--mat-sys-primary);
 }
 
-@media (max-width: 620px) {
+@media (width <= 620px) {
   header a[aria-label*='GitHub'] {
     min-width: 48px;
     padding: 0;

@@ -132,7 +132,7 @@ aside span {
   display: block;
 }
 
-@media (max-width: 620px) {
+@media (width <= 620px) {
   dl div + div {
     border-top: 1px solid var(--mat-sys-outline-variant);
     border-left: 0;
