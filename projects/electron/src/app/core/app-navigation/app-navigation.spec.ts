@@ -47,10 +47,10 @@ describe('AppNavigation', () => {
 
   it('groups navigation links by workflow', () => {
     const nav = (fixture.nativeElement as HTMLElement).querySelector('nav');
-    const groups = Array.from(nav?.querySelectorAll<HTMLElement>('.nav-group') ?? []);
+    const groups = Array.from(nav?.querySelectorAll<HTMLElement>('[role="group"]') ?? []);
 
     expect(
-      groups.map((group) => group.querySelector('.nav-group-label')?.textContent?.trim()),
+      groups.map((group) => group.querySelector('span[id^="nav-group-"]')?.textContent?.trim()),
     ).toEqual(['Imports', 'Conversion', 'Dataset Tools']);
     expect(
       groups.map((group) =>

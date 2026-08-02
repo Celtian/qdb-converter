@@ -7,45 +7,13 @@
   color: var(--mat-sys-on-surface);
 }
 
-.brand {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  padding: 0.5rem 0.75rem 1.25rem;
-  color: inherit;
-  font-size: 1.05rem;
-  font-weight: 700;
-  text-decoration: none;
-}
-
-.brand img {
+:host > a img {
   border-radius: 7px;
 }
 
-.nav-group,
-.utility-actions {
-  display: grid;
-  gap: 0.25rem;
-}
-
-.nav-group + .nav-group {
-  border-top: 1px solid var(--mat-sys-outline-variant);
-  margin-top: 0.5rem;
-  padding-top: 0.5rem;
-}
-
-.nav-group-label {
-  color: var(--mat-sys-on-surface-variant);
-  font-size: 0.7rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  padding: 0.35rem 0.75rem 0.15rem;
-  text-transform: uppercase;
-}
-
 nav a,
-.utility-actions a,
-.utility-actions button {
+:host > div a,
+:host > div button {
   width: 100%;
   justify-content: flex-start;
 }
@@ -55,11 +23,6 @@ nav a,
   color: var(--mat-sys-on-secondary-container);
 }
 
-.utility-actions {
-  margin-top: auto;
-  padding-top: 0.75rem;
-}
-
-.utility-actions mat-divider {
+:host > div mat-divider {
   margin-bottom: 0.5rem;
 }

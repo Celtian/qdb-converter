@@ -1,144 +1,26 @@
-.wizard-card {
-  overflow: hidden;
-}
-
-.qdb-wizard {
+mat-stepper {
   --mat-stepper-container-color: transparent;
 }
 
-.step-content {
-  display: grid;
-  justify-items: start;
-  gap: 1.5rem;
-  padding: 1.5rem 0 0.5rem;
-}
-
-.step-content h2,
-.step-content p {
-  margin: 0;
-}
-
-.step-content h2 {
+mat-stepper h2 {
   font-size: 1.35rem;
 }
 
-.step-intro {
-  display: grid;
-  gap: 0.5rem;
-}
-
-.step-intro p,
-.choice-label small,
-.dataset-option-details,
-.selected-dataset p {
+mat-radio-group small {
   color: var(--mat-sys-on-surface-variant);
 }
 
-.dataset-type-options {
-  display: grid;
-  gap: 0.75rem;
-  width: 100%;
-  max-width: 52rem;
-}
-
-.dataset-type-options mat-radio-button {
+mat-radio-group mat-radio-button {
   padding: 1rem;
   border: 1px solid var(--mat-sys-outline-variant);
   border-radius: 0.75rem;
 }
 
-.dataset-type-options mat-radio-button:has(input:checked) {
+mat-radio-group mat-radio-button:has(input:checked) {
   border-color: var(--mat-sys-primary);
   background: var(--mat-sys-secondary-container);
 }
 
-.choice-label {
-  display: grid;
-  gap: 0.2rem;
-}
-
-.choice-label small {
+mat-radio-group small {
   white-space: normal;
-}
-
-.dataset-picker,
-.selected-dataset,
-.result-step,
-app-validation-report {
-  width: 100%;
-}
-
-.selected-dataset {
-  display: grid;
-  gap: 0.5rem;
-  padding: 1rem;
-}
-
-.selected-dataset-heading {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-}
-
-.dataset-option {
-  min-height: 4rem;
-}
-
-.dataset-option-content {
-  display: grid;
-  padding-block: 0.375rem;
-  line-height: 1.35;
-}
-
-.dataset-option-details {
-  font-size: 0.875rem;
-}
-
-.loading-state {
-  display: grid;
-  justify-items: center;
-  gap: 1rem;
-  width: 100%;
-  min-height: 12rem;
-  padding: 2rem;
-}
-
-.validation-failed {
-  display: flex;
-  gap: 1rem;
-  width: 100%;
-  padding: 1rem;
-  border: 1px solid var(--mat-sys-error);
-  border-radius: 0.75rem;
-  background: var(--mat-sys-error-container);
-  color: var(--mat-sys-on-error-container);
-}
-
-.validation-failed mat-icon {
-  flex: 0 0 auto;
-}
-
-.validation-failed div {
-  display: grid;
-  gap: 0.25rem;
-}
-
-.step-actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 0.5rem;
-  width: 100%;
-}
-
-@media (max-width: 600px) {
-  .selected-dataset-heading,
-  .step-actions {
-    align-items: flex-start;
-    flex-wrap: wrap;
-  }
-
-  .step-actions button {
-    flex: 1 1 auto;
-  }
 }

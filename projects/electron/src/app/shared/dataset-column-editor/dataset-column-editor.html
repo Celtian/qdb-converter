@@ -3,7 +3,7 @@
   and use the Up and Down arrow keys.
 </p>
 <div
-  class="column-list"
+  class="flex flex-col"
   cdkDropList
   cdkDropListLockAxis="y"
   role="list"
@@ -11,7 +11,12 @@
   (cdkDropListDropped)="drop($event)"
 >
   @for (column of orderedColumns(); track column.key) {
-    <div class="column-row" cdkDrag role="listitem" [cdkDragData]="column">
+    <div
+      class="flex min-h-12 items-center gap-2 rounded-lg bg-surface ps-1"
+      cdkDrag
+      role="listitem"
+      [cdkDragData]="column"
+    >
       <mat-checkbox
         [checked]="isColumnVisible(column)"
         [disabled]="column.required"
@@ -20,7 +25,7 @@
         {{ column.label }}
       </mat-checkbox>
       <button
-        class="drag-handle"
+        class="shrink-0 cursor-grab text-on-surface-variant"
         cdkDragHandle
         matIconButton
         type="button"
@@ -32,7 +37,10 @@
         <mat-icon aria-hidden="true">drag_indicator</mat-icon>
       </button>
       <ng-template cdkDragPreview [matchSize]="true">
-        <div class="column-drag-preview" aria-hidden="true">
+        <div
+          class="flex items-center justify-between overflow-clip! rounded-lg bg-surface px-3! shadow-level3 outline -outline-offset-1 outline-outline-variant"
+          aria-hidden="true"
+        >
           <span>{{ column.label }}</span>
           <mat-icon>drag_indicator</mat-icon>
         </div>
@@ -40,4 +48,4 @@
     </div>
   }
 </div>
-<p class="live-announcement" aria-live="polite">{{ announcement() }}</p>
+<p class="sr-only" aria-live="polite">{{ announcement() }}</p>

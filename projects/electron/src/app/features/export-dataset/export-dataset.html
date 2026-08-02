@@ -1,13 +1,15 @@
-<section class="page">
-  <header class="page-header">
+<section class="mx-auto w-full max-w-360 p-8 max-nav:p-4">
+  <header
+    class="sticky top-0 z-2 -mx-8 -mt-8 mb-6 flex items-start justify-between gap-4 border-b border-outline-variant bg-surface px-8 pt-8 pb-6 max-nav:-mx-4 max-nav:-mt-4 max-nav:flex-col max-nav:px-4 max-nav:pt-4"
+  >
     <div>
       <h1>Export dataset</h1>
       <p>Copy one imported or converted dataset into a new external text folder.</p>
     </div>
   </header>
 
-  <mat-card appearance="outlined" class="wizard-card">
-    <mat-stepper class="qdb-wizard" linear aria-label="Dataset export wizard">
+  <mat-card appearance="outlined" class="overflow-hidden">
+    <mat-stepper linear aria-label="Dataset export wizard">
       <ng-template let-index="index" matStepperIcon="number">
         <span aria-hidden="true">{{ index + 1 }}</span>
       </ng-template>
@@ -20,33 +22,35 @@
 
       <mat-step [completed]="!!selectedDatasetKind()">
         <ng-template matStepLabel>Select dataset type</ng-template>
-        <div class="step-content">
-          <div class="step-intro">
+        <div class="grid justify-items-start gap-6 pt-6 pb-2">
+          <div class="grid gap-2">
             <h2>Choose dataset type</h2>
-            <p>Select which managed dataset library you want to export from.</p>
+            <p class="text-on-surface-variant">
+              Select which managed dataset library you want to export from.
+            </p>
           </div>
 
           <mat-radio-group
-            class="dataset-type-options"
+            class="grid w-full max-w-208 gap-3"
             aria-label="Dataset export type"
             [value]="selectedDatasetKind()"
             (change)="selectDatasetKind($event.value)"
           >
             <mat-radio-button value="imported">
-              <span class="choice-label">
+              <span class="grid gap-micro">
                 <strong>Imported dataset</strong>
                 <small>Export a dataset from the imported dataset library.</small>
               </span>
             </mat-radio-button>
             <mat-radio-button value="converted">
-              <span class="choice-label">
+              <span class="grid gap-micro">
                 <strong>Converted dataset</strong>
                 <small>Export a dataset created by a conversion.</small>
               </span>
             </mat-radio-button>
           </mat-radio-group>
 
-          <div class="step-actions">
+          <div class="flex w-full justify-end gap-2 max-xs:flex-wrap max-xs:*:flex-1">
             <button
               type="button"
               matButton="filled"
@@ -61,8 +65,8 @@
 
       <mat-step [completed]="!!selectedDataset()">
         <ng-template matStepLabel>Select dataset</ng-template>
-        <div class="step-content">
-          <mat-form-field class="dataset-picker" appearance="outline">
+        <div class="grid justify-items-start gap-6 pt-6 pb-2">
+          <mat-form-field class="w-full" appearance="outline">
             <mat-label>{{ datasetTypeLabel() }} dataset</mat-label>
             <input
               type="text"
@@ -83,10 +87,10 @@
               (optionSelected)="selectDataset($event.option.value)"
             >
               @for (dataset of filteredDatasets(); track dataset.id) {
-                <mat-option class="dataset-option" [value]="dataset.id">
-                  <span class="dataset-option-content">
+                <mat-option class="min-h-16" [value]="dataset.id">
+                  <span class="grid py-1.5 leading-option">
                     <strong>{{ dataset.name }}</strong>
-                    <span class="dataset-option-details">
+                    <span class="text-sm text-on-surface-variant">
                       FIFA {{ dataset.fifaVersion }} · {{ dataset.tableCount }} tables ·
                       {{ dataset.rowCount }} rows
                     </span>
@@ -103,15 +107,15 @@
             <p>No converted datasets are available. Create one from the Convert page first.</p>
           }
           @if (selectedDataset(); as dataset) {
-            <mat-card appearance="outlined" class="selected-dataset">
+            <mat-card appearance="outlined" class="grid w-full gap-2 p-4">
               <strong>{{ dataset.name }}</strong>
-              <p>
+              <p class="text-on-surface-variant">
                 FIFA {{ dataset.fifaVersion }} · {{ dataset.tableCount }} tables ·
                 {{ dataset.rowCount }} rows
               </p>
             </mat-card>
           }
-          <div class="step-actions">
+          <div class="flex w-full justify-end gap-2 max-xs:flex-wrap max-xs:*:flex-1">
             <button type="button" matButton matStepperPrevious>Back</button>
             <button type="button" matButton="filled" matStepperNext [disabled]="!selectedDataset()">
               Next
@@ -122,8 +126,8 @@
 
       <mat-step [completed]="!!result()">
         <ng-template matStepLabel>Select target folder</ng-template>
-        <div class="step-content">
-          <mat-form-field class="target-picker" appearance="outline">
+        <div class="grid justify-items-start gap-6 pt-6 pb-2">
+          <mat-form-field class="w-full" appearance="outline">
             <mat-label>Target folder</mat-label>
             <input matInput readonly [value]="targetParentPath()" />
             <button
@@ -151,16 +155,18 @@
             <p aria-live="polite">Exporting dataset…</p>
           }
           @if (store.error()) {
-            <p class="error" role="alert">{{ store.error() }}</p>
+            <p class="rounded-xl bg-error-container px-4 py-3 text-on-error-container" role="alert">
+              {{ store.error() }}
+            </p>
           }
           @if (result(); as exported) {
-            <div class="success" role="status">
+            <div class="flex flex-wrap items-center gap-2 text-primary" role="status">
               <mat-icon aria-hidden="true">check_circle</mat-icon>
-              <span>Dataset exported to {{ exported.outputPath }}</span>
+              <span class="wrap-anywhere">Dataset exported to {{ exported.outputPath }}</span>
               <button type="button" matButton (click)="reveal()">Reveal in folder</button>
             </div>
           }
-          <div class="step-actions">
+          <div class="flex w-full justify-end gap-2 max-xs:flex-wrap max-xs:*:flex-1">
             <button type="button" matButton matStepperPrevious [disabled]="store.loading()">
               Back
             </button>

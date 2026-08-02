@@ -102,7 +102,8 @@ describe('ImportedDatasets', () => {
       setQuery(event: Event): void;
     };
     const element = fixture.nativeElement as HTMLElement;
-    const rowCount = (): HTMLElement => element.querySelector<HTMLElement>('.row-count')!;
+    const rowCount = (): HTMLElement =>
+      element.querySelector<HTMLElement>('p[aria-atomic="true"]')!;
     const search = (value: string): void => {
       controls.setQuery({
         target: Object.assign(document.createElement('input'), { value }),
@@ -141,9 +142,7 @@ describe('ImportedDatasets', () => {
     await fixture.whenStable();
 
     const element = fixture.nativeElement as HTMLElement;
-    expect(element.querySelector('app-status-badge .status-badge--success')?.textContent).toBe(
-      'Available',
-    );
+    expect(element.querySelector('app-status-badge span')?.textContent).toBe('Available');
     expect(element.querySelector('mat-chip')).toBeNull();
   });
 
@@ -195,7 +194,7 @@ describe('ImportedDatasets', () => {
       selectedCount(): number;
     };
     const filterButton = await loader.getHarness(
-      MatButtonHarness.with({ selector: '.filter-button' }),
+      MatButtonHarness.with({ selector: 'button[aria-label^="Open filters"]' }),
     );
 
     expect(await filterButton.getAppearance()).toBe('tonal');
@@ -232,7 +231,7 @@ describe('ImportedDatasets', () => {
     controls.pageChanged({ pageIndex: 1, pageSize: 1, length: 2 });
     await fixture.whenStable();
     await (
-      await loader.getHarness(MatCheckboxHarness.with({ selector: '.row-select-checkbox' }))
+      await loader.getHarness(MatCheckboxHarness.with({ selector: 'tbody mat-checkbox' }))
     ).check();
     expect(controls.selectedCount()).toBe(1);
 
@@ -286,10 +285,12 @@ describe('ImportedDatasets', () => {
     controls.sortChanged({ active: 'version', direction: 'desc' });
     controls.pageChanged({ pageIndex: 1, pageSize: 1, length: 2 });
     const columnButton = await loader.getHarness(
-      MatButtonHarness.with({ selector: '.column-button' }),
+      MatButtonHarness.with({ selector: 'button[aria-label^="Choose columns"]' }),
     );
     const element = fixture.nativeElement as HTMLElement;
-    const columnButtonElement = element.querySelector<HTMLButtonElement>('.column-button')!;
+    const columnButtonElement = element.querySelector<HTMLButtonElement>(
+      'button[aria-label^="Choose columns"]',
+    )!;
 
     expect(await (await columnButton.host()).getAttribute('aria-label')).toBe(
       'Choose columns, 0 hidden',

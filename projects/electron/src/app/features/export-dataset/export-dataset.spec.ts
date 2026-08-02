@@ -118,7 +118,7 @@ describe('ExportDataset', () => {
     await fixture.whenStable();
 
     expect(await autocomplete.getValue()).toBe('Imported fixture');
-    expect(element.querySelector('.selected-dataset')?.textContent).toContain(
+    expect(element.querySelector('mat-card mat-card')?.textContent).toContain(
       'FIFA 23 · 1 tables · 3 rows',
     );
     expect(element.querySelector('mat-label')?.textContent).toContain('Imported dataset');
@@ -192,12 +192,13 @@ describe('ExportDataset', () => {
     await fixture.whenStable();
     expect(controls.targetParentPath()).toBe('/exports');
     expect(
-      (fixture.nativeElement as HTMLElement).querySelector<HTMLInputElement>('.target-picker input')
-        ?.value,
+      (fixture.nativeElement as HTMLElement).querySelector<HTMLInputElement>(
+        'mat-form-field input[readonly]',
+      )?.value,
     ).toBe('/exports');
     expect(
       (fixture.nativeElement as HTMLElement)
-        .querySelector('.target-picker button')
+        .querySelector('button[aria-label60"target folder"]')
         ?.getAttribute('aria-label'),
     ).toBe('Change target folder');
     await controls.export();

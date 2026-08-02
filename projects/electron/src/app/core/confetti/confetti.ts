@@ -25,7 +25,7 @@ const defaultColors = ['#22c55e', '#0ea5e9', '#f59e0b', '#ef4444', '#a855f7', '#
 
 @Component({
   selector: 'app-confetti',
-  template: '<canvas #canvas class="confetti-canvas"></canvas>',
+  template: '<canvas #canvas class="pointer-events-none block size-full"></canvas>',
   styleUrl: './confetti.css',
 })
 export class Confetti implements AfterViewInit, OnDestroy {

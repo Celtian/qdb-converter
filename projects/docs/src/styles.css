@@ -1,3 +1,6 @@
+@import 'tailwindcss';
+@import '../../../tailwind.theme.css';
+
 :root {
   --qdb-brand: var(--mat-sys-primary);
   --qdb-accent: var(--mat-sys-tertiary);

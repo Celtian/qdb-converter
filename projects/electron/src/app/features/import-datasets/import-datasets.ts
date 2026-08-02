@@ -70,7 +70,7 @@ const storedFormat = (): DatasetSourceKind => {
     ValidationReport,
   ],
   templateUrl: './import-datasets.html',
-  styleUrls: ['./import-datasets.css', './import-source-card.css'],
+  styleUrl: './import-datasets.css',
 })
 export class ImportDatasets {
   protected readonly store = inject(AppStore);

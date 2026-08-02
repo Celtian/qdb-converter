@@ -1,7 +1,7 @@
 <h2 mat-dialog-title>{{ dataset.name }}</h2>
 
 <mat-dialog-content>
-  <dl class="details">
+  <dl class="m-0 grid grid-cols-details gap-x-5 gap-y-2 max-tiny:grid-cols-1 max-tiny:gap-y-0.5">
     <dt>Status</dt>
     <dd><app-status-badge [status]="dataset.status" /></dd>
 
@@ -26,15 +26,21 @@
   </dl>
 
   @if (dataset.status === 'corrupt' && dataset.error) {
-    <section class="notice notice--error" aria-labelledby="dataset-error-heading">
+    <section
+      class="mt-4 rounded-lg bg-error-container p-3 text-on-error-container"
+      aria-labelledby="dataset-error-heading"
+    >
       <h3 id="dataset-error-heading">Dataset unavailable</h3>
       <p>{{ dataset.error }}</p>
     </section>
   }
 
-  <section class="detail-section" aria-labelledby="dataset-source-heading">
+  <section
+    class="mt-4 border-t border-outline-variant pt-4"
+    aria-labelledby="dataset-source-heading"
+  >
     <h3 id="dataset-source-heading">Original source</h3>
-    <ul class="path-list">
+    <ul class="mt-2 grid gap-tight ps-5">
       @for (path of dataset.source.originalPaths; track $index) {
         <li>
           <code>{{ path }}</code>
@@ -46,13 +52,16 @@
   </section>
 
   @if (dataset.warnings.length) {
-    <section class="detail-section" aria-labelledby="dataset-warnings-heading">
+    <section
+      class="mt-4 border-t border-outline-variant pt-4"
+      aria-labelledby="dataset-warnings-heading"
+    >
       <h3 id="dataset-warnings-heading">
         Import {{ dataset.warnings.length === 1 ? 'warning' : 'warnings' }} ({{
           dataset.warnings.length | number
         }})
       </h3>
-      <ul class="warning-list">
+      <ul class="mt-2 grid gap-tight ps-5">
         @for (warning of dataset.warnings; track $index) {
           <li>{{ warning }}</li>
         }

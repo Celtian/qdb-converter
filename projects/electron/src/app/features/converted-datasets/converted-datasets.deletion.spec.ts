@@ -74,10 +74,12 @@ describe('ConvertedDatasets', () => {
     await TestBed.inject(AppStore).refresh();
     await fixture.whenStable();
     await (
-      await loader.getHarness(MatCheckboxHarness.with({ selector: '.select-all-checkbox' }))
+      await loader.getHarness(MatCheckboxHarness.with({ selector: 'thead mat-checkbox' }))
     ).check();
     await (
-      await loader.getHarness(MatButtonHarness.with({ selector: '.bulk-delete-button' }))
+      await loader.getHarness(
+        MatButtonHarness.with({ selector: 'aside[aria-label^="Selected"] button' }),
+      )
     ).click();
 
     const dialog = await documentLoader.getHarness(MatDialogHarness);
@@ -96,7 +98,9 @@ describe('ConvertedDatasets', () => {
     );
     await fixture.whenStable();
 
-    expect((fixture.nativeElement as HTMLElement).querySelector('.selection-footer')).toBeNull();
+    expect(
+      (fixture.nativeElement as HTMLElement).querySelector('aside[aria-label^="Selected"]'),
+    ).toBeNull();
   });
 
   it('disables dataset actions while deleting and retains selection after a failure', async () => {
@@ -110,7 +114,7 @@ describe('ConvertedDatasets', () => {
         }),
     );
     const rowCheckbox = await loader.getHarness(
-      MatCheckboxHarness.with({ selector: '.row-select-checkbox' }),
+      MatCheckboxHarness.with({ selector: 'tbody mat-checkbox' }),
     );
     await rowCheckbox.check();
     const controls = component as unknown as {
@@ -123,10 +127,10 @@ describe('ConvertedDatasets', () => {
     await fixture.whenStable();
 
     const selectAll = await loader.getHarness(
-      MatCheckboxHarness.with({ selector: '.select-all-checkbox' }),
+      MatCheckboxHarness.with({ selector: 'thead mat-checkbox' }),
     );
     const deleteButton = await loader.getHarness(
-      MatButtonHarness.with({ selector: '.bulk-delete-button' }),
+      MatButtonHarness.with({ selector: 'aside[aria-label^="Selected"] button' }),
     );
     const actionButtons = (
       fixture.nativeElement as HTMLElement
@@ -154,7 +158,9 @@ describe('ConvertedDatasets', () => {
     await fixture.whenStable();
     const element = fixture.nativeElement as HTMLElement;
 
-    expect(element.querySelector('.empty-state h2')?.textContent).toBe('No converted datasets');
+    expect(element.querySelector('div[role="status"] h2')?.textContent).toBe(
+      'No converted datasets',
+    );
     expect(element.textContent).not.toContain('history');
     expect((await axe.run(element)).violations).toEqual([]);
   });

@@ -3,16 +3,6 @@
   height: 100%;
 }
 
-.column-form {
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  min-height: 0;
-  overflow: hidden;
-  width: 100%;
-}
-
 header {
   align-items: center;
   border-bottom: 1px solid var(--mat-sys-outline-variant);
@@ -24,12 +14,6 @@ header {
 h2 {
   font-size: 1.25rem;
   margin: 0;
-}
-
-.column-fields {
-  flex: 1;
-  overflow: auto;
-  padding: 1.25rem 1rem;
 }
 
 footer {

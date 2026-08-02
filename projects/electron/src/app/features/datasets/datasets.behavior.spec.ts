@@ -97,7 +97,7 @@ describe('ImportedDatasets', () => {
     await TestBed.inject(AppStore).refresh();
     await fixture.whenStable();
     const nameButton = (fixture.nativeElement as HTMLElement).querySelector<HTMLButtonElement>(
-      '.dataset-name-button',
+      'button[aria-haspopup="dialog"]',
     )!;
 
     expect(nameButton.textContent).toContain(secondDataset.name);
@@ -208,34 +208,36 @@ describe('ImportedDatasets', () => {
     await TestBed.inject(AppStore).refresh();
     await fixture.whenStable();
     const rowCheckboxes = await loader.getAllHarnesses(
-      MatCheckboxHarness.with({ selector: '.row-select-checkbox' }),
+      MatCheckboxHarness.with({ selector: 'tbody mat-checkbox' }),
     );
     const selectAll = await loader.getHarness(
-      MatCheckboxHarness.with({ selector: '.select-all-checkbox' }),
+      MatCheckboxHarness.with({ selector: 'thead mat-checkbox' }),
     );
     const element = fixture.nativeElement as HTMLElement;
 
     expect(rowCheckboxes).toHaveLength(2);
     expect(
       element
-        .querySelector<HTMLInputElement>('.row-select-checkbox input')
+        .querySelector<HTMLInputElement>('tbody mat-checkbox input')
         ?.getAttribute('aria-label'),
     ).toBe('Select Second');
-    expect(element.querySelector('.selection-footer')).toBeNull();
+    expect(element.querySelector('aside[aria-label^="Selected"]')).toBeNull();
 
     await rowCheckboxes[0]!.check();
     await fixture.whenStable();
 
     expect(await selectAll.isIndeterminate()).toBe(true);
-    expect(element.querySelector('.selection-footer')?.textContent).toContain('1 dataset selected');
-    expect(element.querySelectorAll('.selected-row')).toHaveLength(1);
+    expect(element.querySelector('aside[aria-label^="Selected"]')?.textContent).toContain(
+      '1 dataset selected',
+    );
+    expect(element.querySelectorAll('tr.bg-secondary-container')).toHaveLength(1);
     expect((await axe.run(element)).violations).toEqual([]);
 
     await selectAll.check();
     await fixture.whenStable();
 
     expect(await selectAll.isChecked()).toBe(true);
-    expect(element.querySelector('.selection-footer')?.textContent).toContain(
+    expect(element.querySelector('aside[aria-label^="Selected"]')?.textContent).toContain(
       '2 datasets selected',
     );
 
@@ -249,17 +251,19 @@ describe('ImportedDatasets', () => {
     await fixture.whenStable();
 
     expect(controls.selectedCount()).toBe(0);
-    expect(element.querySelector('.selection-footer')).toBeNull();
+    expect(element.querySelector('aside[aria-label^="Selected"]')).toBeNull();
   });
 
   it('confirms and bulk deletes selected datasets through one bridge call', async () => {
     await TestBed.inject(AppStore).refresh();
     await fixture.whenStable();
     await (
-      await loader.getHarness(MatCheckboxHarness.with({ selector: '.select-all-checkbox' }))
+      await loader.getHarness(MatCheckboxHarness.with({ selector: 'thead mat-checkbox' }))
     ).check();
     await (
-      await loader.getHarness(MatButtonHarness.with({ selector: '.bulk-delete-button' }))
+      await loader.getHarness(
+        MatButtonHarness.with({ selector: 'aside[aria-label^="Selected"] button' }),
+      )
     ).click();
 
     const dialog = await documentLoader.getHarness(MatDialogHarness);
@@ -278,7 +282,9 @@ describe('ImportedDatasets', () => {
     );
     await fixture.whenStable();
 
-    expect((fixture.nativeElement as HTMLElement).querySelector('.selection-footer')).toBeNull();
+    expect(
+      (fixture.nativeElement as HTMLElement).querySelector('aside[aria-label^="Selected"]'),
+    ).toBeNull();
   });
 
   it('disables selection controls while deleting and retains selection after a failure', async () => {
@@ -292,7 +298,7 @@ describe('ImportedDatasets', () => {
         }),
     );
     const rowCheckbox = await loader.getHarness(
-      MatCheckboxHarness.with({ selector: '.row-select-checkbox' }),
+      MatCheckboxHarness.with({ selector: 'tbody mat-checkbox' }),
     );
     await rowCheckbox.check();
     const controls = component as unknown as {
@@ -305,10 +311,10 @@ describe('ImportedDatasets', () => {
     await fixture.whenStable();
 
     const selectAll = await loader.getHarness(
-      MatCheckboxHarness.with({ selector: '.select-all-checkbox' }),
+      MatCheckboxHarness.with({ selector: 'thead mat-checkbox' }),
     );
     const deleteButton = await loader.getHarness(
-      MatButtonHarness.with({ selector: '.bulk-delete-button' }),
+      MatButtonHarness.with({ selector: 'aside[aria-label^="Selected"] button' }),
     );
     expect(await selectAll.isDisabled()).toBe(true);
     expect(await rowCheckbox.isDisabled()).toBe(true);
@@ -333,12 +339,12 @@ describe('ImportedDatasets', () => {
     await fixture.whenStable();
 
     const element = fixture.nativeElement as HTMLElement;
-    expect(element.querySelector('.empty-state')).toBeNull();
+    expect(element.querySelector('div[role="status"]')).toBeNull();
 
     store.loading.set(false);
     await fixture.whenStable();
 
-    expect(element.querySelector('.empty-state h2')?.textContent).toBe(
+    expect(element.querySelector('div[role="status"] h2')?.textContent).toBe(
       'No imported datasets found',
     );
     expect(element.querySelector('table')).toBeNull();
@@ -363,14 +369,14 @@ describe('ImportedDatasets', () => {
     await fixture.whenStable();
 
     const element = fixture.nativeElement as HTMLElement;
-    expect(element.querySelector('.empty-state h2')?.textContent).toBe(
+    expect(element.querySelector('div[role="status"] h2')?.textContent).toBe(
       'No datasets match your filters',
     );
     expect(element.querySelector('table')).toBeNull();
     expect(element.querySelector('mat-paginator')).toBeNull();
     expect((await axe.run(element)).violations).toEqual([]);
 
-    const clearButton = element.querySelector<HTMLButtonElement>('.empty-state button')!;
+    const clearButton = element.querySelector<HTMLButtonElement>('div[role="status"] + button')!;
     expect(clearButton.textContent).toContain('Clear filters');
     clearButton.click();
     await fixture.whenStable();
@@ -379,7 +385,7 @@ describe('ImportedDatasets', () => {
     expect(controls.pageIndex()).toBe(0);
     expect(input.value).toBe('');
     const filterButton = await loader.getHarness(
-      MatButtonHarness.with({ selector: '.filter-button' }),
+      MatButtonHarness.with({ selector: 'button[aria-label^="Open filters"]' }),
     );
     expect(await (await filterButton.host()).getAttribute('aria-label')).toBe('Open filters');
     expect(element.querySelector('table')).toBeTruthy();

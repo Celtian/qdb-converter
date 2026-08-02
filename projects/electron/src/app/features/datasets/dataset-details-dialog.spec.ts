@@ -40,20 +40,24 @@ describe('DatasetDetailsDialog', () => {
     const loader = TestbedHarnessEnvironment.loader(fixture);
     await fixture.whenStable();
     const element = fixture.nativeElement as HTMLElement;
-    const details = [...element.querySelectorAll('.details dt')].map((term) => ({
+    const details = [...element.querySelectorAll('mat-dialog-content > dl dt')].map((term) => ({
       label: term.textContent?.trim(),
       value: term.nextElementSibling?.textContent?.trim(),
     }));
 
     expect(element.querySelector('h2')?.textContent).toContain(dataset.name);
-    expect(element.querySelector('.details')?.textContent).toContain('FIFA 23');
+    expect(element.querySelector('mat-dialog-content > dl')?.textContent).toContain('FIFA 23');
     expect(details).toContainEqual({ label: 'Tables', value: '2' });
     expect(details).toContainEqual({ label: 'Rows', value: '1,234' });
     expect(element.querySelector('time')?.getAttribute('datetime')).toBe(dataset.source.importedAt);
     expect(
-      [...element.querySelectorAll('.path-list code')].map((item) => item.textContent),
+      [...element.querySelectorAll('section[aria-labelledby="dataset-source-heading"] code')].map(
+        (item) => item.textContent,
+      ),
     ).toEqual(dataset.source.originalPaths);
-    expect(element.querySelector('.warning-list')?.textContent).toContain(dataset.warnings[0]);
+    expect(
+      element.querySelector('section[aria-labelledby$="warnings-heading"] ul')?.textContent,
+    ).toContain(dataset.warnings[0]);
     expect((await axe.run(element)).violations).toEqual([]);
 
     const renameButton = await loader.getHarness(MatButtonHarness.with({ text: 'Rename' }));
@@ -88,10 +92,10 @@ describe('DatasetDetailsDialog', () => {
     await fixture.whenStable();
     const element = fixture.nativeElement as HTMLElement;
 
-    expect(element.querySelector('.notice--error')?.textContent).toContain(
-      'The managed source snapshot is missing.',
-    );
-    expect(element.querySelector('.warning-list')).toBeNull();
+    expect(
+      element.querySelector('section[aria-labelledby$="error-heading"]')?.textContent,
+    ).toContain('The managed source snapshot is missing.');
+    expect(element.querySelector('section[aria-labelledby$="warnings-heading"] ul')).toBeNull();
     expect(element.querySelector('button[aria-haspopup="dialog"]')?.textContent).toContain(
       'Rename',
     );

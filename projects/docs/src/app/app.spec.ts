@@ -32,9 +32,13 @@ describe('App', () => {
     const page = fixture.nativeElement as HTMLElement;
     const links = [...page.querySelectorAll<HTMLElement>('mat-nav-list a')];
 
-    expect(page.querySelector('.brand')?.textContent).toContain('QDB Converter');
+    expect(page.querySelector('mat-toolbar a[aria-label$="home"]')?.textContent).toContain(
+      'QDB Converter',
+    );
     expect(
-      page.querySelector<HTMLImageElement>('.brand img')?.getAttribute('ng-img'),
+      page
+        .querySelector<HTMLImageElement>('mat-toolbar a[aria-label$="home"] img')
+        ?.getAttribute('ng-img'),
     ).not.toBeNull();
     expect(links.map((link) => link.querySelector('span')?.textContent.trim())).toEqual(
       documentationPages.map((documentationPage) => documentationPage.label),
@@ -45,7 +49,7 @@ describe('App', () => {
     const fixture = TestBed.createComponent(App);
     await fixture.whenStable();
     const page = fixture.nativeElement as HTMLElement;
-    const trigger = page.querySelector<HTMLButtonElement>('.navigation-trigger')!;
+    const trigger = page.querySelector<HTMLButtonElement>('button[aria-controls]')!;
     const navigation = fixture.componentInstance as unknown as {
       closeNavigation(): void;
       navigationChanged(opened: boolean): void;

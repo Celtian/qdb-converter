@@ -1,13 +1,15 @@
-<header class="about-header">
-  <div class="identity">
+<header class="flex items-start justify-between gap-4 px-10 pt-8 max-compact:px-6 max-compact:pt-6">
+  <div class="flex min-w-0 items-center gap-6 max-compact:gap-4">
     <img ngSrc="qdb-converter-icon.png" width="88" height="88" alt="" priority />
     <div>
       <h2 mat-dialog-title>QDB Converter</h2>
-      <p class="version">Version {{ version }}</p>
+      <p class="mt-2 text-version text-on-surface-variant max-compact:text-base">
+        Version {{ version }}
+      </p>
     </div>
   </div>
   <button
-    class="close-icon"
+    class="shrink-0 bg-surface-container-high"
     type="button"
     matIconButton
     mat-dialog-close
@@ -18,15 +20,19 @@
 </header>
 
 <mat-dialog-content>
-  <p class="description">
+  <p class="m-0 max-w-152 text-body-lg leading-copy">
     Local-first Windows desktop application for importing and converting FIFA 11–23 database
     datasets from DB Master-compatible text folders and PC t3db sources.
   </p>
-  <p class="legal">© 2026 Dominik Hladík <span aria-hidden="true">·</span> MIT License</p>
+  <p class="mt-6 text-on-surface-variant">
+    © 2026 Dominik Hladík <span aria-hidden="true">·</span> MIT License
+  </p>
 </mat-dialog-content>
-<mat-dialog-actions class="dialog-actions">
-  <button class="close-action" type="button" matButton mat-dialog-close>Close</button>
-  <div class="external-actions">
+<mat-dialog-actions
+  class="flex-wrap justify-between gap-4 px-10 pt-6 pb-8 max-compact:flex-col max-compact:items-stretch max-compact:px-6 max-compact:pt-5 max-compact:pb-6"
+>
+  <button class="max-xs:self-start" type="button" matButton mat-dialog-close>Close</button>
+  <div class="flex flex-wrap justify-end gap-2 max-compact:justify-start">
     <a
       matButton
       href="https://github.com/Celtian/qdb-converter#readme"

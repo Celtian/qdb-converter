@@ -93,7 +93,8 @@ describe('ConvertedDatasets', () => {
       setQuery(event: Event): void;
     };
     const element = fixture.nativeElement as HTMLElement;
-    const rowCount = (): HTMLElement => element.querySelector<HTMLElement>('.row-count')!;
+    const rowCount = (): HTMLElement =>
+      element.querySelector<HTMLElement>('p[aria-atomic="true"]')!;
     const search = (value: string): void => {
       controls.setQuery({
         target: Object.assign(document.createElement('input'), { value }),
@@ -151,9 +152,10 @@ describe('ConvertedDatasets', () => {
       [...element.querySelectorAll('td.mat-column-rows')].map((cell) => cell.textContent?.trim()),
     ).toEqual(['2', '2']);
     expect(element.querySelector('.record-count-toggle')).toBeNull();
-    expect(element.querySelector('.source-name')).toBeNull();
     expect(element.textContent).not.toContain('From Fixture');
-    const nameButtons = element.querySelectorAll<HTMLButtonElement>('.dataset-name-button');
+    const nameButtons = element.querySelectorAll<HTMLButtonElement>(
+      'button[aria-haspopup="dialog"]',
+    );
     expect(nameButtons).toHaveLength(2);
     expect(nameButtons[0]?.getAttribute('aria-haspopup')).toBe('dialog');
     expect(nameButtons[0]?.getAttribute('aria-label')).toBe('View details for Second');
@@ -172,7 +174,7 @@ describe('ConvertedDatasets', () => {
       .mockReturnValueOnce({ afterClosed: () => of(undefined) } as never);
     const nameButton = [
       ...(fixture.nativeElement as HTMLElement).querySelectorAll<HTMLButtonElement>(
-        '.dataset-name-button',
+        'button[aria-haspopup="dialog"]',
       ),
     ].find((button) => button.textContent?.trim() === dataset.name);
 
@@ -247,7 +249,7 @@ describe('ConvertedDatasets', () => {
       setQuery(event: Event): void;
     };
     const filterButton = await loader.getHarness(
-      MatButtonHarness.with({ selector: '.filter-button' }),
+      MatButtonHarness.with({ selector: 'button[aria-label^="Open filters"]' }),
     );
 
     expect(await filterButton.getAppearance()).toBe('tonal');
@@ -301,13 +303,15 @@ describe('ConvertedDatasets', () => {
     await fixture.whenStable();
 
     const element = fixture.nativeElement as HTMLElement;
-    expect(element.querySelector('.empty-state h2')?.textContent).toBe(
+    expect(element.querySelector('div[role="status"] h2')?.textContent).toBe(
       'No datasets match your filters',
     );
-    expect(element.querySelector('.empty-state button')?.textContent).toContain('Clear filters');
+    expect(element.querySelector('div[role="status"] + button')?.textContent).toContain(
+      'Clear filters',
+    );
     expect((await axe.run(element)).violations).toEqual([]);
 
-    element.querySelector<HTMLButtonElement>('.empty-state button')!.click();
+    element.querySelector<HTMLButtonElement>('div[role="status"] + button')!.click();
     await fixture.whenStable();
     expect(controls.query()).toBe('');
     expect(controls.filtered()).toEqual([secondDataset, dataset]);
@@ -338,7 +342,7 @@ describe('ConvertedDatasets', () => {
     await fixture.whenStable();
     const saveColumns = vi.spyOn(TestBed.inject(DatasetColumnPreferences), 'save');
     const columnButton = await loader.getHarness(
-      MatButtonHarness.with({ selector: '.column-button' }),
+      MatButtonHarness.with({ selector: 'button[aria-label^="Choose columns"]' }),
     );
 
     expect(await (await columnButton.host()).getAttribute('aria-label')).toBe(
@@ -381,34 +385,36 @@ describe('ConvertedDatasets', () => {
     await TestBed.inject(AppStore).refresh();
     await fixture.whenStable();
     const rowCheckboxes = await loader.getAllHarnesses(
-      MatCheckboxHarness.with({ selector: '.row-select-checkbox' }),
+      MatCheckboxHarness.with({ selector: 'tbody mat-checkbox' }),
     );
     const selectAll = await loader.getHarness(
-      MatCheckboxHarness.with({ selector: '.select-all-checkbox' }),
+      MatCheckboxHarness.with({ selector: 'thead mat-checkbox' }),
     );
     const element = fixture.nativeElement as HTMLElement;
 
     expect(rowCheckboxes).toHaveLength(2);
     expect(
       element
-        .querySelector<HTMLInputElement>('.row-select-checkbox input')
+        .querySelector<HTMLInputElement>('tbody mat-checkbox input')
         ?.getAttribute('aria-label'),
     ).toBe('Select Second');
-    expect(element.querySelector('.selection-footer')).toBeNull();
+    expect(element.querySelector('aside[aria-label^="Selected"]')).toBeNull();
 
     await rowCheckboxes[0]!.check();
     await fixture.whenStable();
 
     expect(await selectAll.isIndeterminate()).toBe(true);
-    expect(element.querySelector('.selection-footer')?.textContent).toContain('1 dataset selected');
-    expect(element.querySelectorAll('.selected-row')).toHaveLength(1);
+    expect(element.querySelector('aside[aria-label^="Selected"]')?.textContent).toContain(
+      '1 dataset selected',
+    );
+    expect(element.querySelectorAll('tr.bg-secondary-container')).toHaveLength(1);
     expect((await axe.run(element)).violations).toEqual([]);
 
     await selectAll.check();
     await fixture.whenStable();
 
     expect(await selectAll.isChecked()).toBe(true);
-    expect(element.querySelector('.selection-footer')?.textContent).toContain(
+    expect(element.querySelector('aside[aria-label^="Selected"]')?.textContent).toContain(
       '2 datasets selected',
     );
 
@@ -423,10 +429,10 @@ describe('ConvertedDatasets', () => {
     await fixture.whenStable();
 
     expect(controls.selectedCount()).toBe(0);
-    expect(element.querySelector('.selection-footer')).toBeNull();
+    expect(element.querySelector('aside[aria-label^="Selected"]')).toBeNull();
 
     await (
-      await loader.getHarness(MatCheckboxHarness.with({ selector: '.row-select-checkbox' }))
+      await loader.getHarness(MatCheckboxHarness.with({ selector: 'tbody mat-checkbox' }))
     ).check();
     controls.pageChanged({ pageIndex: 0, pageSize: 1, length: 1 });
     await fixture.whenStable();
