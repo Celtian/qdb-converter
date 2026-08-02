@@ -198,7 +198,7 @@ describe('ExportDataset', () => {
     ).toBe('/exports');
     expect(
       (fixture.nativeElement as HTMLElement)
-        .querySelector('button[aria-label60"target folder"]')
+        .querySelector('button[aria-label="Change target folder"]')
         ?.getAttribute('aria-label'),
     ).toBe('Change target folder');
     await controls.export();

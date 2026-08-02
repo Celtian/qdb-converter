@@ -125,7 +125,7 @@ describe('ImportDatasets', () => {
     await fixture.whenStable();
 
     const element = fixture.nativeElement as HTMLElement;
-    const cards = [...element.querySelectorAll<HTMLElement>('mat-stepper mat-card mat-card')];
+    const cards = [...element.querySelectorAll<HTMLElement>('mat-stepper mat-card')];
     const card = cards.find((item) => item.querySelector('button[aria-label^="Remove "]'));
     const reviewCard = cards.find((item) => item.querySelector('input[autocomplete="off"]'));
     const path = card?.querySelector<HTMLElement>('p[title]');
@@ -424,9 +424,7 @@ describe('ImportDatasets', () => {
       'A dataset with this name already exists.',
     );
 
-    const reviewCard = [
-      ...element.querySelectorAll<HTMLElement>('mat-stepper mat-card mat-card'),
-    ].find(
+    const reviewCard = [...element.querySelectorAll<HTMLElement>('mat-stepper mat-card')].find(
       (card) =>
         card.querySelector('input[autocomplete="off"]') &&
         card.querySelector('h3')?.textContent?.includes('Text source'),

@@ -25,7 +25,9 @@ describe('App', () => {
     const fixture = TestBed.createComponent(App);
     await fixture.whenStable();
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('app-navigation > a')?.textContent).toContain('QDB Converter');
+    expect(compiled.querySelector('app-app-navigation > a')?.textContent).toContain(
+      'QDB Converter',
+    );
   });
 
   it('exposes the generated version on the root element', async () => {

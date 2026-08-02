@@ -107,7 +107,7 @@ describe('Convert', () => {
     await fixture.whenStable();
 
     expect(await autocomplete.getValue()).toBe('Fixture');
-    expect(element.querySelector('mat-stepper mat-card mat-card')?.textContent).toContain(
+    expect(element.querySelector('mat-stepper mat-card')?.textContent).toContain(
       'FIFA 23 · 2 tables · 1 rows',
     );
     expect(element.querySelector<HTMLButtonElement>('button[matsteppernext]')?.disabled).toBe(
@@ -117,7 +117,7 @@ describe('Convert', () => {
     await autocomplete.enterText('Missing dataset');
     await fixture.whenStable();
 
-    expect(element.querySelector('mat-stepper mat-card mat-card')).toBeNull();
+    expect(element.querySelector('mat-stepper mat-card')).toBeNull();
     expect(element.querySelector<HTMLButtonElement>('button[matsteppernext]')?.disabled).toBe(true);
   });
 

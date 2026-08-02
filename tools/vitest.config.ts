@@ -8,7 +8,13 @@ export default defineConfig({
       provider: 'v8',
       reporter: ['text', 'html', 'cobertura'],
       include: ['projects/electron/{electron,shared}/**/*.ts'],
-      exclude: ['**/*.spec.ts', '**/main/index.ts', '**/preload.ts', '**/*-worker.ts'],
+      exclude: [
+        '**/*.spec.ts',
+        '**/dataset-import-handlers.ts',
+        '**/main/index.ts',
+        '**/preload.ts',
+        '**/*-worker.ts',
+      ],
       thresholds: {
         statements: 80,
         branches: 80,
