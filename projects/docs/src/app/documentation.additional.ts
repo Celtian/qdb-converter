@@ -1,4 +1,4 @@
-import type { DocumentationPage } from './documentation';
+import type { DocumentationPage } from './documentation.types';
 
 const repository = 'https://github.com/Celtian/qdb-converter';
 
