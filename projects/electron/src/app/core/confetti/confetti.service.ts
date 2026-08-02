@@ -14,12 +14,12 @@ const millisecondsPerAnimationFrame = 1_000 / 60;
 
 @Service()
 export class ConfettiService {
+  private readonly injector = inject(Injector);
+  private readonly overlay = inject(Overlay);
   private overlayRef?: OverlayRef;
   private componentRef?: ComponentRef<Confetti>;
   private cleanupTimer?: ReturnType<typeof globalThis.setTimeout>;
   private readonly burstTimers = new Set<ReturnType<typeof globalThis.setTimeout>>();
-  private readonly injector = inject(Injector);
-  private readonly overlay = inject(Overlay);
 
   burst(options: ConfettiBurstOptions = {}): void {
     this.ensureConfetti().instance.burst(options);

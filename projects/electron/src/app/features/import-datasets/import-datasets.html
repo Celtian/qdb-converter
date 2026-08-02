@@ -5,7 +5,6 @@
       <p>Add DB Master text folders or paired t3db sources to the managed dataset library.</p>
     </div>
   </header>
-
   @if (error()) {
     <p class="error" role="alert">{{ error() }}</p>
   }
@@ -20,13 +19,13 @@
     </mat-card-header>
     <mat-card-content>
       <mat-stepper class="qdb-wizard" linear aria-label="Dataset import wizard">
-        <ng-template matStepperIcon="number" let-index="index">
+        <ng-template let-index="index" matStepperIcon="number">
           <span aria-hidden="true">{{ index + 1 }}</span>
         </ng-template>
-        <ng-template matStepperIcon="edit" let-index="index">
+        <ng-template let-index="index" matStepperIcon="edit">
           <span aria-hidden="true">{{ index + 1 }}</span>
         </ng-template>
-        <ng-template matStepperIcon="done" let-index="index">
+        <ng-template let-index="index" matStepperIcon="done">
           <span aria-hidden="true">{{ index + 1 }}</span>
         </ng-template>
 
@@ -175,8 +174,8 @@
                       type="button"
                       matIconButton
                       [disabled]="validationRunning()"
-                      (click)="remove(candidate.selectionId)"
                       [attr.aria-label]="'Remove ' + candidate.name"
+                      (click)="remove(candidate.selectionId)"
                     >
                       <mat-icon>close</mat-icon>
                     </button>
@@ -480,8 +479,8 @@
                 <button
                   type="button"
                   matButton="filled"
-                  (click)="importAll()"
                   [disabled]="!canImport()"
+                  (click)="importAll()"
                 >
                   Import {{ candidates().length }}
                 </button>

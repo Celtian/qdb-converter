@@ -41,9 +41,9 @@
         <mat-tab label="Imported">
           <div class="column-tab-content">
             <app-dataset-column-editor
+              table="imported"
               [columns]="columnDefinitions.imported"
               [defaultPreference]="defaultColumnPreference('imported')"
-              table="imported"
               [preference]="importedColumnPreference()"
               (preferenceChange)="saveColumns('imported', $event)"
             />
@@ -57,9 +57,9 @@
         <mat-tab label="Converted">
           <div class="column-tab-content">
             <app-dataset-column-editor
+              table="converted"
               [columns]="columnDefinitions.converted"
               [defaultPreference]="defaultColumnPreference('converted')"
-              table="converted"
               [preference]="convertedColumnPreference()"
               (preferenceChange)="saveColumns('converted', $event)"
             />

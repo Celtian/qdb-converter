@@ -18,11 +18,11 @@
               </a>
             } @else {
               <a
+                target="_blank"
+                rel="noopener noreferrer"
                 [matButton]="action.primary ? 'filled' : 'outlined'"
                 [class.primary-action]="action.primary"
                 [href]="action.href"
-                target="_blank"
-                rel="noopener noreferrer"
                 [attr.aria-label]="action.label + ' (opens in a new tab)'"
               >
                 {{ action.label }}
@@ -131,9 +131,9 @@
                     } @else {
                       <a
                         matButton
-                        [href]="action.href"
                         target="_blank"
                         rel="noopener noreferrer"
+                        [href]="action.href"
                         [attr.aria-label]="action.label + ' (opens in a new tab)'"
                       >
                         {{ action.label }}

@@ -1,9 +1,9 @@
 @if (report(); as validation) {
   <section
     class="validation-summary"
+    role="status"
     [class.validation-summary--error]="validation.errorCount > 0"
     [class.validation-summary--success]="validation.errorCount === 0"
-    role="status"
   >
     <mat-icon aria-hidden="true">{{ summaryIcon() }}</mat-icon>
     <div>

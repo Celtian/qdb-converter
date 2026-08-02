@@ -8,13 +8,13 @@
 
   <mat-card appearance="outlined" class="wizard-card">
     <mat-stepper class="qdb-wizard" linear aria-label="Dataset export wizard">
-      <ng-template matStepperIcon="number" let-index="index">
+      <ng-template let-index="index" matStepperIcon="number">
         <span aria-hidden="true">{{ index + 1 }}</span>
       </ng-template>
-      <ng-template matStepperIcon="edit" let-index="index">
+      <ng-template let-index="index" matStepperIcon="edit">
         <span aria-hidden="true">{{ index + 1 }}</span>
       </ng-template>
-      <ng-template matStepperIcon="done" let-index="index">
+      <ng-template let-index="index" matStepperIcon="done">
         <span aria-hidden="true">{{ index + 1 }}</span>
       </ng-template>
 

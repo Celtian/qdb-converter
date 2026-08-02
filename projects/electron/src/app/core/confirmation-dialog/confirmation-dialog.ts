@@ -17,13 +17,12 @@ export interface ConfirmationDialogData {
       ><p>{{ data.message }}</p></mat-dialog-content
     >
     <mat-dialog-actions align="end">
-      <button matButton mat-dialog-close>Cancel</button>
-      <button matButton="filled" color="warn" [mat-dialog-close]="true">
+      <button type="button" matButton mat-dialog-close>Cancel</button>
+      <button type="button" matButton="filled" color="warn" [mat-dialog-close]="true">
         {{ data.confirmLabel }}
       </button>
     </mat-dialog-actions>
   `,
-  styles: ``,
 })
 export class ConfirmationDialog {
   protected readonly data = inject<ConfirmationDialogData>(MAT_DIALOG_DATA);

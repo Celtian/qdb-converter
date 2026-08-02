@@ -26,20 +26,7 @@ const report: DatasetValidationReport = {
 
 @Component({
   imports: [ValidationReport],
-  template: `
-    <app-validation-report
-      mode="source"
-      [report]="report"
-      subject="First source"
-      headingIdPrefix="first-source"
-    />
-    <app-validation-report
-      mode="source"
-      [report]="report"
-      subject="Second source"
-      headingIdPrefix="second-source"
-    />
-  `,
+  templateUrl: './validation-report-host.html',
 })
 class ValidationReportHost {
   protected readonly report = report;

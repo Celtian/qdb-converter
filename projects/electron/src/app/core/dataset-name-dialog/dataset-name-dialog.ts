@@ -8,33 +8,7 @@ import { MatInputModule } from '@angular/material/input';
 @Component({
   selector: 'app-dataset-name-dialog',
   imports: [FormField, MatButtonModule, MatDialogModule, MatFormFieldModule, MatInputModule],
-  template: `
-    <form (submit)="save(); $event.preventDefault()">
-      <h2 mat-dialog-title>Rename dataset</h2>
-      <mat-dialog-content>
-        <p id="dataset-name-dialog-description" class="description">
-          Choose a clear name to help you find this dataset later.
-        </p>
-        <mat-form-field appearance="outline">
-          <mat-label>Dataset name</mat-label>
-          <input
-            matInput
-            [formField]="nameForm.name"
-            autocomplete="off"
-            data-dialog-primary-field
-          />
-          <mat-hint align="end">{{ characterCount() }} / 80</mat-hint>
-          @if (nameForm.name().invalid() && nameForm.name().touched()) {
-            <mat-error>{{ nameError() }}</mat-error>
-          }
-        </mat-form-field>
-      </mat-dialog-content>
-      <mat-dialog-actions align="end">
-        <button type="button" matButton mat-dialog-close>Cancel</button>
-        <button type="submit" matButton="filled" [disabled]="!canSave()">Save changes</button>
-      </mat-dialog-actions>
-    </form>
-  `,
+  templateUrl: './dataset-name-dialog.html',
   styleUrl: './dataset-name-dialog.css',
 })
 export class DatasetNameDialog {

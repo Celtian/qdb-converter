@@ -8,13 +8,13 @@
 
   <mat-card appearance="outlined" class="wizard-card">
     <mat-stepper class="qdb-wizard" linear aria-label="Dataset conversion wizard">
-      <ng-template matStepperIcon="number" let-index="index">
+      <ng-template let-index="index" matStepperIcon="number">
         <span aria-hidden="true">{{ index + 1 }}</span>
       </ng-template>
-      <ng-template matStepperIcon="edit" let-index="index">
+      <ng-template let-index="index" matStepperIcon="edit">
         <span aria-hidden="true">{{ index + 1 }}</span>
       </ng-template>
-      <ng-template matStepperIcon="done" let-index="index">
+      <ng-template let-index="index" matStepperIcon="done">
         <span aria-hidden="true">{{ index + 1 }}</span>
       </ng-template>
 
@@ -120,7 +120,7 @@
         <div class="step-content">
           <mat-form-field appearance="outline" class="name-field">
             <mat-label>Dataset name</mat-label>
-            <input matInput [formField]="nameForm.name" autocomplete="off" />
+            <input matInput autocomplete="off" [formField]="nameForm.name" />
             @if (nameForm.name().touched() && nameForm.name().invalid()) {
               <mat-error>Enter a name between 1 and 80 characters.</mat-error>
             } @else if (duplicateName()) {

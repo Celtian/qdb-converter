@@ -71,7 +71,7 @@
           (matSortChange)="sortChanged($event)"
         >
           <ng-container matColumnDef="select">
-            <th mat-header-cell *matHeaderCellDef>
+            <th *matHeaderCellDef mat-header-cell>
               <mat-checkbox
                 class="select-all-checkbox"
                 [checked]="allRowsSelected()"
@@ -85,7 +85,7 @@
                 (change)="toggleAllRows($event.checked)"
               />
             </th>
-            <td mat-cell *matCellDef="let dataset">
+            <td *matCellDef="let dataset" mat-cell>
               <mat-checkbox
                 class="row-select-checkbox"
                 [checked]="isSelected(dataset)"
@@ -98,14 +98,14 @@
           </ng-container>
           <ng-container matColumnDef="name">
             <th
-              mat-header-cell
               *matHeaderCellDef
+              mat-header-cell
               mat-sort-header
               sortActionDescription="Sort by dataset name"
             >
               Name
             </th>
-            <td mat-cell *matCellDef="let dataset">
+            <td *matCellDef="let dataset" mat-cell>
               <button
                 class="dataset-name-button"
                 type="button"
@@ -119,80 +119,81 @@
           </ng-container>
           <ng-container matColumnDef="version">
             <th
-              mat-header-cell
               *matHeaderCellDef
+              mat-header-cell
               mat-sort-header
               sortActionDescription="Sort by FIFA version"
             >
               Version
             </th>
-            <td mat-cell *matCellDef="let dataset">FIFA {{ dataset.fifaVersion }}</td>
+            <td *matCellDef="let dataset" mat-cell>FIFA {{ dataset.fifaVersion }}</td>
           </ng-container>
           <ng-container matColumnDef="source">
             <th
-              mat-header-cell
               *matHeaderCellDef
+              mat-header-cell
               mat-sort-header
               sortActionDescription="Sort by source"
             >
               Source
             </th>
-            <td mat-cell *matCellDef="let dataset">
+            <td *matCellDef="let dataset" mat-cell>
               {{ dataset.source.kind === 't3db' ? 't3db' : 'Text folder' }}
             </td>
           </ng-container>
           <ng-container matColumnDef="tables">
             <th
-              mat-header-cell
               *matHeaderCellDef
+              mat-header-cell
               mat-sort-header
               sortActionDescription="Sort by table count"
             >
               Tables
             </th>
-            <td mat-cell *matCellDef="let dataset">{{ dataset.tableCount | number: '1.0-0' }}</td>
+            <td *matCellDef="let dataset" mat-cell>{{ dataset.tableCount | number: '1.0-0' }}</td>
           </ng-container>
           <ng-container matColumnDef="rows">
             <th
-              mat-header-cell
               *matHeaderCellDef
+              mat-header-cell
               mat-sort-header
               sortActionDescription="Sort by row count"
             >
               Rows
             </th>
-            <td mat-cell *matCellDef="let dataset">{{ dataset.rowCount | number: '1.0-0' }}</td>
+            <td *matCellDef="let dataset" mat-cell>{{ dataset.rowCount | number: '1.0-0' }}</td>
           </ng-container>
           <ng-container matColumnDef="imported">
             <th
-              mat-header-cell
               *matHeaderCellDef
+              mat-header-cell
               mat-sort-header
               sortActionDescription="Sort by import date"
             >
               Imported
             </th>
-            <td mat-cell *matCellDef="let dataset">
+            <td *matCellDef="let dataset" mat-cell>
               {{ dataset.source.importedAt | date: 'medium' }}
             </td>
           </ng-container>
           <ng-container matColumnDef="status">
             <th
-              mat-header-cell
               *matHeaderCellDef
+              mat-header-cell
               mat-sort-header
               sortActionDescription="Sort by status"
             >
               Status
             </th>
-            <td mat-cell *matCellDef="let dataset">
+            <td *matCellDef="let dataset" mat-cell>
               <app-status-badge [status]="dataset.status" />
             </td>
           </ng-container>
           <ng-container matColumnDef="actions">
-            <th mat-header-cell *matHeaderCellDef><span class="visually-hidden">Actions</span></th>
-            <td mat-cell *matCellDef="let dataset">
+            <th *matHeaderCellDef mat-header-cell><span class="visually-hidden">Actions</span></th>
+            <td *matCellDef="let dataset" mat-cell>
               <button
+                type="button"
                 matIconButton
                 [matMenuTriggerFor]="actions"
                 [disabled]="deletionPending()"
@@ -201,19 +202,19 @@
                 <mat-icon aria-hidden="true">more_vert</mat-icon>
               </button>
               <mat-menu #actions="matMenu">
-                <button mat-menu-item (click)="rename(dataset)">
+                <button type="button" mat-menu-item (click)="rename(dataset)">
                   <mat-icon aria-hidden="true">edit</mat-icon>Rename
                 </button>
-                <button mat-menu-item (click)="remove(dataset)">
+                <button type="button" mat-menu-item (click)="remove(dataset)">
                   <mat-icon aria-hidden="true">delete</mat-icon>Delete
                 </button>
               </mat-menu>
             </td>
           </ng-container>
-          <tr mat-header-row *matHeaderRowDef="displayedColumns()"></tr>
+          <tr *matHeaderRowDef="displayedColumns()" mat-header-row></tr>
           <tr
-            mat-row
             *matRowDef="let row; columns: displayedColumns()"
+            mat-row
             [class.selected-row]="isSelected(row)"
           ></tr>
         </table>
@@ -244,7 +245,7 @@
             <p>Try changing or clearing your search and filters.</p>
           </div>
 
-          <button matButton (click)="clearFilters()">Clear filters</button>
+          <button type="button" matButton (click)="clearFilters()">Clear filters</button>
         }
       </div>
     }

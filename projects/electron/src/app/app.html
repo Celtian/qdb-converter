@@ -1,16 +1,16 @@
 <mat-sidenav-container>
   <mat-sidenav
     #drawer
+    aria-label="Primary navigation"
     [mode]="compact() ? 'over' : 'side'"
     [opened]="!compact()"
-    aria-label="Primary navigation"
   >
     <app-app-navigation />
   </mat-sidenav>
   <mat-sidenav-content>
     @if (compact()) {
       <mat-toolbar>
-        <button matIconButton (click)="drawer.toggle()" aria-label="Open navigation">
+        <button type="button" matIconButton aria-label="Open navigation" (click)="drawer.toggle()">
           <mat-icon>menu</mat-icon>
         </button>
         <span>QDB Converter</span>
