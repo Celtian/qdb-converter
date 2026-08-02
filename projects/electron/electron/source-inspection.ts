@@ -1,8 +1,9 @@
+import { type FifaDatabase, openFifaDatabase } from 'fifa-t3db';
 import { readFile, readdir } from 'node:fs/promises';
 import { basename, dirname, extname, join } from 'node:path';
-import { openFifaDatabase, type FifaDatabase } from 'fifa-t3db';
+
 import type { DatasetImportCandidate, DatasetImportTableSummary } from '../shared/contracts';
-import { fieldsFor, SUPPORTED_FIFA_VERSIONS, SUPPORTED_TABLES } from '../shared/table-config';
+import { SUPPORTED_FIFA_VERSIONS, SUPPORTED_TABLES, fieldsFor } from '../shared/table-config';
 import { parseTextTable } from '../shared/text-format';
 
 interface InspectedTable {

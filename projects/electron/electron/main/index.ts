@@ -1,17 +1,18 @@
 import {
-  app,
   BrowserWindow,
+  type IpcMainInvokeEvent,
+  Menu,
+  type OpenDialogOptions,
+  app,
   dialog,
   ipcMain,
-  Menu,
   shell,
-  type IpcMainInvokeEvent,
-  type OpenDialogOptions,
 } from 'electron';
 import { randomUUID } from 'node:crypto';
 import { basename, dirname, isAbsolute, join, resolve } from 'node:path';
 import { Worker } from 'node:worker_threads';
 import { updateElectronApp } from 'update-electron-app';
+
 import type {
   CreateConvertedDatasetRequest,
   CreateConvertedDatasetResult,
@@ -25,23 +26,23 @@ import type {
   DatasetValidationResult,
   ExportDatasetRequest,
   ExportDatasetResult,
-  TableConversionSummary,
   T3dbSourcePreparationRequest,
+  TableConversionSummary,
   ValidationError,
 } from '../../shared/contracts';
 import { isSupportedVersion } from '../../shared/table-config';
 import { parseDatasetKinds } from '../dataset-cleanup';
+import { exportDatasetSnapshot } from '../dataset-exporter';
 import {
-  DatasetLibrary,
   type ConvertedDatasetRecord,
+  DatasetLibrary,
   type ImportedDatasetRecord,
 } from '../dataset-library';
-import { exportDatasetSnapshot } from '../dataset-exporter';
 import type { InspectedSource } from '../source-inspection';
 import {
-  SourceSelections,
   type SelectedSource,
   type SelectedT3dbFileKind,
+  SourceSelections,
 } from '../source-selections';
 
 let mainWindow: BrowserWindow | undefined;

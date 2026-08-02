@@ -6,6 +6,7 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatTabsModule } from '@angular/material/tabs';
+
 import type { DatasetKind } from '../../../../shared/contracts';
 import { AppStore } from '../../core/app-store';
 import { ConfirmationDialog } from '../../core/confirmation-dialog/confirmation-dialog';
@@ -13,10 +14,10 @@ import { DatasetColumnPreferences } from '../../core/dataset-column-preferences'
 import { Theme, type ThemePreference } from '../../core/theme';
 import { DatasetColumnEditor } from '../../shared/dataset-column-editor/dataset-column-editor';
 import {
-  columnsByDatasetTable,
-  defaultDatasetColumnPreference,
   type DatasetColumnPreference,
   type DatasetTableKind,
+  columnsByDatasetTable,
+  defaultDatasetColumnPreference,
 } from '../../shared/dataset-column-editor/dataset-table-columns';
 
 @Component({

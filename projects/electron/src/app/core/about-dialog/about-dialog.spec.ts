@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+
 import axe from 'axe-core';
 
 import { VERSION_INFO } from '../../../../../version-info';

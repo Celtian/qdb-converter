@@ -1,11 +1,12 @@
-import { mkdir, writeFile } from 'node:fs/promises';
+import { Datatype, type Field } from 'fifatables';
 import { mkdtempSync } from 'node:fs';
+import { mkdir, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { Datatype, type Field } from 'fifatables';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+
 import { fieldsFor } from '../shared/table-config';
-import { encodeFifaText, type TableRow } from '../shared/text-format';
+import { type TableRow, encodeFifaText } from '../shared/text-format';
 import {
   type ConvertedDatasetRecord,
   type ImportedDatasetRecord,

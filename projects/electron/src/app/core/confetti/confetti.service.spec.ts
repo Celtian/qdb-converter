@@ -2,8 +2,8 @@ import { Overlay } from '@angular/cdk/overlay';
 import type { ComponentRef } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 
-import { ConfettiService } from './confetti.service';
 import type { Confetti } from './confetti';
+import { ConfettiService } from './confetti.service';
 
 describe('ConfettiService', () => {
   let service: ConfettiService;

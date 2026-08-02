@@ -1,8 +1,9 @@
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatButtonHarness } from '@angular/material/button/testing';
-import { provideRouter } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
+import { provideRouter } from '@angular/router';
+
 import axe from 'axe-core';
 
 import { AboutDialog } from '../about-dialog/about-dialog';

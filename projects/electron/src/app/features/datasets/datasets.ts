@@ -12,6 +12,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSortModule, type Sort, type SortDirection } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { RouterLink } from '@angular/router';
+
 import type { ImportedDatasetDescriptor } from '../../../../shared/contracts';
 import { AppStore } from '../../core/app-store';
 import { ConfirmationDialog } from '../../core/confirmation-dialog/confirmation-dialog';
@@ -22,17 +23,17 @@ import {
   type DatasetColumnDrawerData,
 } from '../../shared/dataset-column-drawer/dataset-column-drawer';
 import {
+  type DatasetColumnPreference,
   columnsByDatasetTable,
   defaultDatasetColumnPreference,
-  type DatasetColumnPreference,
   visibleDatasetColumns,
 } from '../../shared/dataset-column-editor/dataset-table-columns';
 import {
   DatasetFilterDrawer,
   type DatasetFilterDrawerData,
   type DatasetFilters,
-  emptyImportedDatasetFilters,
   type ImportedDatasetFilters,
+  emptyImportedDatasetFilters,
 } from '../../shared/dataset-filter-drawer/dataset-filter-drawer';
 import { StatusBadge } from '../../shared/status-badge/status-badge';
 import { DatasetDetailsDialog, type DatasetDetailsDialogResult } from './dataset-details-dialog';

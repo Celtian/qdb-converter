@@ -1,12 +1,13 @@
+import { openFifaDatabase } from 'fifa-t3db';
 import { createHash } from 'node:crypto';
 import { copyFile, mkdir, readFile, readdir } from 'node:fs/promises';
 import { basename, extname, join } from 'node:path';
-import { openFifaDatabase } from 'fifa-t3db';
+
+import { SUPPORTED_TABLES } from '../shared/table-config';
+import { parseTextTable } from '../shared/text-format';
 import type { ImportedDatasetRecord } from './dataset-library';
 import { sourceProvenance } from './dataset-library';
 import type { SelectedSource } from './source-selections';
-import { SUPPORTED_TABLES } from '../shared/table-config';
-import { parseTextTable } from '../shared/text-format';
 
 const hashFile = async (path: string): Promise<string> =>
   createHash('sha256')

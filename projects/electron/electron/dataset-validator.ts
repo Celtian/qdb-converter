@@ -1,7 +1,8 @@
-import { readFile, readdir } from 'node:fs/promises';
-import { join } from 'node:path';
 import { openFifaDatabase } from 'fifa-t3db';
 import { Datatype, type Field } from 'fifatables';
+import { readFile, readdir } from 'node:fs/promises';
+import { join } from 'node:path';
+
 import type {
   DatasetImportValidationResult,
   DatasetValidationIssue,
@@ -10,7 +11,7 @@ import type {
   DatasetValidationSample,
 } from '../shared/contracts';
 import { fieldsFor, isSupportedTable } from '../shared/table-config';
-import { parseTextTable, type TableRow, type TableValue } from '../shared/text-format';
+import { type TableRow, type TableValue, parseTextTable } from '../shared/text-format';
 import type { ConvertedDatasetRecord, ImportedDatasetRecord } from './dataset-library';
 import type { SelectedSource } from './source-selections';
 

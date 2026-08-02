@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
+
 import axe from 'axe-core';
+
 import type { DatasetValidationReport } from '../../../../shared/contracts';
 import { ValidationReport } from './validation-report';
 

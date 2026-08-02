@@ -7,8 +7,10 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatDialogHarness } from '@angular/material/dialog/testing';
 import { MatSelectHarness } from '@angular/material/select/testing';
 import { provideRouter } from '@angular/router';
+
 import axe from 'axe-core';
 import { of } from 'rxjs';
+
 import type { ConvertedDatasetDescriptor, QdbConverterApi } from '../../../../shared/contracts';
 import { AppStore } from '../../core/app-store';
 import {
@@ -16,7 +18,6 @@ import {
   datasetColumnPreferenceKey,
 } from '../../core/dataset-column-preferences';
 import { DatasetNameDialog } from '../../core/dataset-name-dialog/dataset-name-dialog';
-
 import { ConvertedDatasetDetailsDialog } from './converted-dataset-details-dialog';
 import { ConvertedDatasets } from './converted-datasets';
 

@@ -1,14 +1,14 @@
+import { DecimalPipe } from '@angular/common';
 import {
-  afterRenderEffect,
   ApplicationRef,
   Component,
+  afterRenderEffect,
   computed,
   inject,
   signal,
   viewChild,
   viewChildren,
 } from '@angular/core';
-import { DecimalPipe } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import type { ErrorStateMatcher } from '@angular/material/core';
@@ -20,6 +20,7 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatSelect, MatSelectModule } from '@angular/material/select';
 import { MatStepper, MatStepperModule } from '@angular/material/stepper';
 import { RouterLink } from '@angular/router';
+
 import type {
   DatasetImportCandidate,
   DatasetImportRequest,

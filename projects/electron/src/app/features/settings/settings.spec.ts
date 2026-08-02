@@ -5,7 +5,9 @@ import { MatButtonHarness } from '@angular/material/button/testing';
 import { MatCheckboxHarness } from '@angular/material/checkbox/testing';
 import { MatDialogHarness } from '@angular/material/dialog/testing';
 import { MatTabGroupHarness } from '@angular/material/tabs/testing';
+
 import axe from 'axe-core';
+
 import type {
   ConvertedDatasetDescriptor,
   ImportedDatasetDescriptor,
@@ -16,7 +18,6 @@ import {
   DatasetColumnPreferences,
   datasetColumnPreferenceKey,
 } from '../../core/dataset-column-preferences';
-
 import { Settings } from './settings';
 
 const normalizedLabel = async (checkbox: MatCheckboxHarness): Promise<string> =>

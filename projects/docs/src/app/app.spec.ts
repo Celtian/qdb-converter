@@ -1,9 +1,11 @@
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
+
 import axe from 'axe-core';
 import { provideAppVersion } from 'ngx-app-version';
 import { of } from 'rxjs';
+
 import { VERSION_INFO } from '../../../version-info';
 import { App } from './app';
 import { documentationPages } from './documentation';

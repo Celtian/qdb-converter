@@ -1,8 +1,10 @@
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatAutocompleteHarness } from '@angular/material/autocomplete/testing';
 import { MatRadioGroupHarness } from '@angular/material/radio/testing';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+
 import axe from 'axe-core';
+
 import type {
   ConvertedDatasetDescriptor,
   DatasetKind,
@@ -12,7 +14,6 @@ import type {
 } from '../../../../shared/contracts';
 import { AppStore } from '../../core/app-store';
 import { ConfettiService } from '../../core/confetti/confetti.service';
-
 import { ExportDataset } from './export-dataset';
 
 const importedDataset: ImportedDatasetDescriptor = {
