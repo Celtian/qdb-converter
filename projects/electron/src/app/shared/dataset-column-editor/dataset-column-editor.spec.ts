@@ -3,12 +3,14 @@ import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { TestBed } from '@angular/core/testing';
 import { MatButtonHarness } from '@angular/material/button/testing';
 import { MatCheckboxHarness } from '@angular/material/checkbox/testing';
+
 import axe from 'axe-core';
+
 import { DatasetColumnEditor } from './dataset-column-editor';
 import {
+  type DatasetColumnPreference,
   columnsByDatasetTable,
   defaultDatasetColumnPreference,
-  type DatasetColumnPreference,
 } from './dataset-table-columns';
 
 describe('DatasetColumnEditor', () => {

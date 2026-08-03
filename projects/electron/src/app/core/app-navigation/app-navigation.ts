@@ -5,6 +5,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterLink, RouterLinkActive } from '@angular/router';
+
 import { AboutDialog } from '../about-dialog/about-dialog';
 
 interface NavigationLink {

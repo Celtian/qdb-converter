@@ -1,16 +1,17 @@
-<section class="page" aria-labelledby="import-heading">
-  <header class="page-header">
-    <div>
-      <h1 id="import-heading">Import datasets</h1>
-      <p>Add DB Master text folders or paired t3db sources to the managed dataset library.</p>
-    </div>
-  </header>
-
+<!-- eslint-disable max-lines -->
+<section class="mx-auto w-full max-w-360 p-8 max-nav:p-4" aria-labelledby="import-heading">
+  <app-page-header
+    heading="Import datasets"
+    description="Add DB Master text folders or paired t3db sources to the managed dataset library."
+    headingId="import-heading"
+  />
   @if (error()) {
-    <p class="error" role="alert">{{ error() }}</p>
+    <p class="rounded-xl bg-error-container px-4 py-3 text-on-error-container" role="alert">
+      {{ error() }}
+    </p>
   }
 
-  <mat-card appearance="outlined" class="wizard-card">
+  <mat-card appearance="outlined" class="overflow-hidden">
     <mat-card-header>
       <mat-card-title>Import datasets</mat-card-title>
       <mat-card-subtitle
@@ -19,47 +20,47 @@
       >
     </mat-card-header>
     <mat-card-content>
-      <mat-stepper class="qdb-wizard" linear aria-label="Dataset import wizard">
-        <ng-template matStepperIcon="number" let-index="index">
+      <mat-stepper linear aria-label="Dataset import wizard">
+        <ng-template let-index="index" matStepperIcon="number">
           <span aria-hidden="true">{{ index + 1 }}</span>
         </ng-template>
-        <ng-template matStepperIcon="edit" let-index="index">
+        <ng-template let-index="index" matStepperIcon="edit">
           <span aria-hidden="true">{{ index + 1 }}</span>
         </ng-template>
-        <ng-template matStepperIcon="done" let-index="index">
+        <ng-template let-index="index" matStepperIcon="done">
           <span aria-hidden="true">{{ index + 1 }}</span>
         </ng-template>
 
         <mat-step [completed]="true">
           <ng-template matStepLabel>Format</ng-template>
-          <div class="step-content">
+          <div class="grid gap-6 pt-6 pb-2">
             <div>
               <h2>Choose source format</h2>
               <p>Every source in this import uses the selected format.</p>
             </div>
 
             <mat-radio-group
-              class="format-options"
+              class="grid max-w-208 gap-3"
               aria-label="Dataset source format"
               [value]="format()"
               [disabled]="validationRunning()"
               (change)="changeFormat($event.value)"
             >
               <mat-radio-button value="text-folder">
-                <span class="choice-label">
+                <span class="grid gap-micro">
                   <strong>Text-table folders</strong>
                   <small>Import exported FIFA 11–23 files such as players.txt and teams.txt.</small>
                 </span>
               </mat-radio-button>
               <mat-radio-button value="t3db">
-                <span class="choice-label">
+                <span class="grid gap-micro">
                   <strong>t3db database</strong>
                   <small>Import a .db file together with its matching metadata XML schema.</small>
                 </span>
               </mat-radio-button>
             </mat-radio-group>
 
-            <div class="step-actions">
+            <div class="flex flex-wrap items-center justify-end gap-3 max-xs:*:flex-1">
               <button type="button" matButton="filled" matStepperNext>Next</button>
             </div>
           </div>
@@ -67,7 +68,7 @@
 
         <mat-step [completed]="candidates().length > 0">
           <ng-template matStepLabel>Source</ng-template>
-          <div class="step-content">
+          <div class="grid gap-6 pt-6 pb-2">
             <div>
               <h2>Select sources</h2>
               <p>
@@ -80,7 +81,7 @@
             </div>
 
             @if (format() === 'text-folder') {
-              <mat-form-field class="source-picker" appearance="outline">
+              <mat-form-field class="w-full" appearance="outline">
                 <mat-label>Source folders</mat-label>
                 <input matInput readonly [value]="textSourceDisplay()" />
                 <button
@@ -97,8 +98,8 @@
                 </button>
               </mat-form-field>
             } @else {
-              <div class="source-fields">
-                <mat-form-field class="source-picker" appearance="outline">
+              <div class="grid gap-4">
+                <mat-form-field class="w-full" appearance="outline">
                   <mat-label>t3db database</mat-label>
                   <input matInput readonly [value]="t3dbDatabaseFile()?.displayPath ?? ''" />
                   <button
@@ -114,7 +115,7 @@
                     <mat-icon>folder_open</mat-icon>
                   </button>
                 </mat-form-field>
-                <mat-form-field class="source-picker" appearance="outline">
+                <mat-form-field class="w-full" appearance="outline">
                   <mat-label>Metadata XML</mat-label>
                   <input matInput readonly [value]="t3dbMetadataFile()?.displayPath ?? ''" />
                   <button
@@ -153,68 +154,102 @@
               </div>
             }
 
-            <div class="candidate-list" aria-live="polite">
+            <div class="grid gap-3" aria-live="polite">
               @for (candidate of candidates(); track candidate.selectionId) {
-                <mat-card appearance="outlined" class="source-card candidate-card">
-                  <div class="source-card-header">
-                    <div class="source-identity">
-                      <span class="source-icon" aria-hidden="true">
+                <mat-card
+                  appearance="outlined"
+                  class="grid gap-3.5 rounded-2xl border-outline-variant bg-surface-container-low p-4"
+                >
+                  <div class="flex items-center justify-between gap-4 max-xs:items-start">
+                    <div class="flex min-w-0 items-center gap-3">
+                      <span
+                        class="grid size-11 shrink-0 place-items-center rounded-xl bg-primary-container text-on-primary-container"
+                        aria-hidden="true"
+                      >
                         <mat-icon>{{
                           candidate.sourceKind === 't3db' ? 'storage' : 'folder'
                         }}</mat-icon>
                       </span>
-                      <div class="source-title">
-                        <h3>{{ candidate.name }}</h3>
-                        <span class="source-kind">
+                      <div class="flex min-w-0 flex-wrap items-baseline gap-x-2.5 gap-y-tight">
+                        <h3 class="min-w-0 truncate text-body-lg">
+                          {{ candidate.name }}
+                        </h3>
+                        <span
+                          class="w-fit rounded-full bg-secondary-container px-chip text-compact leading-5 font-medium whitespace-nowrap text-on-secondary-container"
+                        >
                           {{ candidate.sourceKind === 't3db' ? 't3db pair' : 'Text folder' }}
                         </span>
                       </div>
                     </div>
                     <button
-                      class="remove-source"
+                      class="shrink-0 text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
                       type="button"
                       matIconButton
                       [disabled]="validationRunning()"
-                      (click)="remove(candidate.selectionId)"
                       [attr.aria-label]="'Remove ' + candidate.name"
+                      (click)="remove(candidate.selectionId)"
                     >
                       <mat-icon>close</mat-icon>
                     </button>
                   </div>
 
-                  <div class="source-metadata" role="group" aria-label="Source details">
-                    <span>
-                      <mat-icon aria-hidden="true">table_chart</mat-icon>
+                  <div
+                    class="flex flex-wrap items-center gap-2 pl-14 max-xs:pl-0"
+                    role="group"
+                    aria-label="Source details"
+                  >
+                    <span
+                      class="flex w-fit items-center gap-1 rounded-full bg-surface-container-high px-chip py-micro text-compact leading-5 font-medium whitespace-nowrap text-on-surface-variant"
+                    >
+                      <mat-icon class="size-4 text-base" aria-hidden="true">table_chart</mat-icon>
                       {{ candidate.tables.length }} tables
                     </span>
-                    <span>
-                      <mat-icon aria-hidden="true">sports_soccer</mat-icon>
+                    <span
+                      class="flex w-fit items-center gap-1 rounded-full bg-surface-container-high px-chip py-micro text-compact leading-5 font-medium whitespace-nowrap text-on-surface-variant"
+                    >
+                      <mat-icon class="size-4 text-base" aria-hidden="true">sports_soccer</mat-icon>
                       FIFA {{ candidate.version }}
                     </span>
                   </div>
 
-                  <p class="source-path" [title]="candidate.originalPaths.join(' · ')">
-                    <mat-icon aria-hidden="true">folder_open</mat-icon>
-                    <span>{{ candidate.originalPaths.join(' · ') }}</span>
+                  <p
+                    class="m-0 flex min-w-0 items-center gap-2 pl-14 text-sm text-on-surface-variant max-xs:items-start max-xs:pl-0"
+                    [title]="candidate.originalPaths.join(' · ')"
+                  >
+                    <mat-icon class="size-4.5 shrink-0 text-lg" aria-hidden="true"
+                      >folder_open</mat-icon
+                    >
+                    <span
+                      class="truncate max-xs:overflow-visible max-xs:wrap-anywhere max-xs:whitespace-normal"
+                      >{{ candidate.originalPaths.join(' · ') }}</span
+                    >
                   </p>
 
                   @if (candidate.warnings.length) {
-                    <div class="source-warnings">
+                    <div class="grid gap-2">
                       @for (warning of candidate.warnings; track warning) {
-                        <div class="source-warning">
-                          <mat-icon aria-hidden="true">warning_amber</mat-icon>
-                          <p>{{ warning }}</p>
+                        <div
+                          class="flex items-start gap-2.5 rounded-notice bg-tertiary-container px-3 py-2.5 text-on-tertiary-container"
+                        >
+                          <mat-icon class="size-5 shrink-0 text-xl" aria-hidden="true"
+                            >warning_amber</mat-icon
+                          >
+                          <p class="m-0 leading-option">{{ warning }}</p>
                         </div>
                       }
                     </div>
                   }
                 </mat-card>
               } @empty {
-                <p class="empty-step">No sources selected yet.</p>
+                <p
+                  class="rounded-xl border border-dashed border-outline-variant p-6 text-center text-on-surface-variant"
+                >
+                  No sources selected yet.
+                </p>
               }
             </div>
 
-            <div class="step-actions">
+            <div class="flex flex-wrap items-center justify-end gap-3 max-xs:*:flex-1">
               <button
                 type="button"
                 matButton
@@ -237,43 +272,65 @@
 
         <mat-step [completed]="reviewReady()">
           <ng-template matStepLabel>Review</ng-template>
-          <div class="step-content">
+          <div class="grid gap-6 pt-6 pb-2">
             <div>
               <h2>Review dataset details</h2>
               <p>Choose a unique name and a FIFA version supported by each source.</p>
             </div>
 
-            <div class="review-list">
+            <div class="grid gap-3">
               @for (candidate of candidates(); track candidate.selectionId) {
-                <mat-card appearance="outlined" class="source-card review-card">
-                  <div class="source-card-header">
-                    <div class="source-identity">
-                      <span class="source-icon" aria-hidden="true">
+                <mat-card
+                  appearance="outlined"
+                  class="grid gap-3.5 rounded-2xl border-outline-variant bg-surface-container-low p-4"
+                >
+                  <div
+                    class="flex items-center justify-between gap-4 max-xs:flex-col max-xs:items-start"
+                  >
+                    <div class="flex min-w-0 items-center gap-3">
+                      <span
+                        class="grid size-11 shrink-0 place-items-center rounded-xl bg-primary-container text-on-primary-container"
+                        aria-hidden="true"
+                      >
                         <mat-icon>{{
                           candidate.sourceKind === 't3db' ? 'storage' : 'folder'
                         }}</mat-icon>
                       </span>
-                      <div class="source-title">
-                        <h3>{{ candidate.name }}</h3>
-                        <span class="source-kind">
+                      <div class="flex min-w-0 flex-wrap items-baseline gap-x-2.5 gap-y-tight">
+                        <h3 class="min-w-0 truncate text-body-lg">
+                          {{ candidate.name }}
+                        </h3>
+                        <span
+                          class="w-fit rounded-full bg-secondary-container px-chip text-compact leading-5 font-medium whitespace-nowrap text-on-secondary-container"
+                        >
                           {{ candidate.sourceKind === 't3db' ? 't3db pair' : 'Text folder' }}
                         </span>
                       </div>
                     </div>
-                    <div class="source-metadata" role="group" aria-label="Source details">
-                      <span>
-                        <mat-icon aria-hidden="true">table_chart</mat-icon>
+                    <div
+                      class="flex shrink-0 flex-wrap items-center justify-end gap-2 max-xs:justify-start max-xs:pl-14"
+                      role="group"
+                      aria-label="Source details"
+                    >
+                      <span
+                        class="flex w-fit items-center gap-1 rounded-full bg-surface-container-high px-chip py-micro text-compact leading-5 font-medium whitespace-nowrap text-on-surface-variant"
+                      >
+                        <mat-icon class="size-4 text-base" aria-hidden="true">table_chart</mat-icon>
                         {{ candidate.tables.length }} tables
                       </span>
-                      <span>
-                        <mat-icon aria-hidden="true">sports_soccer</mat-icon>
+                      <span
+                        class="flex w-fit items-center gap-1 rounded-full bg-surface-container-high px-chip py-micro text-compact leading-5 font-medium whitespace-nowrap text-on-surface-variant"
+                      >
+                        <mat-icon class="size-4 text-base" aria-hidden="true"
+                          >sports_soccer</mat-icon
+                        >
                         FIFA {{ candidate.version }}
                       </span>
                     </div>
                   </div>
 
-                  <div class="review-fields">
-                    <mat-form-field appearance="outline">
+                  <div class="flex items-center gap-3 max-xs:flex-col max-xs:items-stretch">
+                    <mat-form-field class="flex-1" appearance="outline">
                       <mat-label>Dataset name</mat-label>
                       <input
                         matInput
@@ -311,17 +368,29 @@
                     </mat-form-field>
                   </div>
 
-                  <p class="source-path" [title]="candidate.originalPaths.join(' · ')">
-                    <mat-icon aria-hidden="true">folder_open</mat-icon>
-                    <span>{{ candidate.originalPaths.join(' · ') }}</span>
+                  <p
+                    class="m-0 flex min-w-0 items-center gap-2 pl-14 text-sm text-on-surface-variant max-xs:items-start max-xs:pl-0"
+                    [title]="candidate.originalPaths.join(' · ')"
+                  >
+                    <mat-icon class="size-4.5 shrink-0 text-lg" aria-hidden="true"
+                      >folder_open</mat-icon
+                    >
+                    <span
+                      class="truncate max-xs:overflow-visible max-xs:wrap-anywhere max-xs:whitespace-normal"
+                      >{{ candidate.originalPaths.join(' · ') }}</span
+                    >
                   </p>
 
                   @if (candidate.warnings.length) {
-                    <div class="source-warnings">
+                    <div class="grid gap-2">
                       @for (warning of candidate.warnings; track warning) {
-                        <div class="source-warning">
-                          <mat-icon aria-hidden="true">warning_amber</mat-icon>
-                          <p>{{ warning }}</p>
+                        <div
+                          class="flex items-start gap-2.5 rounded-notice bg-tertiary-container px-3 py-2.5 text-on-tertiary-container"
+                        >
+                          <mat-icon class="size-5 shrink-0 text-xl" aria-hidden="true"
+                            >warning_amber</mat-icon
+                          >
+                          <p class="m-0 leading-option">{{ warning }}</p>
                         </div>
                       }
                     </div>
@@ -330,7 +399,7 @@
               }
             </div>
 
-            <div class="step-actions">
+            <div class="flex flex-wrap items-center justify-end gap-3 max-xs:*:flex-1">
               <button type="button" matButton matStepperPrevious [disabled]="validationRunning()">
                 Back
               </button>
@@ -348,7 +417,7 @@
 
         <mat-step>
           <ng-template matStepLabel>Import</ng-template>
-          <div class="step-content">
+          <div class="grid gap-6 pt-6 pb-2">
             <div>
               <h2>Import datasets</h2>
               <p>
@@ -358,7 +427,7 @@
             </div>
 
             @if (validationRunning() && validationProgress(); as progress) {
-              <div class="validation-progress" role="status" aria-live="polite">
+              <div class="grid gap-2" role="status" aria-live="polite">
                 <mat-progress-bar mode="indeterminate" aria-label="Validating selected sources" />
                 <p>
                   Validating {{ progress.name }} ({{ progress.current }} of {{ progress.total }})…
@@ -367,30 +436,46 @@
             }
 
             @if (candidates().length) {
-              <div class="import-tables">
+              <div class="grid gap-4">
                 @for (candidate of candidates(); track candidate.selectionId) {
                   <section
-                    class="import-dataset"
+                    class="overflow-hidden rounded-xl border border-outline-variant bg-surface-container-low"
                     [attr.aria-labelledby]="'import-tables-' + candidate.selectionId"
                   >
-                    <h3 [id]="'import-tables-' + candidate.selectionId">{{ candidate.name }}</h3>
+                    <h3
+                      class="border-b border-outline-variant px-4 py-3.5"
+                      [id]="'import-tables-' + candidate.selectionId"
+                    >
+                      {{ candidate.name }}
+                    </h3>
                     @if (validationState(candidate.selectionId); as state) {
-                      <div class="import-validation">
+                      <div class="border-b border-outline-variant p-4">
                         @switch (state.status) {
                           @case ('pending') {
-                            <p class="validation-pending" role="status">
+                            <p
+                              class="rounded-xl border border-dashed border-outline-variant p-4 text-on-surface-variant"
+                              role="status"
+                            >
                               Waiting to validate this source…
                             </p>
                           }
                           @case ('running') {
-                            <p class="validation-pending" role="status">Validating this source…</p>
+                            <p
+                              class="rounded-xl border border-dashed border-outline-variant p-4 text-on-surface-variant"
+                              role="status"
+                            >
+                              Validating this source…
+                            </p>
                           }
                           @case ('failed') {
-                            <div class="validation-failed" role="alert">
-                              <mat-icon aria-hidden="true">error</mat-icon>
+                            <div
+                              class="flex gap-3 rounded-xl border border-error bg-error-container p-4 text-on-error-container"
+                              role="alert"
+                            >
+                              <mat-icon class="shrink-0" aria-hidden="true">error</mat-icon>
                               <div>
                                 <strong>Validation could not be completed</strong>
-                                <p>{{ state.error }}</p>
+                                <p class="mt-1">{{ state.error }}</p>
                               </div>
                             </div>
                           }
@@ -407,19 +492,21 @@
                         }
                       </div>
                     }
-                    <div class="import-table-container">
+                    <div class="max-w-full overflow-x-auto">
                       <table [attr.aria-labelledby]="'import-tables-' + candidate.selectionId">
                         <thead>
                           <tr>
                             <th scope="col">Table</th>
-                            <th scope="col" class="row-count">Rows</th>
+                            <th scope="col" class="text-end whitespace-nowrap">Rows</th>
                           </tr>
                         </thead>
                         <tbody>
                           @for (summary of candidate.tables; track summary.table) {
                             <tr>
                               <td>{{ summary.table }}</td>
-                              <td class="row-count">{{ summary.rows | number: '1.0-0' }}</td>
+                              <td class="text-end whitespace-nowrap">
+                                {{ summary.rows | number: '1.0-0' }}
+                              </td>
                             </tr>
                           }
                         </tbody>
@@ -438,12 +525,18 @@
             }
 
             @if (results().length) {
-              <div class="results" aria-live="polite">
-                <h3>Import results</h3>
-                <ul>
+              <div class="grid gap-3" aria-live="polite">
+                <h3 class="m-0">Import results</h3>
+                <ul class="m-0 grid list-none gap-2 p-0">
                   @for (result of results(); track result.selectionId) {
-                    <li [class.result-success]="result.status === 'completed'">
-                      <mat-icon aria-hidden="true">
+                    <li
+                      class="flex items-start gap-2 rounded-lg p-3"
+                      [class.bg-error-container]="result.status !== 'completed'"
+                      [class.text-on-error-container]="result.status !== 'completed'"
+                      [class.bg-secondary-container]="result.status === 'completed'"
+                      [class.text-on-secondary-container]="result.status === 'completed'"
+                    >
+                      <mat-icon class="shrink-0" aria-hidden="true">
                         {{ result.status === 'completed' ? 'check_circle' : 'error' }}
                       </mat-icon>
                       <span>
@@ -460,7 +553,7 @@
               </div>
             }
 
-            <div class="step-actions">
+            <div class="flex flex-wrap items-center justify-end gap-3 max-xs:*:flex-1">
               @if (candidates().length && !store.loading()) {
                 <button type="button" matButton matStepperPrevious [disabled]="validationRunning()">
                   Review remaining
@@ -480,8 +573,8 @@
                 <button
                   type="button"
                   matButton="filled"
-                  (click)="importAll()"
                   [disabled]="!canImport()"
+                  (click)="importAll()"
                 >
                   Import {{ candidates().length }}
                 </button>

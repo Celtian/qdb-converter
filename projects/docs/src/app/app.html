@@ -1,29 +1,39 @@
-<a class="skip-link" href="#main-content">Skip to content</a>
-<header class="site-header">
+<a
+  class="fixed top-2 left-2 z-100 rounded-lg bg-inverse-surface px-4 py-skip font-bold text-inverse-on-surface no-underline"
+  href="#main-content"
+  >Skip to content</a
+>
+<header class="sticky top-0 z-20 shrink-0">
   <mat-toolbar>
-    <button
-      class="navigation-trigger"
-      type="button"
-      matIconButton
-      aria-label="Open documentation navigation"
-      aria-controls="documentation-navigation"
-      [attr.aria-expanded]="navigationOpened()"
-      (click)="toggleNavigation()"
+    @if (compactNavigation()) {
+      <button
+        class="mr-1"
+        type="button"
+        matIconButton
+        aria-label="Open documentation navigation"
+        aria-controls="documentation-navigation"
+        [attr.aria-expanded]="navigationOpened()"
+        (click)="toggleNavigation()"
+      >
+        <mat-icon aria-hidden="true">menu</mat-icon>
+      </button>
+    }
+    <a
+      class="inline-flex min-w-0 items-center gap-brand-gap text-base font-bold text-inherit no-underline"
+      routerLink="/"
+      aria-label="QDB Converter documentation home"
     >
-      <mat-icon aria-hidden="true">menu</mat-icon>
-    </button>
-    <a class="brand" routerLink="/" aria-label="QDB Converter documentation home">
       <img ngSrc="qdb-converter-icon.png" width="28" height="28" alt="" priority />
       <span>QDB Converter</span>
-      <span class="documentation-label">Documentation</span>
+      <span class="font-normal text-on-surface-variant max-mobile:hidden">Documentation</span>
     </a>
-    <span class="toolbar-spacer"></span>
+    <span class="flex-1"></span>
     <a
       matButton
-      [href]="site.links.repository"
       target="_blank"
       rel="noopener noreferrer"
       aria-label="QDB Converter source on GitHub (opens in a new tab)"
+      [href]="site.links.repository"
     >
       <mat-icon aria-hidden="true">code</mat-icon>
       GitHub
@@ -39,7 +49,9 @@
     [opened]="navigationOpened()"
     (openedChange)="navigationChanged($event)"
   >
-    <p class="navigation-heading">Documentation</p>
+    <p class="mx-4 mt-6 mb-2 text-xs font-bold tracking-section text-on-surface-variant uppercase">
+      Documentation
+    </p>
     <mat-nav-list aria-label="Documentation pages">
       @for (page of pages; track page.path) {
         <a
@@ -60,21 +72,23 @@
   </mat-sidenav>
 
   <mat-sidenav-content>
-    <div class="content-shell">
+    <div class="flex min-h-content-screen flex-col">
       <main id="main-content" tabindex="-1">
         <router-outlet />
       </main>
       <footer>
-        <div class="footer-inner">
+        <div
+          class="m-auto flex w-full max-w-360 items-start justify-between gap-8 px-docs-inline py-6 max-mobile:flex-col"
+        >
           <div>
             <strong>QDB Converter</strong>
             <p>Secure, deterministic FIFA 11–23 database conversion.</p>
-            <p class="footer-meta">
+            <p class="text-sm">
               © {{ site.copyrightYear }} {{ site.author }} ·
               <a
-                [href]="site.links.version"
                 target="_blank"
                 rel="noopener noreferrer"
+                [href]="site.links.version"
                 [attr.aria-label]="
                   'QDB Converter ' + site.versionLabel + ' source (opens in a new tab)'
                 "
@@ -82,37 +96,40 @@
               >
             </p>
           </div>
-          <nav class="footer-links" aria-label="Project links">
+          <nav
+            class="flex flex-wrap justify-end gap-1 max-mobile:justify-start"
+            aria-label="Project links"
+          >
             <a
               matButton
-              [href]="site.links.latestRelease"
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Latest download (opens in a new tab)"
+              [href]="site.links.latestRelease"
               >Latest download</a
             >
             <a
               matButton
-              [href]="site.links.changelog"
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Changelog (opens in a new tab)"
+              [href]="site.links.changelog"
               >Changelog</a
             >
             <a
               matButton
-              [href]="site.links.issues"
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Report an issue (opens in a new tab)"
+              [href]="site.links.issues"
               >Report an issue</a
             >
             <a
               matButton
-              [href]="site.links.license"
               target="_blank"
               rel="noopener noreferrer"
               aria-label="MIT License (opens in a new tab)"
+              [href]="site.links.license"
               >MIT License</a
             >
           </nav>

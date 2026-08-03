@@ -1,4 +1,5 @@
 import type { Routes } from '@angular/router';
+
 import { documentationPages } from './documentation';
 
 export const routes: Routes = [

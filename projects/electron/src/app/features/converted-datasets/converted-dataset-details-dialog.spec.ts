@@ -2,7 +2,9 @@ import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { TestBed } from '@angular/core/testing';
 import { MatButtonHarness } from '@angular/material/button/testing';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+
 import axe from 'axe-core';
+
 import type { ConvertedDatasetDescriptor } from '../../../../shared/contracts';
 import { ConvertedDatasetDetailsDialog } from './converted-dataset-details-dialog';
 
@@ -52,11 +54,13 @@ describe('ConvertedDatasetDetailsDialog', () => {
     const loader = TestbedHarnessEnvironment.loader(fixture);
     await fixture.whenStable();
     const element = fixture.nativeElement as HTMLElement;
-    const details = [...element.querySelectorAll('.details dt')].map((term) => ({
+    const details = [...element.querySelectorAll('mat-dialog-content > dl dt')].map((term) => ({
       label: term.textContent?.trim(),
       value: term.nextElementSibling?.textContent?.trim(),
     }));
-    const tableSummaries = element.querySelectorAll('.table-summary-list > li');
+    const tableSummaries = element.querySelectorAll(
+      'section[aria-labelledby="converted-table-details-heading"] > ul.list-none > li',
+    );
 
     expect(element.querySelector('h2')?.textContent).toContain(dataset.name);
     expect(details).toContainEqual({ label: 'Source dataset', value: 'Fixture' });
@@ -112,16 +116,26 @@ describe('ConvertedDatasetDetailsDialog', () => {
     await fixture.whenStable();
     const element = fixture.nativeElement as HTMLElement;
 
-    expect(element.querySelector('.notice--error')?.textContent).toContain(
-      'The managed converted snapshot is missing.',
-    );
-    expect(element.querySelector('.fallback-message')?.textContent).toContain(
-      'Detailed conversion statistics were not recorded',
-    );
     expect(
-      [...element.querySelectorAll('.table-name-list code')].map((item) => item.textContent),
+      element.querySelector('section[aria-labelledby="converted-dataset-error-heading"]')
+        ?.textContent,
+    ).toContain('The managed converted snapshot is missing.');
+    expect(
+      element.querySelector('section[aria-labelledby="converted-table-details-heading"] > p')
+        ?.textContent,
+    ).toContain('Detailed conversion statistics were not recorded');
+    expect(
+      [
+        ...element.querySelectorAll(
+          'section[aria-labelledby="converted-table-details-heading"] > ul:not(.list-none) code',
+        ),
+      ].map((item) => item.textContent),
     ).toEqual(dataset.tableNames);
-    expect(element.querySelector('.table-summary-list')).toBeNull();
+    expect(
+      element.querySelector(
+        'section[aria-labelledby="converted-table-details-heading"] > ul.list-none',
+      ),
+    ).toBeNull();
     expect(element.querySelector('button[aria-haspopup="dialog"]')?.textContent).toContain(
       'Rename',
     );
@@ -151,10 +165,15 @@ describe('ConvertedDatasetDetailsDialog', () => {
     await fixture.whenStable();
     const element = fixture.nativeElement as HTMLElement;
 
-    expect(element.querySelector('.fallback-message')?.textContent).toContain(
-      'No table details were recorded for this dataset.',
-    );
-    expect(element.querySelector('.table-name-list')).toBeNull();
+    expect(
+      element.querySelector('section[aria-labelledby="converted-table-details-heading"] > p')
+        ?.textContent,
+    ).toContain('No table details were recorded for this dataset.');
+    expect(
+      element.querySelector(
+        'section[aria-labelledby="converted-table-details-heading"] > ul:not(.list-none)',
+      ),
+    ).toBeNull();
     expect((await axe.run(element)).violations).toEqual([]);
   });
 });

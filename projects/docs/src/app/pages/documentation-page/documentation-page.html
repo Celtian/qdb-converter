@@ -1,14 +1,19 @@
 <article>
-  <header class="hero">
-    <div class="hero-content">
-      <p class="eyebrow">{{ content.eyebrow }}</p>
+  <header class="border-b border-outline-variant text-on-primary-container">
+    <div class="mx-auto max-w-360 px-docs-inline py-hero-block">
+      <p class="m-0 text-xs font-bold tracking-eyebrow text-primary uppercase">
+        {{ content.eyebrow }}
+      </p>
       <h1>{{ content.title }}</h1>
-      <p class="summary">{{ content.summary }}</p>
+      <p class="m-0 max-w-192 text-summary leading-summary text-on-primary-container">
+        {{ content.summary }}
+      </p>
       @if (content.actions?.length) {
-        <div class="actions" aria-label="Page actions">
+        <div class="mt-6 flex flex-wrap items-center gap-3" aria-label="Page actions">
           @for (action of content.actions; track action.label) {
             @if (action.route) {
               <a
+                class="max-mobile:w-full max-mobile:justify-between"
                 [matButton]="action.primary ? 'filled' : 'outlined'"
                 [class.primary-action]="action.primary"
                 [routerLink]="action.route"
@@ -18,11 +23,12 @@
               </a>
             } @else {
               <a
+                class="max-mobile:w-full max-mobile:justify-between"
+                target="_blank"
+                rel="noopener noreferrer"
                 [matButton]="action.primary ? 'filled' : 'outlined'"
                 [class.primary-action]="action.primary"
                 [href]="action.href"
-                target="_blank"
-                rel="noopener noreferrer"
                 [attr.aria-label]="action.label + ' (opens in a new tab)'"
               >
                 {{ action.label }}
@@ -35,11 +41,14 @@
     </div>
   </header>
 
-  <div class="page-content">
+  <div class="mx-auto max-w-360 px-docs-inline pt-8 pb-20 max-mobile:pb-12">
     @if (content.facts?.length) {
-      <mat-card appearance="outlined" class="facts-card">
-        <mat-card-content>
-          <dl class="facts" aria-label="At a glance">
+      <mat-card appearance="outlined" class="bg-surface-container-lowest">
+        <mat-card-content class="p-0!">
+          <dl
+            class="m-0 grid grid-cols-facts overflow-hidden max-mobile:grid-cols-1"
+            aria-label="At a glance"
+          >
             @for (fact of content.facts; track fact.label) {
               <div>
                 <dt>{{ fact.label }}</dt>
@@ -51,35 +60,41 @@
       </mat-card>
     }
 
-    <div class="sections">
+    <div class="mt-5 grid grid-cols-sections gap-5">
       @for (section of content.sections; track section.title) {
-        <mat-card appearance="outlined" class="documentation-card" [class.wide]="section.wide">
-          <mat-card-content>
-            <section>
+        <mat-card
+          appearance="outlined"
+          class="min-w-0 bg-surface-container-lowest"
+          [class.col-span-full]="section.wide"
+        >
+          <mat-card-content class="p-docs-card">
+            <section class="min-w-0">
               @if (section.eyebrow) {
-                <p class="section-eyebrow">{{ section.eyebrow }}</p>
+                <p class="mb-3 text-xs font-bold tracking-eyebrow text-primary uppercase">
+                  {{ section.eyebrow }}
+                </p>
               }
               <h2>{{ section.title }}</h2>
               @for (paragraph of section.paragraphs; track paragraph) {
-                <p>{{ paragraph }}</p>
+                <p class="leading-summary text-on-surface-variant">{{ paragraph }}</p>
               }
               @if (section.items?.length) {
                 <ul>
                   @for (item of section.items; track item) {
-                    <li>{{ item }}</li>
+                    <li class="leading-summary text-on-surface-variant">{{ item }}</li>
                   }
                 </ul>
               }
               @if (section.steps?.length) {
                 <ol>
                   @for (step of section.steps; track step) {
-                    <li>{{ step }}</li>
+                    <li class="leading-summary text-on-surface-variant">{{ step }}</li>
                   }
                 </ol>
               }
               @if (section.table; as table) {
                 <div
-                  class="table-scroll"
+                  class="mt-5 overflow-x-auto"
                   role="region"
                   tabindex="0"
                   [attr.aria-label]="table.caption"
@@ -121,19 +136,20 @@
                 </aside>
               }
               @if (section.actions?.length) {
-                <div class="section-actions">
+                <div class="mt-section-actions flex flex-wrap items-center gap-3">
                   @for (action of section.actions; track action.label) {
                     @if (action.route) {
-                      <a matButton [routerLink]="action.route">
+                      <a class="text-primary" matButton [routerLink]="action.route">
                         {{ action.label }}
                         <mat-icon aria-hidden="true">arrow_forward</mat-icon>
                       </a>
                     } @else {
                       <a
+                        class="text-primary"
                         matButton
-                        [href]="action.href"
                         target="_blank"
                         rel="noopener noreferrer"
+                        [href]="action.href"
                         [attr.aria-label]="action.label + ' (opens in a new tab)'"
                       >
                         {{ action.label }}

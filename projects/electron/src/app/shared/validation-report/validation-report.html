@@ -1,20 +1,24 @@
 @if (report(); as validation) {
   <section
-    class="validation-summary"
-    [class.validation-summary--error]="validation.errorCount > 0"
-    [class.validation-summary--success]="validation.errorCount === 0"
+    class="flex gap-4 rounded-xl border p-4"
     role="status"
+    [class.border-error]="validation.errorCount > 0"
+    [class.bg-error-container]="validation.errorCount > 0"
+    [class.text-on-error-container]="validation.errorCount > 0"
+    [class.border-primary]="validation.errorCount === 0"
+    [class.bg-primary-container]="validation.errorCount === 0"
+    [class.text-on-primary-container]="validation.errorCount === 0"
   >
-    <mat-icon aria-hidden="true">{{ summaryIcon() }}</mat-icon>
+    <mat-icon class="shrink-0" aria-hidden="true">{{ summaryIcon() }}</mat-icon>
     <div>
-      <h3>{{ summaryTitle() }}</h3>
+      <h3 class="mb-1">{{ summaryTitle() }}</h3>
       <p>
         {{ validation.errorCount | number }} blocking
         {{ validation.errorCount === 1 ? 'error' : 'errors' }} and
         {{ validation.warningCount | number }}
         {{ validation.warningCount === 1 ? 'warning' : 'warnings' }} found.
       </p>
-      <p class="validation-metadata">
+      <p class="mt-tight! text-sm">
         {{ validation.tablesChecked | number }}
         {{ validation.tablesChecked === 1 ? 'table' : 'tables' }} and
         {{ validation.rowsChecked | number }}
@@ -24,9 +28,9 @@
   </section>
 
   @if (validation.errors.length) {
-    <section class="issue-section" [attr.aria-labelledby]="errorsHeadingId()">
-      <h3 [id]="errorsHeadingId()">
-        Blocking errors <span class="visually-hidden">for {{ subject() }}</span>
+    <section class="mt-6" [attr.aria-labelledby]="errorsHeadingId()">
+      <h3 class="mb-tight" [id]="errorsHeadingId()">
+        Blocking errors <span class="sr-only">for {{ subject() }}</span>
       </h3>
       <p>
         {{
@@ -35,19 +39,21 @@
             : 'The dataset should not be used until these problems are corrected and reimported.'
         }}
       </p>
-      <div class="issue-list">
+      <div class="mt-3 grid gap-2">
         @for (issue of validation.errors; track issueLabel(issue)) {
-          <details class="issue issue--error">
-            <summary>
-              <strong>{{ issueLabel(issue) }}</strong>
+          <details class="rounded-lg border border-outline-variant bg-surface-container-low">
+            <summary
+              class="cursor-pointer rounded-lg p-3 leading-issue focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-primary"
+            >
+              <strong class="text-error">{{ issueLabel(issue) }}</strong>
               <span>
                 — {{ issue.message }} ({{ issue.occurrences | number }}
                 {{ issue.occurrences === 1 ? 'occurrence' : 'occurrences' }})
               </span>
             </summary>
-            <ul>
+            <ul class="m-0 pr-4 pb-3 pl-10">
               @for (sample of issue.samples; track sample.row) {
-                <li>
+                <li class="my-1">
                   {{
                     sample.row > 0
                       ? 'Row ' + sample.row
@@ -55,12 +61,12 @@
                         ? 'Source'
                         : 'Dataset'
                   }}:
-                  <code>{{ sample.value }}</code>
+                  <code class="wrap-anywhere">{{ sample.value }}</code>
                 </li>
               }
             </ul>
             @if (issue.samples.length < issue.occurrences) {
-              <p class="sample-note">
+              <p class="m-0 px-4 pb-3 text-sm text-on-surface-variant">
                 Showing the first {{ issue.samples.length | number }} occurrences.
               </p>
             }
@@ -71,30 +77,33 @@
   }
 
   @if (validation.warnings.length) {
-    <section class="issue-section" [attr.aria-labelledby]="warningsHeadingId()">
-      <h3 [id]="warningsHeadingId()">
-        Warnings <span class="visually-hidden">for {{ subject() }}</span>
+    <section class="mt-6" [attr.aria-labelledby]="warningsHeadingId()">
+      <h3 class="mb-tight" [id]="warningsHeadingId()">
+        Warnings <span class="sr-only">for {{ subject() }}</span>
       </h3>
       <p>Modified databases may intentionally exceed the published FIFA table metadata.</p>
-      <div class="issue-list">
+      <div class="mt-3 grid gap-2">
         @for (issue of validation.warnings; track issueLabel(issue)) {
-          <details class="issue issue--warning">
-            <summary>
-              <strong>{{ issueLabel(issue) }}</strong>
+          <details class="rounded-lg border border-outline-variant bg-surface-container-low">
+            <summary
+              class="cursor-pointer rounded-lg p-3 leading-issue focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-primary"
+            >
+              <strong class="text-primary">{{ issueLabel(issue) }}</strong>
               <span>
                 — {{ issue.message }} ({{ issue.occurrences | number }}
                 {{ issue.occurrences === 1 ? 'occurrence' : 'occurrences' }})
               </span>
             </summary>
-            <ul>
+            <ul class="m-0 pr-4 pb-3 pl-10">
               @for (sample of issue.samples; track sample.row) {
-                <li>
-                  Row {{ sample.row | number }}: <code>{{ sample.value }}</code>
+                <li class="my-1">
+                  Row {{ sample.row | number }}:
+                  <code class="wrap-anywhere">{{ sample.value }}</code>
                 </li>
               }
             </ul>
             @if (issue.samples.length < issue.occurrences) {
-              <p class="sample-note">
+              <p class="m-0 px-4 pb-3 text-sm text-on-surface-variant">
                 Showing the first {{ issue.samples.length | number }} occurrences.
               </p>
             }
@@ -103,6 +112,6 @@
       </div>
     </section>
   } @else if (!validation.errors.length) {
-    <p class="no-issues">No validation issues were found.</p>
+    <p class="mt-6">No validation issues were found.</p>
   }
 }

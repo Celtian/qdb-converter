@@ -10,13 +10,14 @@ import { Component, computed, input, linkedSignal, model, signal } from '@angula
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatIconModule } from '@angular/material/icon';
+
 import {
-  fromDatasetColumnVisibility,
-  toDatasetColumnVisibility,
   type DatasetColumnDefinition,
   type DatasetColumnPreference,
   type DatasetColumnVisibility,
   type DatasetTableKind,
+  fromDatasetColumnVisibility,
+  toDatasetColumnVisibility,
 } from './dataset-table-columns';
 
 @Component({

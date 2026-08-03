@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+
 import axe from 'axe-core';
 
 import { VERSION_INFO } from '../../../../../version-info';
@@ -25,7 +26,7 @@ describe('AboutDialog', () => {
   it('renders the generated application version', () => {
     const content = fixture.nativeElement as HTMLElement;
 
-    expect(content.querySelector('.version')?.textContent).toContain(
+    expect(content.querySelector('header p')?.textContent).toContain(
       `Version ${VERSION_INFO.version}`,
     );
   });
@@ -33,10 +34,10 @@ describe('AboutDialog', () => {
   it('renders the product description and legal information', () => {
     const content = fixture.nativeElement as HTMLElement;
 
-    expect(content.querySelector('.description')?.textContent).toContain(
+    expect(content.querySelector('mat-dialog-content p:first-child')?.textContent).toContain(
       'Local-first Windows desktop application for importing and converting FIFA 11–23 database datasets',
     );
-    expect(content.querySelector('.legal')?.textContent).toContain(
+    expect(content.querySelector('mat-dialog-content p:last-child')?.textContent).toContain(
       '© 2026 Dominik Hladík · MIT License',
     );
   });
@@ -44,7 +45,7 @@ describe('AboutDialog', () => {
   it('links to the documentation and GitHub repository safely', () => {
     const links = Array.from(
       (fixture.nativeElement as HTMLElement).querySelectorAll<HTMLAnchorElement>(
-        '.external-actions a',
+        'mat-dialog-actions a',
       ),
     );
 

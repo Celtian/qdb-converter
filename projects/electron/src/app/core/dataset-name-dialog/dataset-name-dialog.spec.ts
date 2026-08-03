@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+
 import axe from 'axe-core';
 
 import { DatasetNameDialog } from './dataset-name-dialog';
@@ -38,7 +39,7 @@ describe('DatasetNameDialog', () => {
     const content = fixture.nativeElement as HTMLElement;
     const buttons = Array.from(content.querySelectorAll<HTMLButtonElement>('button'));
 
-    expect(content.querySelector('.description')?.textContent?.trim()).toBe(
+    expect(content.querySelector('p#dataset-name-dialog-description')?.textContent?.trim()).toBe(
       'Choose a clear name to help you find this dataset later.',
     );
     expect(content.querySelector('mat-hint')?.textContent?.replace(/\s/g, '')).toBe('7/80');

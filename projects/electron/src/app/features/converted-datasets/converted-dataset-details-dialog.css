@@ -6,123 +6,52 @@ mat-dialog-content {
   max-height: min(70vh, 42rem);
 }
 
-.details {
-  display: grid;
-  grid-template-columns: max-content minmax(0, 1fr);
-  gap: 0.5rem 1.25rem;
-  margin: 0;
-}
-
-.details dt,
-.table-summary dt {
+mat-dialog-content > dl dt,
+section li dl dt {
   color: var(--mat-sys-on-surface-variant);
   font-size: 0.875rem;
   font-weight: 500;
 }
 
-.details dd,
-.table-summary dd {
+mat-dialog-content > dl dd,
+section li dl dd {
   min-width: 0;
   margin: 0;
 }
 
-.notice,
-.detail-section {
-  margin-top: 1rem;
-}
-
-.notice {
-  padding: 0.75rem;
-  border-radius: 0.5rem;
-}
-
-.notice--error {
-  background: var(--mat-sys-error-container);
-  color: var(--mat-sys-on-error-container);
-}
-
-.notice h3,
-.detail-section h3,
-.table-summary-list h4 {
+section h3,
+section li h4 {
   margin: 0;
   font-size: 1rem;
 }
 
-.notice p {
+section[aria-labelledby='converted-dataset-error-heading'] p {
   margin: 0.25rem 0 0;
 }
 
-.detail-section {
-  padding-top: 1rem;
-  border-top: 1px solid var(--mat-sys-outline-variant);
-}
-
-.table-summary-list {
-  display: grid;
-  gap: 0.75rem;
-  margin: 0.75rem 0 0;
-  padding: 0;
-  list-style: none;
-}
-
-.table-summary-list > li {
+section ul.list-none > li {
   padding: 0.75rem;
   border: 1px solid var(--mat-sys-outline-variant);
   border-radius: 0.75rem;
   background: var(--mat-sys-surface-container-low);
 }
 
-.table-summary {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 0.75rem;
-  margin: 0.75rem 0 0;
-}
-
-.table-summary > div {
+section li dl > div {
   display: grid;
   gap: 0.125rem;
 }
 
-.table-warnings {
-  margin-top: 0.75rem;
-  padding-top: 0.75rem;
-  border-top: 1px solid var(--mat-sys-outline-variant);
-}
-
-.table-warnings strong {
+section li dl + div strong {
   font-size: 0.875rem;
 }
 
-.warning-list,
-.table-name-list {
-  display: grid;
-  gap: 0.35rem;
-  margin: 0.5rem 0 0;
-  padding-inline-start: 1.25rem;
-}
-
-.table-name-list code {
+section code {
   overflow-wrap: anywhere;
   user-select: text;
 }
 
-.fallback-message {
-  margin: 0.5rem 0 0;
-  color: var(--mat-sys-on-surface-variant);
-}
-
 @media (width <= 560px) {
-  .details {
-    grid-template-columns: 1fr;
-    gap: 0.125rem;
-  }
-
-  .details dd:not(:last-child) {
+  mat-dialog-content > dl dd:not(:last-child) {
     margin-bottom: 0.5rem;
-  }
-
-  .table-summary {
-    grid-template-columns: 1fr;
   }
 }

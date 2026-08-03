@@ -1,6 +1,7 @@
 import { parentPort, workerData } from 'node:worker_threads';
-import type { ImportedDatasetRecord } from './dataset-library';
+
 import { importDatasetSnapshot } from './dataset-importer';
+import type { ImportedDatasetRecord } from './dataset-library';
 import type { SelectedSource } from './source-selections';
 
 interface ImportWorkerData {

@@ -1,10 +1,11 @@
 import { Service } from '@angular/core';
+
 import {
-  columnsByDatasetTable,
-  defaultDatasetColumnPreference,
   type DatasetColumnKey,
   type DatasetColumnPreference,
   type DatasetTableKind,
+  columnsByDatasetTable,
+  defaultDatasetColumnPreference,
 } from '../shared/dataset-column-editor/dataset-table-columns';
 
 export const datasetColumnPreferenceKey = (table: DatasetTableKind): string =>

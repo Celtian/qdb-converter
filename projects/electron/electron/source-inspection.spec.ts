@@ -1,8 +1,9 @@
-import { mkdir, writeFile } from 'node:fs/promises';
 import { mkdtempSync } from 'node:fs';
+import { mkdir, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
+
 import { fieldsFor } from '../shared/table-config';
 import { encodeFifaText } from '../shared/text-format';
 import { importDatasetSnapshot } from './dataset-importer';

@@ -1,8 +1,9 @@
 import { RenderMode } from '@angular/ssr';
+
 import { VERSION_INFO } from '../../../version-info';
-import { documentationPages } from './documentation';
 import { routes } from './app.routes';
 import { serverRoutes } from './app.routes.server';
+import { documentationPages } from './documentation';
 import { DocumentationPage } from './pages/documentation-page/documentation-page';
 import { siteMetadata } from './site-metadata';
 

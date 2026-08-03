@@ -21,18 +21,10 @@ mat-sidenav {
   background: var(--mat-sys-surface-container-low);
 }
 
-.app-content {
-  height: 100%;
-  min-width: 0;
-  overflow-x: hidden;
-  overflow-y: auto;
-  background: var(--mat-sys-surface);
-}
-
 mat-toolbar {
   border-bottom: 1px solid var(--mat-sys-outline-variant);
 }
 
-mat-toolbar + .app-content {
+mat-toolbar + main {
   height: calc(100% - 64px);
 }

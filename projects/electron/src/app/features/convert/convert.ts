@@ -10,10 +10,12 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSelectModule } from '@angular/material/select';
 import { MatStepperModule } from '@angular/material/stepper';
 import { RouterLink } from '@angular/router';
+
 import type { CreateConvertedDatasetResult } from '../../../../shared/contracts';
-import { fieldsFor, SUPPORTED_FIFA_VERSIONS } from '../../../../shared/table-config';
+import { SUPPORTED_FIFA_VERSIONS, fieldsFor } from '../../../../shared/table-config';
 import { AppStore } from '../../core/app-store';
 import { ConfettiService } from '../../core/confetti/confetti.service';
+import { PageHeader } from '../../shared/page-header/page-header';
 
 @Component({
   selector: 'app-convert',
@@ -28,6 +30,7 @@ import { ConfettiService } from '../../core/confetti/confetti.service';
     MatProgressBarModule,
     MatSelectModule,
     MatStepperModule,
+    PageHeader,
     RouterLink,
   ],
   templateUrl: './convert.html',

@@ -1,6 +1,7 @@
 import { DecimalPipe } from '@angular/common';
 import { Component, computed, input } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
+
 import type { DatasetValidationIssue, DatasetValidationReport } from '../../../../shared/contracts';
 
 @Component({

@@ -1,8 +1,10 @@
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatAutocompleteHarness } from '@angular/material/autocomplete/testing';
 import { MatRadioGroupHarness } from '@angular/material/radio/testing';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+
 import axe from 'axe-core';
+
 import type {
   ConvertedDatasetDescriptor,
   DatasetKind,
@@ -12,7 +14,6 @@ import type {
 } from '../../../../shared/contracts';
 import { AppStore } from '../../core/app-store';
 import { ConfettiService } from '../../core/confetti/confetti.service';
-
 import { ExportDataset } from './export-dataset';
 
 const importedDataset: ImportedDatasetDescriptor = {
@@ -117,7 +118,7 @@ describe('ExportDataset', () => {
     await fixture.whenStable();
 
     expect(await autocomplete.getValue()).toBe('Imported fixture');
-    expect(element.querySelector('.selected-dataset')?.textContent).toContain(
+    expect(element.querySelector('mat-card mat-card')?.textContent).toContain(
       'FIFA 23 · 1 tables · 3 rows',
     );
     expect(element.querySelector('mat-label')?.textContent).toContain('Imported dataset');
@@ -191,12 +192,13 @@ describe('ExportDataset', () => {
     await fixture.whenStable();
     expect(controls.targetParentPath()).toBe('/exports');
     expect(
-      (fixture.nativeElement as HTMLElement).querySelector<HTMLInputElement>('.target-picker input')
-        ?.value,
+      (fixture.nativeElement as HTMLElement).querySelector<HTMLInputElement>(
+        'mat-form-field input[readonly]',
+      )?.value,
     ).toBe('/exports');
     expect(
       (fixture.nativeElement as HTMLElement)
-        .querySelector('.target-picker button')
+        .querySelector('button[aria-label="Change target folder"]')
         ?.getAttribute('aria-label'),
     ).toBe('Change target folder');
     await controls.export();

@@ -1,22 +1,23 @@
-import { mkdir, readFile, readdir, rm, writeFile } from 'node:fs/promises';
-import { join } from 'node:path';
-import { openFifaDatabase, type FifaDatabase } from 'fifa-t3db';
+import { type FifaDatabase, openFifaDatabase } from 'fifa-t3db';
 import { registerFifaDatePrototype } from 'fifadate';
 import {
   Attribute,
   CalculateUtils,
-  Fifa as RatingFifa,
-  Position,
   type FifaRatingAttributes,
+  Position,
+  Fifa as RatingFifa,
 } from 'fifarating';
 import { Datatype, type Field } from 'fifatables';
+import { mkdir, readFile, readdir, rm, writeFile } from 'node:fs/promises';
+import { join } from 'node:path';
+
 import type { TableConversionSummary } from '../shared/contracts';
 import { fieldsFor, isSupportedTable } from '../shared/table-config';
 import {
-  encodeFifaText,
-  parseTextTable,
   type TableRow,
   type TableValue,
+  encodeFifaText,
+  parseTextTable,
 } from '../shared/text-format';
 import type { ImportedDatasetRecord } from './dataset-library';
 

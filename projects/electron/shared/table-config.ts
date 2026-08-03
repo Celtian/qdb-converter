@@ -1,4 +1,4 @@
-import { Fifa, fifaTableConfig, sortByOrder, Table, type Field } from 'fifatables';
+import { type Field, Fifa, Table, fifaTableConfig, sortByOrder } from 'fifatables';
 
 export const SUPPORTED_FIFA_VERSIONS = Array.from({ length: 13 }, (_, index) => index + 11);
 export const SUPPORTED_TABLES = Object.values(Table);

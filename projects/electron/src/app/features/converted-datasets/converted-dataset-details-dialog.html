@@ -1,7 +1,9 @@
 <h2 mat-dialog-title>{{ dataset.name }}</h2>
 
 <mat-dialog-content>
-  <dl class="details">
+  <dl
+    class="m-0 grid grid-cols-details gap-x-5 gap-y-2 max-compact:grid-cols-1 max-compact:gap-y-0.5"
+  >
     <dt>Status</dt>
     <dd><app-status-badge [status]="dataset.status" /></dd>
 
@@ -29,21 +31,27 @@
   </dl>
 
   @if (dataset.error) {
-    <section class="notice notice--error" aria-labelledby="converted-dataset-error-heading">
+    <section
+      class="mt-4 rounded-lg bg-error-container p-3 text-on-error-container"
+      aria-labelledby="converted-dataset-error-heading"
+    >
       <h3 id="converted-dataset-error-heading">Dataset unavailable</h3>
       <p>{{ dataset.error }}</p>
     </section>
   }
 
-  <section class="detail-section" aria-labelledby="converted-table-details-heading">
+  <section
+    class="mt-4 border-t border-outline-variant pt-4"
+    aria-labelledby="converted-table-details-heading"
+  >
     <h3 id="converted-table-details-heading">Table conversion details</h3>
 
     @if (dataset.tableSummaries.length) {
-      <ul class="table-summary-list">
+      <ul class="mt-3 grid list-none gap-3 p-0">
         @for (summary of dataset.tableSummaries; track summary.table) {
           <li>
             <h4>{{ summary.table }}</h4>
-            <dl class="table-summary">
+            <dl class="mt-3 grid grid-cols-table-summary gap-3 max-compact:grid-cols-1">
               <div>
                 <dt>{{ summary.rows === 1 ? 'Row' : 'Rows' }}</dt>
                 <dd>{{ summary.rows | number }}</dd>
@@ -59,13 +67,13 @@
             </dl>
 
             @if (summary.warnings.length) {
-              <div class="table-warnings">
+              <div class="mt-3 border-t border-outline-variant pt-3">
                 <strong>
                   {{ summary.warnings.length === 1 ? 'Warning' : 'Warnings' }} ({{
                     summary.warnings.length | number
                   }})
                 </strong>
-                <ul class="warning-list">
+                <ul class="mt-2 grid gap-tight ps-5">
                   @for (warning of summary.warnings; track $index) {
                     <li>{{ warning }}</li>
                   }
@@ -76,10 +84,10 @@
         }
       </ul>
     } @else if (dataset.tableNames.length) {
-      <p class="fallback-message">
+      <p class="mt-2 text-on-surface-variant">
         Detailed conversion statistics were not recorded for this dataset.
       </p>
-      <ul class="table-name-list">
+      <ul class="mt-2 grid gap-tight ps-5">
         @for (tableName of dataset.tableNames; track tableName) {
           <li>
             <code>{{ tableName }}</code>
@@ -87,18 +95,21 @@
         }
       </ul>
     } @else {
-      <p class="fallback-message">No table details were recorded for this dataset.</p>
+      <p class="mt-2 text-on-surface-variant">No table details were recorded for this dataset.</p>
     }
   </section>
 
   @if (dataset.warnings.length) {
-    <section class="detail-section" aria-labelledby="converted-dataset-warnings-heading">
+    <section
+      class="mt-4 border-t border-outline-variant pt-4"
+      aria-labelledby="converted-dataset-warnings-heading"
+    >
       <h3 id="converted-dataset-warnings-heading">
         Conversion {{ dataset.warnings.length === 1 ? 'warning' : 'warnings' }} ({{
           dataset.warnings.length | number
         }})
       </h3>
-      <ul class="warning-list">
+      <ul class="mt-2 grid gap-tight ps-5">
         @for (warning of dataset.warnings; track $index) {
           <li>{{ warning }}</li>
         }

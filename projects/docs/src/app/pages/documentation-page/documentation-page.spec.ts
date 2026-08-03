@@ -1,6 +1,8 @@
 import { TestBed } from '@angular/core/testing';
 import { ActivatedRoute, provideRouter } from '@angular/router';
+
 import axe from 'axe-core';
+
 import type { DocumentationContent } from '../../documentation';
 import { DocumentationPage } from './documentation-page';
 
@@ -59,11 +61,11 @@ describe('DocumentationPage', () => {
     const page = fixture.nativeElement as HTMLElement;
 
     expect(page.querySelector('h1')?.textContent).toContain('Test documentation');
-    expect(page.querySelector('.facts dd')?.textContent).toContain('Windows x64');
+    expect(page.querySelector('dl dd')?.textContent).toContain('Windows x64');
     expect(page.querySelectorAll('ul li')).toHaveLength(1);
     expect(page.querySelectorAll('ol li')).toHaveLength(1);
-    expect(page.querySelector('.table-scroll')?.getAttribute('role')).toBe('region');
-    expect(page.querySelector('.table-scroll')?.getAttribute('tabindex')).toBe('0');
+    expect(page.querySelector('div[role="region"]')?.getAttribute('role')).toBe('region');
+    expect(page.querySelector('div[role="region"]')?.getAttribute('tabindex')).toBe('0');
     expect(page.querySelector('caption')?.textContent).toContain('Supported formats');
     expect([...page.querySelectorAll('th')].map((cell) => cell.textContent.trim())).toEqual([
       'Format',
@@ -72,7 +74,7 @@ describe('DocumentationPage', () => {
     expect(page.querySelectorAll('tbody tr')).toHaveLength(2);
     expect(page.querySelector('pre code')?.textContent).toContain('bun run validate');
     expect(page.querySelector('aside')?.textContent).toContain('Keep the original source');
-    expect(page.querySelector('.documentation-card.wide')).not.toBeNull();
+    expect(page.querySelector('mat-card.col-span-full')).not.toBeNull();
   });
 
   it('marks external links as new-tab actions and keeps router actions internal', async () => {

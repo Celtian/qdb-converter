@@ -1,8 +1,10 @@
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
-import { MatAutocompleteHarness } from '@angular/material/autocomplete/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatAutocompleteHarness } from '@angular/material/autocomplete/testing';
 import { provideRouter } from '@angular/router';
+
 import axe from 'axe-core';
+
 import type {
   ConvertedDatasetDescriptor,
   ImportedDatasetDescriptor,
@@ -10,7 +12,6 @@ import type {
 } from '../../../../shared/contracts';
 import { AppStore } from '../../core/app-store';
 import { ConfettiService } from '../../core/confetti/confetti.service';
-
 import { Convert } from './convert';
 
 const importedDataset: ImportedDatasetDescriptor = {
@@ -80,14 +81,16 @@ describe('Convert', () => {
   it('renders an accessible three-step conversion wizard', async () => {
     const element = fixture.nativeElement as HTMLElement;
 
-    expect(element.querySelector('mat-card.wizard-card')).toBeTruthy();
+    expect(element.querySelector('section > mat-card')).toBeTruthy();
     expect(element.querySelector('mat-stepper')?.getAttribute('aria-label')).toBe(
       'Dataset conversion wizard',
     );
     expect(
       [...element.querySelectorAll('.mat-step-icon-content')].map((icon) => icon.textContent),
     ).toEqual(['1', '2', '3']);
-    expect(element.querySelectorAll('.step-actions')).toHaveLength(3);
+    expect(
+      element.querySelectorAll('button[matsteppernext], button[matstepperprevious]'),
+    ).toHaveLength(4);
     expect((await axe.run(element)).violations).toEqual([]);
   });
 
@@ -104,7 +107,7 @@ describe('Convert', () => {
     await fixture.whenStable();
 
     expect(await autocomplete.getValue()).toBe('Fixture');
-    expect(element.querySelector('.selected-dataset')?.textContent).toContain(
+    expect(element.querySelector('mat-stepper mat-card')?.textContent).toContain(
       'FIFA 23 · 2 tables · 1 rows',
     );
     expect(element.querySelector<HTMLButtonElement>('button[matsteppernext]')?.disabled).toBe(
@@ -114,7 +117,7 @@ describe('Convert', () => {
     await autocomplete.enterText('Missing dataset');
     await fixture.whenStable();
 
-    expect(element.querySelector('.selected-dataset')).toBeNull();
+    expect(element.querySelector('mat-stepper mat-card')).toBeNull();
     expect(element.querySelector<HTMLButtonElement>('button[matsteppernext]')?.disabled).toBe(true);
   });
 

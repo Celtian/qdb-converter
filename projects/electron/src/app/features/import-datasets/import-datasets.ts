@@ -1,14 +1,14 @@
+import { DecimalPipe } from '@angular/common';
 import {
-  afterRenderEffect,
   ApplicationRef,
   Component,
+  afterRenderEffect,
   computed,
   inject,
   signal,
   viewChild,
   viewChildren,
 } from '@angular/core';
-import { DecimalPipe } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import type { ErrorStateMatcher } from '@angular/material/core';
@@ -20,6 +20,7 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatSelect, MatSelectModule } from '@angular/material/select';
 import { MatStepper, MatStepperModule } from '@angular/material/stepper';
 import { RouterLink } from '@angular/router';
+
 import type {
   DatasetImportCandidate,
   DatasetImportRequest,
@@ -31,6 +32,7 @@ import type {
 import { AppStore } from '../../core/app-store';
 import { ConfettiService } from '../../core/confetti/confetti.service';
 import { DesktopApi } from '../../core/desktop-api';
+import { PageHeader } from '../../shared/page-header/page-header';
 import { ValidationReport } from '../../shared/validation-report/validation-report';
 
 interface EditableCandidate extends DatasetImportCandidate {
@@ -65,11 +67,12 @@ const storedFormat = (): DatasetSourceKind => {
     MatRadioModule,
     MatSelectModule,
     MatStepperModule,
+    PageHeader,
     RouterLink,
     ValidationReport,
   ],
   templateUrl: './import-datasets.html',
-  styleUrls: ['./import-datasets.css', './import-source-card.css'],
+  styleUrl: './import-datasets.css',
 })
 export class ImportDatasets {
   protected readonly store = inject(AppStore);

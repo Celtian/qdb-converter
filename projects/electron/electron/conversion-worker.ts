@@ -1,4 +1,5 @@
 import { parentPort, workerData } from 'node:worker_threads';
+
 import type { CreateConvertedDatasetRequest } from '../shared/contracts';
 import { createConvertedDatasetSnapshot } from './conversion-engine';
 import type { ImportedDatasetRecord } from './dataset-library';

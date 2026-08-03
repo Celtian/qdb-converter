@@ -1,23 +1,26 @@
-<section class="page" [class.has-selection]="selectedCount() > 0">
-  <header class="page-header">
-    <div>
-      <h1>Datasets</h1>
-      <p>Converted FIFA datasets stored independently and ready to export.</p>
-    </div>
+<section class="mx-auto w-full max-w-360 p-8 max-nav:p-4" [class.pb-32]="selectedCount() > 0">
+  <app-page-header
+    heading="Datasets"
+    description="Converted FIFA datasets stored independently and ready to export."
+  >
     <a matButton="filled" routerLink="/convert">
       <mat-icon>add</mat-icon>
       Convert dataset
     </a>
-  </header>
+  </app-page-header>
 
-  <div class="table-controls">
-    <mat-form-field appearance="outline" class="search-field" subscriptSizing="dynamic">
+  <div class="mb-4 flex flex-wrap items-center gap-3">
+    <mat-form-field
+      appearance="outline"
+      class="w-search-field max-sm:w-full"
+      subscriptSizing="dynamic"
+    >
       <mat-label>Search converted datasets</mat-label>
       <mat-icon matPrefix aria-hidden="true">search</mat-icon>
       <input matInput type="search" [value]="query()" (input)="setQuery($event)" />
     </mat-form-field>
     <button
-      class="filter-button"
+      class="min-h-14 max-sm:w-full"
       matButton="tonal"
       type="button"
       [attr.aria-label]="
@@ -30,11 +33,15 @@
       <mat-icon aria-hidden="true">filter_alt</mat-icon>
       Filters
       @if (activeFilterCount()) {
-        <span class="filter-count" aria-hidden="true">{{ activeFilterCount() | number }}</span>
+        <span
+          class="inline-flex size-5 min-w-5 items-center justify-center rounded-full bg-on-primary px-1 text-xs font-bold text-primary"
+          aria-hidden="true"
+          >{{ activeFilterCount() | number }}</span
+        >
       }
     </button>
     <button
-      class="column-button"
+      class="min-h-14 max-sm:w-full"
       matButton="tonal"
       type="button"
       [attr.aria-label]="'Choose columns, ' + (hiddenColumnCount() | number) + ' hidden'"
@@ -43,10 +50,19 @@
       <mat-icon aria-hidden="true">view_column</mat-icon>
       Columns
       @if (hiddenColumnCount()) {
-        <span class="column-count" aria-hidden="true">{{ hiddenColumnCount() | number }}</span>
+        <span
+          class="inline-flex size-5 min-w-5 items-center justify-center rounded-full bg-on-primary px-1 text-xs font-bold text-primary"
+          aria-hidden="true"
+          >{{ hiddenColumnCount() | number }}</span
+        >
       }
     </button>
-    <p class="row-count" role="status" aria-live="polite" aria-atomic="true">
+    <p
+      class="m-0 ms-auto text-end font-medium whitespace-nowrap text-on-surface-variant tabular-nums max-sm:ms-0 max-sm:w-full"
+      role="status"
+      aria-live="polite"
+      aria-atomic="true"
+    >
       {{ filtered().length | number }} {{ filtered().length === 1 ? 'row' : 'rows' }}
     </p>
   </div>
@@ -55,17 +71,23 @@
     <mat-progress-bar mode="indeterminate" />
   }
   @if (store.error()) {
-    <p class="error" role="alert">{{ store.error() }}</p>
+    <p class="rounded-xl bg-error-container px-4 py-3 text-on-error-container" role="alert">
+      {{ store.error() }}
+    </p>
   }
 
-  <div class="table-container">
+  <div class="overflow-hidden rounded-xl border border-outline-variant">
     @if (filtered().length) {
-      <div class="table-scroll" role="region" aria-label="Converted datasets table" tabindex="0">
+      <div
+        class="overflow-x-auto focus-visible:outline-3 focus-visible:-outline-offset-3 focus-visible:outline-primary"
+        role="region"
+        aria-label="Converted datasets table"
+        tabindex="0"
+      >
         <table mat-table [dataSource]="paged()">
           <ng-container matColumnDef="select">
-            <th mat-header-cell *matHeaderCellDef>
+            <th *matHeaderCellDef mat-header-cell>
               <mat-checkbox
-                class="select-all-checkbox"
                 [checked]="allRowsSelected()"
                 [indeterminate]="someRowsSelected()"
                 [disabled]="deletionPending() || paged().length === 0"
@@ -77,9 +99,8 @@
                 (change)="toggleAllRows($event.checked)"
               />
             </th>
-            <td mat-cell *matCellDef="let dataset">
+            <td *matCellDef="let dataset" mat-cell>
               <mat-checkbox
-                class="row-select-checkbox"
                 [checked]="isSelected(dataset)"
                 [disabled]="deletionPending()"
                 [aria-label]="(isSelected(dataset) ? 'Deselect ' : 'Select ') + dataset.name"
@@ -89,10 +110,10 @@
             </td>
           </ng-container>
           <ng-container matColumnDef="name">
-            <th mat-header-cell *matHeaderCellDef>Name</th>
-            <td mat-cell *matCellDef="let dataset">
+            <th *matHeaderCellDef mat-header-cell>Name</th>
+            <td *matCellDef="let dataset" mat-cell>
               <button
-                class="dataset-name-button"
+                class="min-h-6 min-w-6 cursor-pointer rounded bg-transparent p-0 text-start font-bold text-primary no-underline focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-primary"
                 type="button"
                 aria-haspopup="dialog"
                 [attr.aria-label]="'View details for ' + dataset.name"
@@ -103,41 +124,42 @@
             </td>
           </ng-container>
           <ng-container matColumnDef="source">
-            <th mat-header-cell *matHeaderCellDef>Source</th>
-            <td mat-cell *matCellDef="let dataset">FIFA {{ dataset.sourceVersion }}</td>
+            <th *matHeaderCellDef mat-header-cell>Source</th>
+            <td *matCellDef="let dataset" mat-cell>FIFA {{ dataset.sourceVersion }}</td>
           </ng-container>
           <ng-container matColumnDef="target">
-            <th mat-header-cell *matHeaderCellDef>Target</th>
-            <td mat-cell *matCellDef="let dataset">FIFA {{ dataset.fifaVersion }}</td>
+            <th *matHeaderCellDef mat-header-cell>Target</th>
+            <td *matCellDef="let dataset" mat-cell>FIFA {{ dataset.fifaVersion }}</td>
           </ng-container>
           <ng-container matColumnDef="tables">
-            <th mat-header-cell *matHeaderCellDef>Tables</th>
-            <td mat-cell *matCellDef="let dataset">
+            <th *matHeaderCellDef mat-header-cell>Tables</th>
+            <td *matCellDef="let dataset" mat-cell>
               {{ dataset.tableCount | number: '1.0-0' }}
             </td>
           </ng-container>
           <ng-container matColumnDef="rows">
-            <th mat-header-cell *matHeaderCellDef>Records</th>
-            <td mat-cell *matCellDef="let dataset">
+            <th *matHeaderCellDef mat-header-cell>Records</th>
+            <td *matCellDef="let dataset" mat-cell>
               {{ dataset.rowCount | number: '1.0-0' }}
             </td>
           </ng-container>
           <ng-container matColumnDef="created">
-            <th mat-header-cell *matHeaderCellDef>Created</th>
-            <td mat-cell *matCellDef="let dataset">{{ dataset.createdAt | date: 'medium' }}</td>
+            <th *matHeaderCellDef mat-header-cell>Created</th>
+            <td *matCellDef="let dataset" mat-cell>{{ dataset.createdAt | date: 'medium' }}</td>
           </ng-container>
           <ng-container matColumnDef="status">
-            <th mat-header-cell *matHeaderCellDef>Status</th>
-            <td mat-cell *matCellDef="let dataset">
+            <th *matHeaderCellDef mat-header-cell>Status</th>
+            <td *matCellDef="let dataset" mat-cell>
               <app-status-badge [status]="dataset.status" />
             </td>
           </ng-container>
           <ng-container matColumnDef="actions">
-            <th mat-header-cell *matHeaderCellDef>
-              <span class="visually-hidden">Actions</span>
+            <th *matHeaderCellDef mat-header-cell>
+              <span class="sr-only">Actions</span>
             </th>
-            <td mat-cell *matCellDef="let dataset">
+            <td *matCellDef="let dataset" mat-cell>
               <button
+                type="button"
                 matIconButton
                 [matMenuTriggerFor]="actions"
                 [disabled]="deletionPending()"
@@ -146,25 +168,26 @@
                 <mat-icon aria-hidden="true">more_vert</mat-icon>
               </button>
               <mat-menu #actions="matMenu">
-                <button mat-menu-item (click)="rename(dataset)">
+                <button type="button" mat-menu-item (click)="rename(dataset)">
                   <mat-icon aria-hidden="true">edit</mat-icon>Rename
                 </button>
-                <button mat-menu-item (click)="remove(dataset)">
+                <button type="button" mat-menu-item (click)="remove(dataset)">
                   <mat-icon aria-hidden="true">delete</mat-icon>Delete
                 </button>
               </mat-menu>
             </td>
           </ng-container>
-          <tr mat-header-row *matHeaderRowDef="displayedColumns()"></tr>
+          <tr *matHeaderRowDef="displayedColumns()" mat-header-row></tr>
           <tr
-            mat-row
             *matRowDef="let row; columns: displayedColumns()"
-            [class.selected-row]="isSelected(row)"
+            mat-row
+            [class.bg-secondary-container]="isSelected(row)"
           ></tr>
         </table>
       </div>
 
       <mat-paginator
+        class="border-t border-outline-variant bg-transparent"
         aria-label="Select converted datasets page"
         [length]="filtered().length"
         [pageIndex]="effectivePageIndex()"
@@ -173,21 +196,21 @@
         (page)="pageChanged($event)"
       />
     } @else if (!store.loading()) {
-      <div class="empty-state">
+      <div class="px-4 py-12 text-center text-on-surface-variant">
         @if (!store.convertedDatasets().length) {
           <div role="status">
-            <mat-icon>database</mat-icon>
+            <mat-icon class="size-12 text-5xl">database</mat-icon>
             <h2>No converted datasets</h2>
             <p>Convert an imported dataset to create your first exportable dataset.</p>
           </div>
           <a matButton="filled" routerLink="/convert">Convert dataset</a>
         } @else {
           <div role="status">
-            <mat-icon>search_off</mat-icon>
+            <mat-icon class="size-12 text-5xl">search_off</mat-icon>
             <h2>No datasets match your filters</h2>
             <p>Try changing or clearing your search and filters.</p>
           </div>
-          <button matButton (click)="clearFilters()">Clear filters</button>
+          <button type="button" matButton (click)="clearFilters()">Clear filters</button>
         }
       </div>
     }
@@ -195,7 +218,7 @@
 
   @if (selectedCount()) {
     <aside
-      class="selection-footer"
+      class="fixed start-62 end-0 bottom-0 z-100 flex min-h-20 items-center justify-between gap-4 border-t border-outline-variant bg-surface-container-high px-footer-inline py-3 shadow-level3 max-nav:start-0 max-sm:flex-col max-sm:items-stretch"
       aria-label="Selected converted dataset actions"
       [attr.aria-busy]="deletionPending()"
     >
@@ -204,7 +227,7 @@
         {{ selectedCount() === 1 ? 'dataset' : 'datasets' }} selected
       </strong>
       <button
-        class="bulk-delete-button"
+        class="enabled:bg-error enabled:text-on-error"
         matButton="filled"
         type="button"
         [disabled]="deletionPending()"

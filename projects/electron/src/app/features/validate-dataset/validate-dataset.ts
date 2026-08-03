@@ -8,6 +8,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatStepperModule } from '@angular/material/stepper';
+
 import type {
   ConvertedDatasetDescriptor,
   DatasetKind,
@@ -17,6 +18,7 @@ import type {
 import { AppStore } from '../../core/app-store';
 import { ConfettiService } from '../../core/confetti/confetti.service';
 import { DesktopApi } from '../../core/desktop-api';
+import { PageHeader } from '../../shared/page-header/page-header';
 import { StatusBadge } from '../../shared/status-badge/status-badge';
 import { ValidationReport } from '../../shared/validation-report/validation-report';
 
@@ -39,6 +41,7 @@ const datasetSearchDetails = (dataset: ValidatableDatasetDescriptor): string[] =
     MatProgressSpinnerModule,
     MatRadioModule,
     MatStepperModule,
+    PageHeader,
     StatusBadge,
     ValidationReport,
   ],

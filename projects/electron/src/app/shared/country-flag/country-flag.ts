@@ -1,7 +1,7 @@
 import { NgOptimizedImage } from '@angular/common';
-import { booleanAttribute, Component, computed, input } from '@angular/core';
+import { Component, booleanAttribute, computed, input } from '@angular/core';
 
-import { FLAG_DIMENSIONS, getFlagPath, type CountryCode } from './country-flags.generated';
+import { type CountryCode, FLAG_DIMENSIONS, getFlagPath } from './country-flags.generated';
 
 interface FlagImageSource {
   src: string;

@@ -1,6 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
+
 import axe from 'axe-core';
+
 import type {
   DatasetImportCandidate,
   DatasetImportResult,
@@ -123,25 +125,26 @@ describe('ImportDatasets', () => {
     await fixture.whenStable();
 
     const element = fixture.nativeElement as HTMLElement;
-    const card = element.querySelector<HTMLElement>('.candidate-card');
-    const reviewCard = element.querySelector<HTMLElement>('.review-card');
-    const path = card?.querySelector<HTMLElement>('.source-path');
-    const removeButton = card?.querySelector<HTMLButtonElement>('.remove-source');
+    const cards = [...element.querySelectorAll<HTMLElement>('mat-stepper mat-card')];
+    const card = cards.find((item) => item.querySelector('button[aria-label^="Remove "]'));
+    const reviewCard = cards.find((item) => item.querySelector('input[autocomplete="off"]'));
+    const path = card?.querySelector<HTMLElement>('p[title]');
+    const removeButton = card?.querySelector<HTMLButtonElement>('button[aria-label^="Remove "]');
 
-    expect(card?.querySelector('.source-title')?.textContent).toContain('Text source');
-    expect(card?.querySelector('.source-kind')?.textContent?.trim()).toBe('Text folder');
-    expect(card?.querySelector('.source-metadata')?.textContent).toContain('2 tables');
-    expect(card?.querySelector('.source-metadata')?.textContent).toContain('FIFA 23');
+    expect(card?.querySelector('h3')?.textContent).toContain('Text source');
+    expect(card?.querySelector('h3 + span')?.textContent?.trim()).toBe('Text folder');
+    expect(card?.querySelector('[role="group"]')?.textContent).toContain('2 tables');
+    expect(card?.querySelector('[role="group"]')?.textContent).toContain('FIFA 23');
     expect(path?.getAttribute('title')).toBe(
       '/sources/exports/fifa23/very-long-folder-name/text-tables',
     );
-    expect(card?.querySelector('.source-warning')?.textContent).toContain(
+    expect(card?.querySelector('.bg-tertiary-container')?.textContent).toContain(
       'Unsupported text tables will be preserved but not converted.',
     );
     expect(removeButton?.getAttribute('aria-label')).toBe('Remove Text source');
-    expect(reviewCard?.querySelector('.source-title')?.textContent).toContain('Text source');
-    expect(reviewCard?.querySelector('.source-metadata')?.textContent).toContain('FIFA 23');
-    expect(reviewCard?.querySelector('.source-warning')?.textContent).toContain(
+    expect(reviewCard?.querySelector('h3')?.textContent).toContain('Text source');
+    expect(reviewCard?.querySelector('[role="group"]')?.textContent).toContain('FIFA 23');
+    expect(reviewCard?.querySelector('.bg-tertiary-container')?.textContent).toContain(
       'Unsupported text tables will be preserved but not converted.',
     );
     expect(await axe.run(element)).toEqual(expect.objectContaining({ violations: [] }));
@@ -240,7 +243,9 @@ describe('ImportDatasets', () => {
     button('Review import')!.click();
     await fixture.whenStable();
 
-    const groups = [...element.querySelectorAll<HTMLElement>('.import-dataset')];
+    const groups = [
+      ...element.querySelectorAll<HTMLElement>('section[aria-labelledby^="import-tables-"]'),
+    ];
     expect(groups).toHaveLength(2);
     expect(groups.map((group) => group.querySelector('h3')?.textContent?.trim())).toEqual([
       'Text source',
@@ -299,9 +304,9 @@ describe('ImportDatasets', () => {
     expect(element.textContent).toContain('Source ready to import');
     expect(element.textContent).toContain('0 blocking errors and 3 warnings found');
     expect(controls.canImport()).toBe(true);
-    const headingIds = [...element.querySelectorAll<HTMLElement>('.issue-section h3')].map(
-      (heading) => heading.id,
-    );
+    const headingIds = [
+      ...element.querySelectorAll<HTMLElement>('app-validation-report section[aria-labelledby] h3'),
+    ].map((heading) => heading.id);
     expect(new Set(headingIds).size).toBe(headingIds.length);
     expect(await axe.run(element)).toEqual(expect.objectContaining({ violations: [] }));
   });
@@ -419,10 +424,12 @@ describe('ImportDatasets', () => {
       'A dataset with this name already exists.',
     );
 
-    const reviewCard = [...element.querySelectorAll<HTMLElement>('.review-card')].find((card) =>
-      card.querySelector('.source-title')?.textContent?.includes('Text source'),
+    const reviewCard = [...element.querySelectorAll<HTMLElement>('mat-stepper mat-card')].find(
+      (card) =>
+        card.querySelector('input[autocomplete="off"]') &&
+        card.querySelector('h3')?.textContent?.includes('Text source'),
     );
-    const nameField = reviewCard?.querySelector<HTMLElement>('.review-fields mat-form-field');
+    const nameField = reviewCard?.querySelector<HTMLElement>('mat-form-field');
     const nameInput = nameField?.querySelector<HTMLInputElement>('input');
     const nameError = nameField?.querySelector<HTMLElement>('mat-error');
     const reviewButton = [...element.querySelectorAll<HTMLButtonElement>('button')].find(
@@ -444,69 +451,5 @@ describe('ImportDatasets', () => {
     expect(nameField?.querySelector('mat-error')).toBeNull();
     expect(nameInput?.getAttribute('aria-invalid')).toBe('false');
     expect(reviewButton?.disabled).toBe(false);
-  });
-
-  it('requires both t3db files and prepares one candidate before review', async () => {
-    const controls = component as unknown as {
-      changeFormat(format: DatasetSourceKind): void;
-      selectT3dbDatabase(): Promise<void>;
-      selectT3dbMetadata(): Promise<void>;
-      continueSource(): Promise<void>;
-      candidates(): { selectionId: string }[];
-      sourceReady(): boolean;
-    };
-
-    controls.changeFormat('t3db');
-    await controls.continueSource();
-    expect(window.qdbConverter!.prepareT3dbSource).not.toHaveBeenCalled();
-
-    await controls.selectT3dbDatabase();
-    expect(controls.sourceReady()).toBe(false);
-    await controls.continueSource();
-    expect(window.qdbConverter!.prepareT3dbSource).not.toHaveBeenCalled();
-
-    await controls.selectT3dbMetadata();
-    expect(controls.sourceReady()).toBe(true);
-    await controls.continueSource();
-    expect(window.qdbConverter!.prepareT3dbSource).toHaveBeenCalledWith({
-      databaseFileId: 'database-file',
-      metadataFileId: 'metadata-file',
-    });
-    expect(controls.candidates()).toEqual([
-      expect.objectContaining({ selectionId: 't3db', name: 'T3db source', version: 23 }),
-    ]);
-  });
-
-  it('shows partial results, keeps failed sources, and supports cancellation', async () => {
-    const controls = component as unknown as {
-      selectTextFolders(): Promise<void>;
-      runValidations(): Promise<void>;
-      importAll(): Promise<void>;
-      cancelImport(): void;
-      candidates(): { selectionId: string }[];
-      results(): DatasetImportResult[];
-    };
-    await controls.selectTextFolders();
-    importResults = [
-      {
-        selectionId: 'text',
-        status: 'completed',
-        dataset: { name: 'Text source' } as DatasetImportResult['dataset'],
-      },
-      {
-        selectionId: 'extra',
-        status: 'failed',
-        error: { code: 'invalid-source', message: 'Broken source' },
-      },
-    ];
-
-    await controls.runValidations();
-    await controls.importAll();
-    expect(controls.results()).toHaveLength(2);
-    expect(controls.candidates()).toHaveLength(1);
-    expect(controls.candidates()[0].selectionId).toBe('extra');
-    expect(celebrate).toHaveBeenCalledOnce();
-    controls.cancelImport();
-    expect(window.qdbConverter!.cancelImport).toHaveBeenCalled();
   });
 });

@@ -1,12 +1,24 @@
-<a class="brand" routerLink="/" aria-label="QDB Converter imported datasets">
+<a
+  class="flex items-center gap-3 px-3 pt-2 pb-5 text-body-lg font-bold text-inherit no-underline"
+  routerLink="/"
+  aria-label="QDB Converter imported datasets"
+>
   <img ngSrc="qdb-converter-icon.png" width="28" height="28" alt="" priority />
   <span>QDB Converter</span>
 </a>
 
 <nav aria-label="Primary navigation">
   @for (group of linkGroups; track group.id) {
-    <div class="nav-group" role="group" [attr.aria-labelledby]="'nav-group-' + group.id">
-      <span class="nav-group-label" [id]="'nav-group-' + group.id">{{ group.label }}</span>
+    <div
+      class="mt-2 grid gap-1 border-t border-outline-variant pt-2 first:mt-0 first:border-t-0 first:pt-0"
+      role="group"
+      [attr.aria-labelledby]="'nav-group-' + group.id"
+    >
+      <span
+        class="px-3 pt-tight pb-label-end text-2xs font-bold tracking-label text-on-surface-variant uppercase"
+        [id]="'nav-group-' + group.id"
+        >{{ group.label }}</span
+      >
       @for (link of group.links; track link.path) {
         <a
           matButton
@@ -23,7 +35,7 @@
   }
 </nav>
 
-<div class="utility-actions">
+<div class="mt-auto grid gap-1 pt-3">
   <mat-divider />
   <a matButton routerLink="/settings" routerLinkActive="active" ariaCurrentWhenActive="page">
     <mat-icon>settings</mat-icon>

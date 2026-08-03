@@ -1,7 +1,11 @@
+@import 'tailwindcss';
+@import '../../../tailwind.theme.css';
+
 :root {
   --qdb-brand: var(--mat-sys-primary);
   --qdb-accent: var(--mat-sys-tertiary);
   --qdb-panel: var(--mat-sys-surface-container-low);
+
   color-scheme: light dark;
   font-family: Roboto, 'Helvetica Neue', sans-serif;
   font-synthesis: none;

@@ -1,4 +1,5 @@
 import { TestBed } from '@angular/core/testing';
+
 import type { QdbConverterApi } from '../../../shared/contracts';
 import { DesktopApi } from './desktop-api';
 

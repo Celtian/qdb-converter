@@ -1,39 +1,51 @@
 import { Component, computed, input } from '@angular/core';
+
 import type { DatasetStatus, OperationStatus } from '../../../../shared/contracts';
 
 type StatusBadgeValue = DatasetStatus | OperationStatus;
 
 interface StatusBadgeDetails {
-  className: string;
   label: string;
+  tone: 'success' | 'error' | 'neutral';
 }
 
 const statusBadgeDetails: Record<StatusBadgeValue, StatusBadgeDetails> = {
   available: {
-    className: 'status-badge status-badge--success',
     label: 'Available',
+    tone: 'success',
   },
   completed: {
-    className: 'status-badge status-badge--success',
     label: 'Completed',
+    tone: 'success',
   },
   corrupt: {
-    className: 'status-badge status-badge--error',
     label: 'Corrupt',
+    tone: 'error',
   },
   failed: {
-    className: 'status-badge status-badge--error',
     label: 'Failed',
+    tone: 'error',
   },
   cancelled: {
-    className: 'status-badge status-badge--neutral',
     label: 'Cancelled',
+    tone: 'neutral',
   },
 };
 
 @Component({
   selector: 'app-status-badge',
-  template: `<span [class]="details().className">{{ details().label }}</span>`,
+  template: `
+    <span
+      class="inline-block rounded-full px-chip text-xs leading-6 font-bold whitespace-nowrap"
+      [class.bg-tertiary-container]="details().tone === 'success'"
+      [class.text-on-tertiary-container]="details().tone === 'success'"
+      [class.bg-error-container]="details().tone === 'error'"
+      [class.text-on-error-container]="details().tone === 'error'"
+      [class.bg-secondary-container]="details().tone === 'neutral'"
+      [class.text-on-secondary-container]="details().tone === 'neutral'"
+      >{{ details().label }}</span
+    >
+  `,
   styleUrl: './status-badge.css',
 })
 export class StatusBadge {

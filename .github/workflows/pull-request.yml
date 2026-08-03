@@ -30,6 +30,12 @@ jobs:
       - name: 🛠️ Install dependencies
         uses: ./.github/actions/cached-deps
 
+      - name: ♻️ Check circular dependencies
+        run: bun run check-circular-dependencies
+
+      - name: 💾 Restore ESLint cache
+        uses: ./.github/actions/cached-eslint
+
       - name: 📤 Upload version info
         uses: actions/upload-artifact@v7
         with:
@@ -39,7 +45,7 @@ jobs:
           retention-days: 1
 
       - name: ✅ Validate source
-        run: bun run validate:source
+        run: bun run format:check && bun run lint && bun run typecheck
 
       - name: 🧪 Test with coverage
         run: bun run test:coverage

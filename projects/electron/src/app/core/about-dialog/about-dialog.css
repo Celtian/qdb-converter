@@ -2,112 +2,34 @@
   display: block;
 }
 
-.about-header {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 1rem;
-  padding: 2rem 2.5rem 0;
-}
-
-.identity {
-  display: flex;
-  align-items: center;
-  gap: 1.5rem;
-  min-width: 0;
-}
-
-.identity img {
+header img {
   flex: 0 0 auto;
   border-radius: 18px;
 }
 
-.identity h2 {
+header h2 {
   margin: 0;
   padding: 0;
   font-size: 2rem;
   line-height: 1.2;
 }
 
-.version {
-  margin: 0.5rem 0 0;
-  color: var(--mat-sys-on-surface-variant);
-  font-size: 1.1rem;
-}
-
-.close-icon {
-  flex: 0 0 auto;
-  background: var(--mat-sys-surface-container-high);
-}
-
 mat-dialog-content {
   padding: 2rem 2.5rem 0;
 }
 
-.description {
-  max-width: 38rem;
-  margin: 0;
-  font-size: 1.05rem;
-  line-height: 1.55;
-}
-
-.legal {
-  margin: 1.5rem 0 0;
-  color: var(--mat-sys-on-surface-variant);
-}
-
-.dialog-actions {
-  flex-wrap: wrap;
-  justify-content: space-between;
-  gap: 1rem;
-  padding: 1.5rem 2.5rem 2rem;
-}
-
-.external-actions {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-end;
-  gap: 0.5rem;
-}
-
 @media (width <= 560px) {
-  .about-header {
-    padding: 1.5rem 1.5rem 0;
-  }
-
-  .identity {
-    gap: 1rem;
-  }
-
-  .identity img {
+  header img {
     width: 64px;
     height: 64px;
     border-radius: 14px;
   }
 
-  .identity h2 {
+  header h2 {
     font-size: 1.5rem;
-  }
-
-  .version {
-    font-size: 1rem;
   }
 
   mat-dialog-content {
     padding: 1.5rem 1.5rem 0;
-  }
-
-  .dialog-actions {
-    flex-direction: column;
-    align-items: stretch;
-    padding: 1.25rem 1.5rem 1.5rem;
-  }
-
-  .close-action {
-    align-self: flex-start;
-  }
-
-  .external-actions {
-    justify-content: flex-start;
   }
 }

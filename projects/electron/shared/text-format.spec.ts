@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+
 import { decodeFifaText, encodeFifaText, parseTextTable } from './text-format';
 
 describe('DB Master text format', () => {

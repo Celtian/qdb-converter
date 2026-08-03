@@ -1,10 +1,8 @@
-<section class="page">
-  <header class="page-header">
-    <div>
-      <h1>Settings</h1>
-      <p>Application appearance, table layouts, and storage behavior.</p>
-    </div>
-  </header>
+<section class="mx-auto w-full max-w-360 p-8 max-nav:p-4">
+  <app-page-header
+    heading="Settings"
+    description="Application appearance, table layouts, and storage behavior."
+  />
 
   <mat-card appearance="outlined">
     <mat-card-header>
@@ -14,6 +12,7 @@
     </mat-card-header>
     <mat-card-content>
       <mat-radio-group
+        class="flex gap-4 pt-4 max-xs:flex-col"
         aria-label="Theme preference"
         [value]="theme.preference()"
         (change)="setTheme($event.value)"
@@ -25,29 +24,28 @@
     </mat-card-content>
   </mat-card>
 
-  <mat-card class="column-card" appearance="outlined">
+  <mat-card appearance="outlined">
     <mat-card-header>
       <mat-icon mat-card-avatar>view_column</mat-icon>
       <mat-card-title id="dataset-column-layouts-title">Dataset column layouts</mat-card-title>
       <mat-card-subtitle>Set default visibility and order for dataset tables.</mat-card-subtitle>
     </mat-card-header>
-    <mat-card-content>
+    <mat-card-content class="px-0! pt-4! pb-0!">
       <mat-tab-group
-        class="dataset-column-tabs"
         animationDuration="0ms"
         aria-labelledby="dataset-column-layouts-title"
         [preserveContent]="true"
       >
         <mat-tab label="Imported">
-          <div class="column-tab-content">
+          <div class="px-4 pt-5 pb-4">
             <app-dataset-column-editor
+              table="imported"
               [columns]="columnDefinitions.imported"
               [defaultPreference]="defaultColumnPreference('imported')"
-              table="imported"
               [preference]="importedColumnPreference()"
               (preferenceChange)="saveColumns('imported', $event)"
             />
-            <div class="column-actions">
+            <div class="mt-3 flex justify-end border-t border-outline-variant pt-4">
               <button matButton="outlined" type="button" (click)="resetColumns('imported')">
                 Reset imported columns
               </button>
@@ -55,15 +53,15 @@
           </div>
         </mat-tab>
         <mat-tab label="Converted">
-          <div class="column-tab-content">
+          <div class="px-4 pt-5 pb-4">
             <app-dataset-column-editor
+              table="converted"
               [columns]="columnDefinitions.converted"
               [defaultPreference]="defaultColumnPreference('converted')"
-              table="converted"
               [preference]="convertedColumnPreference()"
               (preferenceChange)="saveColumns('converted', $event)"
             />
-            <div class="column-actions">
+            <div class="mt-3 flex justify-end border-t border-outline-variant pt-4">
               <button matButton="outlined" type="button" (click)="resetColumns('converted')">
                 Reset converted columns
               </button>
@@ -74,7 +72,7 @@
     </mat-card-content>
   </mat-card>
 
-  <mat-card class="storage-card" appearance="outlined">
+  <mat-card appearance="outlined">
     <mat-card-header>
       <mat-icon mat-card-avatar>storage</mat-icon>
       <mat-card-title>Dataset storage</mat-card-title>
@@ -86,36 +84,38 @@
         folders will not be deleted.
       </p>
       @if (store.error()) {
-        <p class="error" role="alert">{{ store.error() }}</p>
+        <p class="rounded-xl bg-error-container px-4 py-3 text-on-error-container" role="alert">
+          {{ store.error() }}
+        </p>
       }
-      <fieldset class="cleanup-options" aria-describedby="dataset-storage-description">
+      <fieldset
+        class="mt-6 flex flex-col items-start gap-2 border-0 p-0"
+        aria-describedby="dataset-storage-description"
+      >
         <legend>Choose managed copies to delete</legend>
         <mat-checkbox
-          class="imported-cleanup-checkbox"
           [checked]="deleteImported()"
           [disabled]="store.importedDatasets().length === 0 || cleanupDisabled()"
           (change)="setCleanupSelection('imported', $event.checked)"
         >
           Imported datasets
-          <span class="dataset-count" aria-live="polite">
+          <span class="text-on-surface-variant" aria-live="polite">
             ({{ store.importedDatasets().length }})
           </span>
         </mat-checkbox>
         <mat-checkbox
-          class="converted-cleanup-checkbox"
           [checked]="deleteConverted()"
           [disabled]="store.convertedDatasets().length === 0 || cleanupDisabled()"
           (change)="setCleanupSelection('converted', $event.checked)"
         >
           Converted datasets
-          <span class="dataset-count" aria-live="polite">
+          <span class="text-on-surface-variant" aria-live="polite">
             ({{ store.convertedDatasets().length }})
           </span>
         </mat-checkbox>
       </fieldset>
-      <div class="storage-footer">
+      <div class="mt-6 flex items-center justify-end gap-4 max-xs:flex-col max-xs:items-stretch">
         <button
-          class="delete-selected-button"
           type="button"
           matButton="filled"
           color="warn"

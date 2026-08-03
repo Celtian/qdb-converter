@@ -5,7 +5,9 @@ import { MatButtonHarness } from '@angular/material/button/testing';
 import { MatCheckboxHarness } from '@angular/material/checkbox/testing';
 import { MatDialogHarness } from '@angular/material/dialog/testing';
 import { MatTabGroupHarness } from '@angular/material/tabs/testing';
+
 import axe from 'axe-core';
+
 import type {
   ConvertedDatasetDescriptor,
   ImportedDatasetDescriptor,
@@ -16,7 +18,6 @@ import {
   DatasetColumnPreferences,
   datasetColumnPreferenceKey,
 } from '../../core/dataset-column-preferences';
-
 import { Settings } from './settings';
 
 const normalizedLabel = async (checkbox: MatCheckboxHarness): Promise<string> =>
@@ -107,7 +108,7 @@ describe('Settings', () => {
   it('edits and resets independent default layouts for both dataset tables', async () => {
     const element = fixture.nativeElement as HTMLElement;
     const tabGroup = await loader.getHarness(
-      MatTabGroupHarness.with({ selector: '.dataset-column-tabs' }),
+      MatTabGroupHarness.with({ selector: 'mat-tab-group' }),
     );
     const tabs = await tabGroup.getTabs();
     const [importedTab, convertedTab] = tabs;
@@ -168,13 +169,16 @@ describe('Settings', () => {
 
     const element = fixture.nativeElement as HTMLElement;
     const imported = await loader.getHarness(
-      MatCheckboxHarness.with({ selector: '.imported-cleanup-checkbox' }),
+      MatCheckboxHarness.with({ selector: 'fieldset mat-checkbox:nth-of-type(1)' }),
     );
     const converted = await loader.getHarness(
-      MatCheckboxHarness.with({ selector: '.converted-cleanup-checkbox' }),
+      MatCheckboxHarness.with({ selector: 'fieldset mat-checkbox:nth-of-type(2)' }),
     );
     const button = await loader.getHarness(
-      MatButtonHarness.with({ selector: '.delete-selected-button' }),
+      MatButtonHarness.with({ selector: 'fieldset + div button' }),
+    );
+    const storageCard = [...element.querySelectorAll('mat-card')].find((card) =>
+      card.textContent?.includes('Dataset storage'),
     );
 
     expect(element.textContent).toContain('Dataset storage');
@@ -188,7 +192,7 @@ describe('Settings', () => {
     expect(await imported.isDisabled()).toBe(false);
     expect(await converted.isDisabled()).toBe(false);
     expect(await button.isDisabled()).toBe(true);
-    expect(element.querySelector('.storage-card mat-icon[mat-card-avatar]')?.textContent).toContain(
+    expect(storageCard?.querySelector('mat-icon[mat-card-avatar]')?.textContent).toContain(
       'storage',
     );
     expect((await axe.run(element)).violations).toEqual([]);
@@ -201,13 +205,13 @@ describe('Settings', () => {
     await fixture.whenStable();
 
     const imported = await loader.getHarness(
-      MatCheckboxHarness.with({ selector: '.imported-cleanup-checkbox' }),
+      MatCheckboxHarness.with({ selector: 'fieldset mat-checkbox:nth-of-type(1)' }),
     );
     const converted = await loader.getHarness(
-      MatCheckboxHarness.with({ selector: '.converted-cleanup-checkbox' }),
+      MatCheckboxHarness.with({ selector: 'fieldset mat-checkbox:nth-of-type(2)' }),
     );
     const button = await loader.getHarness(
-      MatButtonHarness.with({ selector: '.delete-selected-button' }),
+      MatButtonHarness.with({ selector: 'fieldset + div button' }),
     );
 
     expect(await normalizedLabel(imported)).toContain('Imported datasets (0)');
@@ -221,11 +225,11 @@ describe('Settings', () => {
     await TestBed.inject(AppStore).refresh();
     await fixture.whenStable();
     const imported = await loader.getHarness(
-      MatCheckboxHarness.with({ selector: '.imported-cleanup-checkbox' }),
+      MatCheckboxHarness.with({ selector: 'fieldset mat-checkbox:nth-of-type(1)' }),
     );
     await imported.check();
     await (
-      await loader.getHarness(MatButtonHarness.with({ selector: '.delete-selected-button' }))
+      await loader.getHarness(MatButtonHarness.with({ selector: 'fieldset + div button' }))
     ).click();
 
     const dialog = await documentLoader.getHarness(MatDialogHarness);
@@ -245,11 +249,11 @@ describe('Settings', () => {
     await TestBed.inject(AppStore).refresh();
     await fixture.whenStable();
     const converted = await loader.getHarness(
-      MatCheckboxHarness.with({ selector: '.converted-cleanup-checkbox' }),
+      MatCheckboxHarness.with({ selector: 'fieldset mat-checkbox:nth-of-type(2)' }),
     );
     await converted.check();
     const button = await loader.getHarness(
-      MatButtonHarness.with({ selector: '.delete-selected-button' }),
+      MatButtonHarness.with({ selector: 'fieldset + div button' }),
     );
     await button.click();
     const dialog = await documentLoader.getHarness(MatDialogHarness);
@@ -268,7 +272,7 @@ describe('Settings', () => {
     await fixture.whenStable();
 
     const imported = await loader.getHarness(
-      MatCheckboxHarness.with({ selector: '.imported-cleanup-checkbox' }),
+      MatCheckboxHarness.with({ selector: 'fieldset mat-checkbox:nth-of-type(1)' }),
     );
     expect(await normalizedLabel(imported)).toContain('Imported datasets (2)');
     expect(await imported.isDisabled()).toBe(false);
@@ -282,15 +286,15 @@ describe('Settings', () => {
     await TestBed.inject(AppStore).refresh();
     await fixture.whenStable();
     const imported = await loader.getHarness(
-      MatCheckboxHarness.with({ selector: '.imported-cleanup-checkbox' }),
+      MatCheckboxHarness.with({ selector: 'fieldset mat-checkbox:nth-of-type(1)' }),
     );
     const converted = await loader.getHarness(
-      MatCheckboxHarness.with({ selector: '.converted-cleanup-checkbox' }),
+      MatCheckboxHarness.with({ selector: 'fieldset mat-checkbox:nth-of-type(2)' }),
     );
     await imported.check();
     await converted.check();
     const button = await loader.getHarness(
-      MatButtonHarness.with({ selector: '.delete-selected-button' }),
+      MatButtonHarness.with({ selector: 'fieldset + div button' }),
     );
     await button.click();
 
@@ -330,15 +334,15 @@ describe('Settings', () => {
         }),
     );
     const imported = await loader.getHarness(
-      MatCheckboxHarness.with({ selector: '.imported-cleanup-checkbox' }),
+      MatCheckboxHarness.with({ selector: 'fieldset mat-checkbox:nth-of-type(1)' }),
     );
     const converted = await loader.getHarness(
-      MatCheckboxHarness.with({ selector: '.converted-cleanup-checkbox' }),
+      MatCheckboxHarness.with({ selector: 'fieldset mat-checkbox:nth-of-type(2)' }),
     );
     await imported.check();
     await converted.check();
     const button = await loader.getHarness(
-      MatButtonHarness.with({ selector: '.delete-selected-button' }),
+      MatButtonHarness.with({ selector: 'fieldset + div button' }),
     );
     await button.click();
     const dialog = await documentLoader.getHarness(MatDialogHarness);

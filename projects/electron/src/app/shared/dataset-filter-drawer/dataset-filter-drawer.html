@@ -1,5 +1,5 @@
 <form
-  class="filter-form"
+  class="box-border flex size-full min-h-0 flex-col overflow-hidden"
   aria-labelledby="dataset-filter-title"
   (submit)="apply(); $event.preventDefault()"
 >
@@ -10,7 +10,7 @@
     </button>
   </header>
 
-  <div class="filter-fields">
+  <div class="flex flex-1 flex-col gap-4 overflow-auto px-4 py-5">
     @if (kind === 'imported') {
       <mat-form-field appearance="outline" subscriptSizing="dynamic">
         <mat-label>FIFA version</mat-label>

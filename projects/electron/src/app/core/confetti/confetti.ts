@@ -25,20 +25,12 @@ const defaultColors = ['#22c55e', '#0ea5e9', '#f59e0b', '#ef4444', '#a855f7', '#
 
 @Component({
   selector: 'app-confetti',
-  template: '<canvas #canvas class="confetti-canvas"></canvas>',
-  styles: `
-    :host,
-    .confetti-canvas {
-      display: block;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-    }
-  `,
+  template: '<canvas #canvas class="pointer-events-none block size-full"></canvas>',
+  styleUrl: './confetti.css',
 })
 export class Confetti implements AfterViewInit, OnDestroy {
-  private readonly canvasRef = viewChild<ElementRef<HTMLCanvasElement>>('canvas');
   private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
+  private readonly canvasRef = viewChild<ElementRef<HTMLCanvasElement>>('canvas');
   private readonly particles: ConfettiParticle[] = [];
   private animationFrameId?: number;
   private context?: CanvasRenderingContext2D;

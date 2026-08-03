@@ -11,6 +11,7 @@ import { MatPaginatorModule, type PageEvent } from '@angular/material/paginator'
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatTableModule } from '@angular/material/table';
 import { RouterLink } from '@angular/router';
+
 import type { ConvertedDatasetDescriptor } from '../../../../shared/contracts';
 import { AppStore } from '../../core/app-store';
 import { ConfirmationDialog } from '../../core/confirmation-dialog/confirmation-dialog';
@@ -21,9 +22,9 @@ import {
   type DatasetColumnDrawerData,
 } from '../../shared/dataset-column-drawer/dataset-column-drawer';
 import {
+  type DatasetColumnPreference,
   columnsByDatasetTable,
   defaultDatasetColumnPreference,
-  type DatasetColumnPreference,
   visibleDatasetColumns,
 } from '../../shared/dataset-column-editor/dataset-table-columns';
 import {
@@ -33,6 +34,7 @@ import {
   type DatasetFilters,
   emptyConvertedDatasetFilters,
 } from '../../shared/dataset-filter-drawer/dataset-filter-drawer';
+import { PageHeader } from '../../shared/page-header/page-header';
 import { StatusBadge } from '../../shared/status-badge/status-badge';
 import {
   ConvertedDatasetDetailsDialog,
@@ -53,6 +55,7 @@ import {
     MatPaginatorModule,
     MatProgressBarModule,
     MatTableModule,
+    PageHeader,
     RouterLink,
     StatusBadge,
   ],

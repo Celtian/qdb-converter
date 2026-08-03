@@ -1,4 +1,5 @@
 import { parentPort, workerData } from 'node:worker_threads';
+
 import { inspectT3dbSource, inspectTextSource } from './source-inspection';
 
 type InspectionWorkerData =

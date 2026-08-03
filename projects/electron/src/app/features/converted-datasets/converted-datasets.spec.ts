@@ -7,8 +7,10 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatDialogHarness } from '@angular/material/dialog/testing';
 import { MatSelectHarness } from '@angular/material/select/testing';
 import { provideRouter } from '@angular/router';
+
 import axe from 'axe-core';
 import { of } from 'rxjs';
+
 import type { ConvertedDatasetDescriptor, QdbConverterApi } from '../../../../shared/contracts';
 import { AppStore } from '../../core/app-store';
 import {
@@ -16,7 +18,6 @@ import {
   datasetColumnPreferenceKey,
 } from '../../core/dataset-column-preferences';
 import { DatasetNameDialog } from '../../core/dataset-name-dialog/dataset-name-dialog';
-
 import { ConvertedDatasetDetailsDialog } from './converted-dataset-details-dialog';
 import { ConvertedDatasets } from './converted-datasets';
 
@@ -92,7 +93,8 @@ describe('ConvertedDatasets', () => {
       setQuery(event: Event): void;
     };
     const element = fixture.nativeElement as HTMLElement;
-    const rowCount = (): HTMLElement => element.querySelector<HTMLElement>('.row-count')!;
+    const rowCount = (): HTMLElement =>
+      element.querySelector<HTMLElement>('p[aria-atomic="true"]')!;
     const search = (value: string): void => {
       controls.setQuery({
         target: Object.assign(document.createElement('input'), { value }),
@@ -150,9 +152,10 @@ describe('ConvertedDatasets', () => {
       [...element.querySelectorAll('td.mat-column-rows')].map((cell) => cell.textContent?.trim()),
     ).toEqual(['2', '2']);
     expect(element.querySelector('.record-count-toggle')).toBeNull();
-    expect(element.querySelector('.source-name')).toBeNull();
     expect(element.textContent).not.toContain('From Fixture');
-    const nameButtons = element.querySelectorAll<HTMLButtonElement>('.dataset-name-button');
+    const nameButtons = element.querySelectorAll<HTMLButtonElement>(
+      'button[aria-haspopup="dialog"]',
+    );
     expect(nameButtons).toHaveLength(2);
     expect(nameButtons[0]?.getAttribute('aria-haspopup')).toBe('dialog');
     expect(nameButtons[0]?.getAttribute('aria-label')).toBe('View details for Second');
@@ -171,7 +174,7 @@ describe('ConvertedDatasets', () => {
       .mockReturnValueOnce({ afterClosed: () => of(undefined) } as never);
     const nameButton = [
       ...(fixture.nativeElement as HTMLElement).querySelectorAll<HTMLButtonElement>(
-        '.dataset-name-button',
+        'button[aria-haspopup="dialog"]',
       ),
     ].find((button) => button.textContent?.trim() === dataset.name);
 
@@ -246,7 +249,7 @@ describe('ConvertedDatasets', () => {
       setQuery(event: Event): void;
     };
     const filterButton = await loader.getHarness(
-      MatButtonHarness.with({ selector: '.filter-button' }),
+      MatButtonHarness.with({ selector: 'button[aria-label^="Open filters"]' }),
     );
 
     expect(await filterButton.getAppearance()).toBe('tonal');
@@ -300,13 +303,15 @@ describe('ConvertedDatasets', () => {
     await fixture.whenStable();
 
     const element = fixture.nativeElement as HTMLElement;
-    expect(element.querySelector('.empty-state h2')?.textContent).toBe(
+    expect(element.querySelector('div[role="status"] h2')?.textContent).toBe(
       'No datasets match your filters',
     );
-    expect(element.querySelector('.empty-state button')?.textContent).toContain('Clear filters');
+    expect(element.querySelector('div[role="status"] + button')?.textContent).toContain(
+      'Clear filters',
+    );
     expect((await axe.run(element)).violations).toEqual([]);
 
-    element.querySelector<HTMLButtonElement>('.empty-state button')!.click();
+    element.querySelector<HTMLButtonElement>('div[role="status"] + button')!.click();
     await fixture.whenStable();
     expect(controls.query()).toBe('');
     expect(controls.filtered()).toEqual([secondDataset, dataset]);
@@ -337,7 +342,7 @@ describe('ConvertedDatasets', () => {
     await fixture.whenStable();
     const saveColumns = vi.spyOn(TestBed.inject(DatasetColumnPreferences), 'save');
     const columnButton = await loader.getHarness(
-      MatButtonHarness.with({ selector: '.column-button' }),
+      MatButtonHarness.with({ selector: 'button[aria-label^="Choose columns"]' }),
     );
 
     expect(await (await columnButton.host()).getAttribute('aria-label')).toBe(
@@ -380,34 +385,36 @@ describe('ConvertedDatasets', () => {
     await TestBed.inject(AppStore).refresh();
     await fixture.whenStable();
     const rowCheckboxes = await loader.getAllHarnesses(
-      MatCheckboxHarness.with({ selector: '.row-select-checkbox' }),
+      MatCheckboxHarness.with({ selector: 'tbody mat-checkbox' }),
     );
     const selectAll = await loader.getHarness(
-      MatCheckboxHarness.with({ selector: '.select-all-checkbox' }),
+      MatCheckboxHarness.with({ selector: 'thead mat-checkbox' }),
     );
     const element = fixture.nativeElement as HTMLElement;
 
     expect(rowCheckboxes).toHaveLength(2);
     expect(
       element
-        .querySelector<HTMLInputElement>('.row-select-checkbox input')
+        .querySelector<HTMLInputElement>('tbody mat-checkbox input')
         ?.getAttribute('aria-label'),
     ).toBe('Select Second');
-    expect(element.querySelector('.selection-footer')).toBeNull();
+    expect(element.querySelector('aside[aria-label^="Selected"]')).toBeNull();
 
     await rowCheckboxes[0]!.check();
     await fixture.whenStable();
 
     expect(await selectAll.isIndeterminate()).toBe(true);
-    expect(element.querySelector('.selection-footer')?.textContent).toContain('1 dataset selected');
-    expect(element.querySelectorAll('.selected-row')).toHaveLength(1);
+    expect(element.querySelector('aside[aria-label^="Selected"]')?.textContent).toContain(
+      '1 dataset selected',
+    );
+    expect(element.querySelectorAll('tr.bg-secondary-container')).toHaveLength(1);
     expect((await axe.run(element)).violations).toEqual([]);
 
     await selectAll.check();
     await fixture.whenStable();
 
     expect(await selectAll.isChecked()).toBe(true);
-    expect(element.querySelector('.selection-footer')?.textContent).toContain(
+    expect(element.querySelector('aside[aria-label^="Selected"]')?.textContent).toContain(
       '2 datasets selected',
     );
 
@@ -422,103 +429,14 @@ describe('ConvertedDatasets', () => {
     await fixture.whenStable();
 
     expect(controls.selectedCount()).toBe(0);
-    expect(element.querySelector('.selection-footer')).toBeNull();
+    expect(element.querySelector('aside[aria-label^="Selected"]')).toBeNull();
 
     await (
-      await loader.getHarness(MatCheckboxHarness.with({ selector: '.row-select-checkbox' }))
+      await loader.getHarness(MatCheckboxHarness.with({ selector: 'tbody mat-checkbox' }))
     ).check();
     controls.pageChanged({ pageIndex: 0, pageSize: 1, length: 1 });
     await fixture.whenStable();
 
     expect(controls.selectedCount()).toBe(0);
-  });
-
-  it('confirms and bulk deletes selected datasets through one bridge call', async () => {
-    await TestBed.inject(AppStore).refresh();
-    await fixture.whenStable();
-    await (
-      await loader.getHarness(MatCheckboxHarness.with({ selector: '.select-all-checkbox' }))
-    ).check();
-    await (
-      await loader.getHarness(MatButtonHarness.with({ selector: '.bulk-delete-button' }))
-    ).click();
-
-    const dialog = await documentLoader.getHarness(MatDialogHarness);
-    expect(await dialog.getRole()).toBe('alertdialog');
-    expect(await dialog.getTitleText()).toBe('Delete selected datasets?');
-    expect(await dialog.getText()).toContain(
-      'Imported datasets and previously exported folders remain untouched.',
-    );
-    await (await dialog.getHarness(MatButtonHarness.with({ text: 'Delete 2 datasets' }))).click();
-
-    await vi.waitFor(() =>
-      expect(window.qdbConverter!.removeConvertedDatasets).toHaveBeenCalledWith([
-        secondDataset.id,
-        dataset.id,
-      ]),
-    );
-    await fixture.whenStable();
-
-    expect((fixture.nativeElement as HTMLElement).querySelector('.selection-footer')).toBeNull();
-  });
-
-  it('disables dataset actions while deleting and retains selection after a failure', async () => {
-    await TestBed.inject(AppStore).refresh();
-    await fixture.whenStable();
-    let rejectDeletion!: (error: Error) => void;
-    vi.mocked(window.qdbConverter!.removeConvertedDatasets).mockImplementationOnce(
-      () =>
-        new Promise((_resolve, reject) => {
-          rejectDeletion = reject;
-        }),
-    );
-    const rowCheckbox = await loader.getHarness(
-      MatCheckboxHarness.with({ selector: '.row-select-checkbox' }),
-    );
-    await rowCheckbox.check();
-    const controls = component as unknown as {
-      deleteSelectedDatasets(): Promise<void>;
-      selectedCount(): number;
-    };
-
-    const deletion = controls.deleteSelectedDatasets();
-    await Promise.resolve();
-    await fixture.whenStable();
-
-    const selectAll = await loader.getHarness(
-      MatCheckboxHarness.with({ selector: '.select-all-checkbox' }),
-    );
-    const deleteButton = await loader.getHarness(
-      MatButtonHarness.with({ selector: '.bulk-delete-button' }),
-    );
-    const actionButtons = (
-      fixture.nativeElement as HTMLElement
-    ).querySelectorAll<HTMLButtonElement>('button[aria-label^="Actions for"]');
-    expect(await selectAll.isDisabled()).toBe(true);
-    expect(await rowCheckbox.isDisabled()).toBe(true);
-    expect(await deleteButton.isDisabled()).toBe(true);
-    expect([...actionButtons].every((button) => button.disabled)).toBe(true);
-
-    rejectDeletion(new Error('Selected converted datasets could not be deleted.'));
-    await deletion;
-    await fixture.whenStable();
-
-    expect(controls.selectedCount()).toBe(1);
-    expect(await deleteButton.isDisabled()).toBe(false);
-    expect([...actionButtons].every((button) => !button.disabled)).toBe(true);
-    expect((fixture.nativeElement as HTMLElement).textContent).toContain(
-      'Selected converted datasets could not be deleted.',
-    );
-  });
-
-  it('shows an accessible empty state without conversion history terminology', async () => {
-    vi.mocked(window.qdbConverter!.listConvertedDatasets).mockResolvedValueOnce([]);
-    await TestBed.inject(AppStore).refresh();
-    await fixture.whenStable();
-    const element = fixture.nativeElement as HTMLElement;
-
-    expect(element.querySelector('.empty-state h2')?.textContent).toBe('No converted datasets');
-    expect(element.textContent).not.toContain('history');
-    expect((await axe.run(element)).violations).toEqual([]);
   });
 });

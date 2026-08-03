@@ -8,6 +8,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatStepperModule } from '@angular/material/stepper';
+
 import type {
   ConvertedDatasetDescriptor,
   DatasetKind,
@@ -16,6 +17,7 @@ import type {
 } from '../../../../shared/contracts';
 import { AppStore } from '../../core/app-store';
 import { ConfettiService } from '../../core/confetti/confetti.service';
+import { PageHeader } from '../../shared/page-header/page-header';
 
 type ExportableDatasetDescriptor = ImportedDatasetDescriptor | ConvertedDatasetDescriptor;
 
@@ -36,6 +38,7 @@ const datasetSearchDetails = (dataset: ExportableDatasetDescriptor): string[] =>
     MatProgressBarModule,
     MatRadioModule,
     MatStepperModule,
+    PageHeader,
   ],
   templateUrl: './export-dataset.html',
   styleUrl: './export-dataset.css',
