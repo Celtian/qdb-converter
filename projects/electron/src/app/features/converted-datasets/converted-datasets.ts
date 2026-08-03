@@ -34,6 +34,7 @@ import {
   type DatasetFilters,
   emptyConvertedDatasetFilters,
 } from '../../shared/dataset-filter-drawer/dataset-filter-drawer';
+import { PageHeader } from '../../shared/page-header/page-header';
 import { StatusBadge } from '../../shared/status-badge/status-badge';
 import {
   ConvertedDatasetDetailsDialog,
@@ -54,6 +55,7 @@ import {
     MatPaginatorModule,
     MatProgressBarModule,
     MatTableModule,
+    PageHeader,
     RouterLink,
     StatusBadge,
   ],

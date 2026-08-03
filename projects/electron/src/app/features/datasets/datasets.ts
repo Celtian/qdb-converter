@@ -35,6 +35,7 @@ import {
   type ImportedDatasetFilters,
   emptyImportedDatasetFilters,
 } from '../../shared/dataset-filter-drawer/dataset-filter-drawer';
+import { PageHeader } from '../../shared/page-header/page-header';
 import { StatusBadge } from '../../shared/status-badge/status-badge';
 import { DatasetDetailsDialog, type DatasetDetailsDialogResult } from './dataset-details-dialog';
 
@@ -70,6 +71,7 @@ const sortLabels: Record<DatasetSortKey, string> = {
     MatProgressBarModule,
     MatSortModule,
     MatTableModule,
+    PageHeader,
     RouterLink,
     StatusBadge,
   ],

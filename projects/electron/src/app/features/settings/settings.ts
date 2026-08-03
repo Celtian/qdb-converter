@@ -19,6 +19,7 @@ import {
   columnsByDatasetTable,
   defaultDatasetColumnPreference,
 } from '../../shared/dataset-column-editor/dataset-table-columns';
+import { PageHeader } from '../../shared/page-header/page-header';
 
 @Component({
   selector: 'app-settings',
@@ -31,6 +32,7 @@ import {
     MatIconModule,
     MatRadioModule,
     MatTabsModule,
+    PageHeader,
   ],
   templateUrl: './settings.html',
   styleUrl: './settings.css',

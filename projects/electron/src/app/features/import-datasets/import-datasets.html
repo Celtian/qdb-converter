@@ -1,13 +1,10 @@
 <!-- eslint-disable max-lines -->
 <section class="mx-auto w-full max-w-360 p-8 max-nav:p-4" aria-labelledby="import-heading">
-  <header
-    class="sticky top-0 z-2 -mx-8 -mt-8 mb-6 flex items-start justify-between gap-4 border-b border-outline-variant bg-surface px-8 pt-8 pb-6 max-nav:-mx-4 max-nav:-mt-4 max-nav:flex-col max-nav:px-4 max-nav:pt-4"
-  >
-    <div>
-      <h1 id="import-heading">Import datasets</h1>
-      <p>Add DB Master text folders or paired t3db sources to the managed dataset library.</p>
-    </div>
-  </header>
+  <app-page-header
+    heading="Import datasets"
+    description="Add DB Master text folders or paired t3db sources to the managed dataset library."
+    headingId="import-heading"
+  />
   @if (error()) {
     <p class="rounded-xl bg-error-container px-4 py-3 text-on-error-container" role="alert">
       {{ error() }}

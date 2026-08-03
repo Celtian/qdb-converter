@@ -32,6 +32,7 @@ import type {
 import { AppStore } from '../../core/app-store';
 import { ConfettiService } from '../../core/confetti/confetti.service';
 import { DesktopApi } from '../../core/desktop-api';
+import { PageHeader } from '../../shared/page-header/page-header';
 import { ValidationReport } from '../../shared/validation-report/validation-report';
 
 interface EditableCandidate extends DatasetImportCandidate {
@@ -66,6 +67,7 @@ const storedFormat = (): DatasetSourceKind => {
     MatRadioModule,
     MatSelectModule,
     MatStepperModule,
+    PageHeader,
     RouterLink,
     ValidationReport,
   ],

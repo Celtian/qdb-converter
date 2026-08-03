@@ -1,16 +1,13 @@
 <section class="mx-auto w-full max-w-360 p-8 max-nav:p-4" [class.pb-32]="selectedCount() > 0">
-  <header
-    class="sticky top-0 z-2 -mx-8 -mt-8 mb-6 flex items-start justify-between gap-4 border-b border-outline-variant bg-surface px-8 pt-8 pb-6 max-nav:-mx-4 max-nav:-mt-4 max-nav:flex-col max-nav:px-4 max-nav:pt-4"
+  <app-page-header
+    heading="Datasets"
+    description="Converted FIFA datasets stored independently and ready to export."
   >
-    <div>
-      <h1>Datasets</h1>
-      <p>Converted FIFA datasets stored independently and ready to export.</p>
-    </div>
     <a matButton="filled" routerLink="/convert">
       <mat-icon>add</mat-icon>
       Convert dataset
     </a>
-  </header>
+  </app-page-header>
 
   <div class="mb-4 flex flex-wrap items-center gap-3">
     <mat-form-field

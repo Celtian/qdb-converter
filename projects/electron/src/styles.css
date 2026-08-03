@@ -21,15 +21,6 @@ select {
   font: inherit;
 }
 
-main > * > section > header h1 {
-  margin: 0 0 0.25rem;
-}
-
-main > * > section > header p {
-  margin: 0;
-  color: var(--mat-sys-on-surface-variant);
-}
-
 .dataset-filter-drawer-panel,
 .dataset-column-drawer-panel {
   --mat-dialog-container-shape: 0;

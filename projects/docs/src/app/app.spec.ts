@@ -4,15 +4,20 @@ import { provideRouter } from '@angular/router';
 
 import axe from 'axe-core';
 import { provideAppVersion } from 'ngx-app-version';
-import { of } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 
 import { VERSION_INFO } from '../../../version-info';
 import { App } from './app';
 import { documentationPages } from './documentation';
 import { siteMetadata } from './site-metadata';
 
+const breakpointState = new BehaviorSubject({ matches: true });
+const observeBreakpoint = vi.fn(() => breakpointState.asObservable());
+
 describe('App', () => {
   beforeEach(async () => {
+    breakpointState.next({ matches: true });
+    observeBreakpoint.mockClear();
     await TestBed.configureTestingModule({
       imports: [App],
       providers: [
@@ -20,7 +25,7 @@ describe('App', () => {
         provideAppVersion({ version: VERSION_INFO.version }),
         {
           provide: BreakpointObserver,
-          useValue: { observe: () => of({ matches: true }) },
+          useValue: { observe: observeBreakpoint },
         },
       ],
     }).compileComponents();
@@ -55,6 +60,7 @@ describe('App', () => {
       navigationChanged(opened: boolean): void;
     };
 
+    expect(observeBreakpoint).toHaveBeenCalledWith('(max-width: 620px)');
     expect(trigger.getAttribute('aria-expanded')).toBe('false');
     trigger.click();
     await fixture.whenStable();
@@ -64,6 +70,16 @@ describe('App', () => {
     navigation.navigationChanged(false);
     await fixture.whenStable();
     expect(trigger.getAttribute('aria-expanded')).toBe('false');
+  });
+
+  it('does not render the navigation trigger on desktop', async () => {
+    breakpointState.next({ matches: false });
+    const fixture = TestBed.createComponent(App);
+    await fixture.whenStable();
+
+    expect(
+      (fixture.nativeElement as HTMLElement).querySelector('button[aria-controls]'),
+    ).toBeNull();
   });
 
   it('renders generated version metadata and safe external project links', async () => {

@@ -17,6 +17,7 @@ import type {
 } from '../../../../shared/contracts';
 import { AppStore } from '../../core/app-store';
 import { ConfettiService } from '../../core/confetti/confetti.service';
+import { PageHeader } from '../../shared/page-header/page-header';
 
 type ExportableDatasetDescriptor = ImportedDatasetDescriptor | ConvertedDatasetDescriptor;
 
@@ -37,6 +38,7 @@ const datasetSearchDetails = (dataset: ExportableDatasetDescriptor): string[] =>
     MatProgressBarModule,
     MatRadioModule,
     MatStepperModule,
+    PageHeader,
   ],
   templateUrl: './export-dataset.html',
   styleUrl: './export-dataset.css',

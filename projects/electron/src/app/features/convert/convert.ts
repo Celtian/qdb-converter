@@ -15,6 +15,7 @@ import type { CreateConvertedDatasetResult } from '../../../../shared/contracts'
 import { SUPPORTED_FIFA_VERSIONS, fieldsFor } from '../../../../shared/table-config';
 import { AppStore } from '../../core/app-store';
 import { ConfettiService } from '../../core/confetti/confetti.service';
+import { PageHeader } from '../../shared/page-header/page-header';
 
 @Component({
   selector: 'app-convert',
@@ -29,6 +30,7 @@ import { ConfettiService } from '../../core/confetti/confetti.service';
     MatProgressBarModule,
     MatSelectModule,
     MatStepperModule,
+    PageHeader,
     RouterLink,
   ],
   templateUrl: './convert.html',

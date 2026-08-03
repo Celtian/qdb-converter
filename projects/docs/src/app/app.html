@@ -5,17 +5,19 @@
 >
 <header class="sticky top-0 z-20 shrink-0">
   <mat-toolbar>
-    <button
-      class="mr-1 hidden max-docs:inline-flex"
-      type="button"
-      matIconButton
-      aria-label="Open documentation navigation"
-      aria-controls="documentation-navigation"
-      [attr.aria-expanded]="navigationOpened()"
-      (click)="toggleNavigation()"
-    >
-      <mat-icon aria-hidden="true">menu</mat-icon>
-    </button>
+    @if (compactNavigation()) {
+      <button
+        class="mr-1"
+        type="button"
+        matIconButton
+        aria-label="Open documentation navigation"
+        aria-controls="documentation-navigation"
+        [attr.aria-expanded]="navigationOpened()"
+        (click)="toggleNavigation()"
+      >
+        <mat-icon aria-hidden="true">menu</mat-icon>
+      </button>
+    }
     <a
       class="inline-flex min-w-0 items-center gap-brand-gap text-base font-bold text-inherit no-underline"
       routerLink="/"

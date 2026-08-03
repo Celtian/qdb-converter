@@ -15,6 +15,8 @@ import { map } from 'rxjs';
 import { documentationPages } from './documentation';
 import { siteMetadata } from './site-metadata';
 
+const MOBILE_NAVIGATION_QUERY = '(max-width: 620px)';
+
 @Component({
   selector: 'app-root',
   imports: [
@@ -37,7 +39,7 @@ export class App {
   protected readonly pages = documentationPages;
   protected readonly site = siteMetadata;
   protected readonly compactNavigation = toSignal(
-    this.breakpoint.observe('(max-width: 900px)').pipe(map((state) => state.matches)),
+    this.breakpoint.observe(MOBILE_NAVIGATION_QUERY).pipe(map((state) => state.matches)),
     { initialValue: false },
   );
   protected readonly mobileNavigationOpen = signal(false);
