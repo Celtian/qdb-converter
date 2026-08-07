@@ -1,11 +1,10 @@
 import { datasetIdWorldToScreen } from './dataset-id-range-camera';
-import { type DatasetIdRangeModel, createDatasetIdRangeLayout } from './dataset-id-range-layout';
 import {
-  BAR_HEIGHT,
-  BAR_Y,
-  type DatasetIdRangeColors,
-  type DatasetIdRangeView,
-} from './playername-id-range-renderer';
+  type DatasetIdRangeModel,
+  createDatasetIdRangeLayout,
+  datasetIdLaneGeometry,
+} from './dataset-id-range-layout';
+import { type DatasetIdRangeColors, type DatasetIdRangeView } from './playername-id-range-renderer';
 
 /** Browser-native compatibility renderer for software-only Electron systems. */
 export class DatasetIdRangeCanvasRenderer {
@@ -35,36 +34,45 @@ export class DatasetIdRangeCanvasRenderer {
     const layout = createDatasetIdRangeLayout(model, this.width);
     context.setTransform(this.resolution, 0, 0, this.resolution, 0, 0);
     context.clearRect(0, 0, this.width, this.height);
-    context.fillStyle = colors.surface;
-    context.fillRect(0, BAR_Y, this.width, BAR_HEIGHT);
-
-    for (const segment of layout.segments) {
-      context.fillStyle =
-        segment.state === 'occupied'
-          ? colors.occupied
-          : segment.state === 'hole'
-            ? colors.holes
-            : segment.state === 'capacity'
-              ? colors.capacity
-              : colors.outOfRange;
-      const x = datasetIdWorldToScreen(segment.x, view.camera, this.width);
-      const endX = datasetIdWorldToScreen(segment.x + segment.width, view.camera, this.width);
-      context.fillRect(x, BAR_Y, endX - x, BAR_HEIGHT);
+    for (const [laneIndex, lane] of layout.lanes.entries()) {
+      const geometry = datasetIdLaneGeometry(laneIndex, layout.lanes.length);
+      const laneX = datasetIdWorldToScreen(lane.x, view.camera, this.width);
+      const laneEndX = datasetIdWorldToScreen(lane.x + lane.width, view.camera, this.width);
+      context.fillStyle = colors.surface;
+      context.fillRect(laneX, geometry.y, laneEndX - laneX, geometry.height);
+      const orderedSegments = [...lane.segments].sort(
+        (left, right) =>
+          Number(left.state.includes('range')) - Number(right.state.includes('range')),
+      );
+      for (const segment of orderedSegments) {
+        context.fillStyle =
+          segment.state === 'occupied'
+            ? colors.occupied
+            : segment.state === 'hole'
+              ? colors.holes
+              : segment.state === 'capacity'
+                ? colors.capacity
+                : colors.outOfRange;
+        const x = datasetIdWorldToScreen(segment.x, view.camera, this.width);
+        const endX = datasetIdWorldToScreen(segment.x + segment.width, view.camera, this.width);
+        context.fillRect(x, geometry.y, endX - x, geometry.height);
+      }
+      context.strokeStyle = colors.outline;
+      context.lineWidth = 1;
+      context.strokeRect(laneX + 0.5, geometry.y + 0.5, laneEndX - laneX - 1, geometry.height - 1);
     }
 
-    const worldLeft = datasetIdWorldToScreen(0, view.camera, this.width);
-    const worldRight = datasetIdWorldToScreen(this.width, view.camera, this.width);
-    context.strokeStyle = colors.outline;
-    context.lineWidth = 1;
-    context.strokeRect(worldLeft + 0.5, BAR_Y + 0.5, worldRight - worldLeft - 1, BAR_HEIGHT - 1);
-    const active =
-      view.activeSegment === undefined ? undefined : layout.segments[view.activeSegment];
-    if (active) {
+    const selection = view.activeSelection;
+    const active = selection
+      ? layout.lanes[selection.lane]?.segments[selection.segment]
+      : undefined;
+    if (active && selection) {
+      const geometry = datasetIdLaneGeometry(selection.lane, layout.lanes.length);
       const x = datasetIdWorldToScreen(active.x, view.camera, this.width);
       const endX = datasetIdWorldToScreen(active.x + active.width, view.camera, this.width);
       context.strokeStyle = colors.outline;
       context.lineWidth = 2;
-      context.strokeRect(x, BAR_Y - 3, endX - x, BAR_HEIGHT + 6);
+      context.strokeRect(x, geometry.y - 3, endX - x, geometry.height + 6);
     }
   }
 

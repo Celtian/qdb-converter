@@ -197,7 +197,7 @@ describe('ConvertedDatasetDetailsDialog', () => {
     ).toHaveLength(2);
     expect(
       element.querySelectorAll(
-        'section[aria-labelledby="playername-table-details-heading"] app-playername-id-union',
+        'section[aria-labelledby="playername-table-details-heading"] app-playername-id-lanes',
       ),
     ).toHaveLength(2);
     expect(element.textContent).toContain('Playernames IDs before');

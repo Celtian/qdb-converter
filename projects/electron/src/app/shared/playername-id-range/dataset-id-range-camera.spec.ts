@@ -41,20 +41,19 @@ describe('dataset ID range layout and camera', () => {
   it('lays out proportional active runs, a compact capacity tail, and overflow endcaps', () => {
     const width = 640;
     const layout = createDatasetIdRangeLayout(profile, width);
-    const below = layout.segments[0]!;
-    const capacity = layout.segments.at(-2)!;
-    const above = layout.segments.at(-1)!;
-    const innerWidth = width - OVERFLOW_INDICATOR_WIDTH * 2;
+    const segments = layout.lanes[0]!.segments;
+    const below = segments[0]!;
+    const capacity = segments.at(-2)!;
+    const above = segments.at(-1)!;
 
     expect(below.width).toBe(OVERFLOW_INDICATOR_WIDTH);
     expect(above.width).toBe(OVERFLOW_INDICATOR_WIDTH);
-    expect(capacity.width).toBeCloseTo(innerWidth * CAPACITY_FRACTION);
-    for (let index = 1; index < layout.segments.length; index += 1)
-      expect(layout.segments[index - 1]!.x + layout.segments[index - 1]!.width).toBeCloseTo(
-        layout.segments[index]!.x,
-      );
+    expect(capacity.width).toBeCloseTo(width * CAPACITY_FRACTION);
+    const inRange = segments.filter((segment) => !segment.state.includes('range'));
+    for (let index = 1; index < inRange.length; index += 1)
+      expect(inRange[index - 1]!.x + inRange[index - 1]!.width).toBeCloseTo(inRange[index]!.x);
     expect(segmentAtPosition(layout, 5)).toBe(0);
-    expect(segmentAtPosition(layout, width - 5)).toBe(layout.segments.length - 1);
+    expect(segmentAtPosition(layout, width - 5)).toBe(segments.length - 1);
   });
 
   it('uses the full inner canvas for an empty table or an active span without capacity', () => {
@@ -72,7 +71,7 @@ describe('dataset ID range layout and camera', () => {
       },
       640,
     );
-    expect(empty.segments).toEqual([
+    expect(empty.lanes[0]!.segments).toEqual([
       { state: 'capacity', startId: 0, endId: 49_999, count: 50_000, x: 0, width: 640 },
     ]);
 
@@ -91,16 +90,18 @@ describe('dataset ID range layout and camera', () => {
       },
       600,
     );
-    expect(full.segments.at(-1)!.x + full.segments.at(-1)!.width).toBeCloseTo(600);
-    expect(full.segments.some((segment) => segment.state === 'capacity')).toBe(false);
+    expect(full.lanes[0]!.segments.at(-1)!.x + full.lanes[0]!.segments.at(-1)!.width).toBeCloseTo(
+      600,
+    );
+    expect(full.lanes[0]!.segments.some((segment) => segment.state === 'capacity')).toBe(false);
   });
 
   it('computes a fit-to-four-pixels camera and preserves a pointer zoom anchor', () => {
     const width = 640;
     const layout = createDatasetIdRangeLayout(profile, width);
     const limits = createDatasetIdRangeCameraLimits(profile, layout);
-    const activeWidth = layout.segments
-      .filter((segment) => segment.state === 'occupied' || segment.state === 'hole')
+    const activeWidth = layout.axisSegments
+      .filter((segment) => segment.state === 'active')
       .reduce((sum, segment) => sum + segment.width, 0);
 
     expect((activeWidth / 391) * limits.maxScale).toBeCloseTo(MAX_ID_WIDTH);
@@ -124,8 +125,9 @@ describe('dataset ID range layout and camera', () => {
     expect(panDatasetIdRangeCamera(panned, width * 10, width, limits).center).toBe(
       1 - 1 / (panned.scale * 2),
     );
-    const capacity = layout.segments.findIndex((segment) => segment.state === 'capacity');
-    const capacitySegment = layout.segments[capacity]!;
+    const segments = layout.lanes[0]!.segments;
+    const capacity = segments.findIndex((segment) => segment.state === 'capacity');
+    const capacitySegment = segments[capacity]!;
     const capacityScreenX =
       (capacitySegment.x + capacitySegment.width / 2 - (panned.center * width - width / 4)) * 2;
     expect(segmentAtScreenPosition(layout, panned, width, capacityScreenX)).toBe(capacity);
@@ -134,9 +136,10 @@ describe('dataset ID range layout and camera', () => {
   it('clamps a measured tooltip within the chart at every segment position', () => {
     const width = 640;
     const layout = createDatasetIdRangeLayout(profile, width);
-    const first = layout.segments[0]!;
-    const middle = layout.segments.find((segment) => segment.startId === 196)!;
-    const last = layout.segments.at(-1)!;
+    const segments = layout.lanes[0]!.segments;
+    const first = segments[0]!;
+    const middle = segments.find((segment) => segment.startId === 196)!;
+    const last = segments.at(-1)!;
 
     expect(segmentTooltipPosition(first, FIT_DATASET_ID_CAMERA, width, 200, 8)).toBe(108);
     expect(segmentTooltipPosition(last, FIT_DATASET_ID_CAMERA, width, 200, 8)).toBe(532);

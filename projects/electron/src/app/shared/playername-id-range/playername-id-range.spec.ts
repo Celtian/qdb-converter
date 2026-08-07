@@ -308,7 +308,7 @@ describe('DatasetIdRange', () => {
     const element = fixture.nativeElement as HTMLElement;
     const host = element.querySelector<HTMLElement>('[data-range-canvas]')!;
     const hover = (x: number): void => {
-      host.dispatchEvent(new MouseEvent('pointermove', { bubbles: true, clientX: x }));
+      host.dispatchEvent(new MouseEvent('pointermove', { bubbles: true, clientX: x, clientY: 30 }));
     };
 
     hover(5);

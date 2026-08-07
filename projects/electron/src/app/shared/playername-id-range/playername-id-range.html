@@ -16,13 +16,25 @@
   </div>
 
   @if (hasExactIds()) {
+    @if (model().lanes[0]?.label) {
+      <ol aria-label="Canvas rows" data-range-lanes>
+        @for (lane of model().lanes; track lane.label ?? $index) {
+          <li>
+            <span class="text-on-surface-variant">
+              {{ $count === 1 ? 'Row' : $first ? 'Top row' : 'Bottom row' }}:
+            </span>
+            <strong>{{ lane.label }}</strong>
+          </li>
+        }
+      </ol>
+    }
     <div class="relative">
       <div
         #canvasHost
         data-range-canvas
         role="group"
         tabindex="0"
-        aria-keyshortcuts="ArrowLeft ArrowRight Home End PageUp PageDown + - 0"
+        aria-keyshortcuts="ArrowLeft ArrowRight ArrowUp ArrowDown Home End PageUp PageDown + - 0"
         [attr.data-dragging]="dragging() ? '' : null"
         [attr.aria-label]="summary()"
         [attr.aria-describedby]="statusId()"
@@ -34,14 +46,14 @@
         (pointerleave)="clearPointer()"
         (keydown)="inspectKeyboard($event)"
       ></div>
-      @if (activeSegment() !== undefined) {
+      @if (activeSelection() !== undefined) {
         <div
           #tooltip
           class="pointer-events-none absolute z-10 w-max -translate-x-1/2 -translate-y-full rounded-md bg-inverse-surface px-2 py-1 text-xs break-words text-inverse-on-surface shadow-md"
           data-range-tooltip
           aria-hidden="true"
           [style.left.px]="tooltipPosition()"
-          [style.top.px]="tooltipTop"
+          [style.top.px]="tooltipTop()"
         >
           {{ activeDescription() }}
         </div>

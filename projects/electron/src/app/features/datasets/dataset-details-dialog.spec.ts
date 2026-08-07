@@ -203,7 +203,7 @@ describe('DatasetDetailsDialog', () => {
     ).toHaveLength(2);
     expect(
       element.querySelectorAll(
-        'section[aria-labelledby="imported-playername-details-heading"] app-playername-id-union',
+        'section[aria-labelledby="imported-playername-details-heading"] app-playername-id-lanes',
       ),
     ).toHaveLength(2);
     expect((await axe.run(element)).violations).toEqual([]);

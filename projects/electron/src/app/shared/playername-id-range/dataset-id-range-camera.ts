@@ -27,9 +27,7 @@ export const createDatasetIdRangeCameraLimits = (
   _source: DatasetIdProfile | DatasetIdRangeModel,
   layout: DatasetIdRangeLayout,
 ): DatasetIdRangeCameraLimits => {
-  const activeSegments = layout.segments.filter(
-    (segment) => segment.state === 'occupied' || segment.state === 'hole',
-  );
+  const activeSegments = layout.axisSegments.filter((segment) => segment.state === 'active');
   const activeWidth = activeSegments.reduce((sum, segment) => sum + segment.width, 0);
   const activeIdCount = activeSegments.reduce((sum, segment) => sum + segment.count, 0);
   if (!activeIdCount) return { minScale: 1, maxScale: 1 };
@@ -92,15 +90,21 @@ export const segmentAtScreenPosition = (
   camera: DatasetIdRangeCamera,
   width: number,
   screenX: number,
+  laneIndex = 0,
 ): number | undefined => {
   const worldX = datasetIdScreenToWorld(screenX, camera, width);
-  const index = layout.segments.findIndex(
-    (segment, segmentIndex) =>
-      worldX >= segment.x &&
-      (worldX < segment.x + segment.width ||
-        (segmentIndex === layout.segments.length - 1 && worldX <= segment.x + segment.width)),
-  );
-  return index < 0 ? undefined : index;
+  const segments = layout.lanes[laneIndex]?.segments ?? [];
+  const matches = segments
+    .map((segment, segmentIndex) => ({ segment, segmentIndex }))
+    .filter(({ segment }) => worldX >= segment.x && worldX <= segment.x + segment.width);
+  const match =
+    matches.find(({ segment }) => segment.state.includes('range')) ??
+    matches.find(
+      ({ segment, segmentIndex }) =>
+        worldX < segment.x + segment.width ||
+        (segmentIndex === segments.length - 1 && worldX <= segment.x + segment.width),
+    );
+  return match?.segmentIndex;
 };
 
 export const revealDatasetIdRangeSegment = (

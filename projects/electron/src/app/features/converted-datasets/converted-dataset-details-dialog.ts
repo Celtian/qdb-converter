@@ -10,9 +10,9 @@ import type {
 } from '../../../../shared/contracts';
 import { DatasetIdAnalysis } from '../../shared/dataset-id-analysis/dataset-id-analysis';
 import {
-  PlayernameIdUnion,
+  PlayernameIdLanes,
   playernameSummaryProfiles,
-} from '../../shared/playername-id-range/playername-id-union';
+} from '../../shared/playername-id-range/playername-id-lanes';
 import { StatusBadge } from '../../shared/status-badge/status-badge';
 
 export type ConvertedDatasetDetailsDialogResult = 'rename';
@@ -25,7 +25,7 @@ export type ConvertedDatasetDetailsDialogResult = 'rename';
     DecimalPipe,
     MatButtonModule,
     MatDialogModule,
-    PlayernameIdUnion,
+    PlayernameIdLanes,
     StatusBadge,
   ],
   templateUrl: './converted-dataset-details-dialog.html',

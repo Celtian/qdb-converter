@@ -28,9 +28,9 @@ import { ConfettiService } from '../../core/confetti/confetti.service';
 import { ConfirmationDialog } from '../../core/confirmation-dialog/confirmation-dialog';
 import { PageHeader } from '../../shared/page-header/page-header';
 import {
-  PlayernameIdUnion,
+  PlayernameIdLanes,
   playernameSummaryProfiles,
-} from '../../shared/playername-id-range/playername-id-union';
+} from '../../shared/playername-id-range/playername-id-lanes';
 
 type PlayernameDataset = ImportedDatasetDescriptor | ConvertedDatasetDescriptor;
 type OutputKind = PlayernameOutput['kind'];
@@ -56,7 +56,7 @@ const searchDetails = (dataset: PlayernameDataset): string[] =>
     MatRadioModule,
     MatStepperModule,
     PageHeader,
-    PlayernameIdUnion,
+    PlayernameIdLanes,
     RouterLink,
   ],
   templateUrl: './playernames.html',
@@ -128,9 +128,7 @@ export class Playernames {
       this.analysis()?.tables.reduce((total, table) => total + table.profile.outOfRangeCount, 0) ??
       0,
   );
-  protected readonly currentIdProfiles = computed(() =>
-    this.analysis()?.status === 'completed' ? this.analysis()!.tables : [],
-  );
+  protected readonly currentIdProfiles = computed(() => this.analysis()?.tables ?? []);
   protected readonly resultBeforeIdProfiles = computed(() =>
     playernameSummaryProfiles(this.result()?.summary?.tables ?? [], 'before'),
   );

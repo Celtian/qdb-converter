@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 
 import { datasetIdRangeProfileFixture as profile } from './dataset-id-range.fixture';
 import { DatasetIdRange } from './playername-id-range';
-import { createPlayernameIdRangeUnion } from './playername-id-range-union';
+import { createPlayernameIdRangeLanes } from './playername-id-range-lanes';
 
 const pixiMocks = vi.hoisted(() => ({
   destroy: vi.fn(),
@@ -79,7 +79,7 @@ describe('DatasetIdRange tooltip', () => {
       '[data-range-canvas]',
     )!;
     const hover = async (clientX: number): Promise<HTMLDivElement> => {
-      host.dispatchEvent(new MouseEvent('pointermove', { bubbles: true, clientX }));
+      host.dispatchEvent(new MouseEvent('pointermove', { bubbles: true, clientX, clientY: 30 }));
       await fixture.whenStable();
       return (fixture.nativeElement as HTMLElement).querySelector<HTMLDivElement>(
         '[data-range-tooltip]',
@@ -137,7 +137,7 @@ describe('DatasetIdRange tooltip', () => {
     const host = (fixture.nativeElement as HTMLElement).querySelector<HTMLElement>(
       '[data-range-canvas]',
     )!;
-    host.dispatchEvent(new MouseEvent('pointermove', { bubbles: true, clientX: 100 }));
+    host.dispatchEvent(new MouseEvent('pointermove', { bubbles: true, clientX: 100, clientY: 30 }));
     await fixture.whenStable();
     const tooltip = (fixture.nativeElement as HTMLElement).querySelector('[data-range-tooltip]');
     const tooltipObserver = resizeObservers.find(({ observeMock }) =>
@@ -151,12 +151,12 @@ describe('DatasetIdRange tooltip', () => {
     expect((fixture.nativeElement as HTMLElement).querySelector('[data-range-tooltip]')).toBeNull();
   });
 
-  it('renders source-aware union ranges and tooltips in one canvas', async () => {
+  it('renders source-aware table lanes and tooltips in one canvas', async () => {
     const fixture = TestBed.createComponent(DatasetIdRange);
     fixture.componentRef.setInput('label', 'Playernames current IDs');
     fixture.componentRef.setInput(
       'rangeModel',
-      createPlayernameIdRangeUnion([
+      createPlayernameIdRangeLanes([
         { table: 'playernames', profile },
         {
           table: 'dcplayernames',
@@ -182,6 +182,12 @@ describe('DatasetIdRange tooltip', () => {
     const text = element.textContent?.replaceAll(/\s+/g, ' ');
 
     expect(element.querySelectorAll('[data-range-canvas]')).toHaveLength(1);
+    expect(element.querySelector('[data-range-lanes]')?.textContent).toContain(
+      'Top row: playernames',
+    );
+    expect(element.querySelector('[data-range-lanes]')?.textContent).toContain(
+      'Bottom row: dcplayernames',
+    );
     expect(text).toContain('playernames 0–49,999');
     expect(text).toContain('dcplayernames 60,000–60,010');
     expect(element.querySelectorAll('[data-range-breakdowns] tbody tr')).toHaveLength(2);
@@ -189,5 +195,17 @@ describe('DatasetIdRange tooltip', () => {
     host.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowRight', bubbles: true }));
     await fixture.whenStable();
     expect(element.textContent).toContain('playernames · Below published range');
+
+    host.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown', bubbles: true }));
+    await fixture.whenStable();
+    expect(element.textContent).toContain('dcplayernames · Occupied IDs 60,000–60,000');
+
+    host.dispatchEvent(new MouseEvent('pointermove', { bubbles: true, clientX: 639, clientY: 70 }));
+    await fixture.whenStable();
+    expect(element.textContent).toContain('dcplayernames ·');
+
+    host.dispatchEvent(new MouseEvent('pointermove', { bubbles: true, clientX: 320, clientY: 48 }));
+    await fixture.whenStable();
+    expect(element.querySelector('[data-range-tooltip]')).toBeNull();
   });
 });

@@ -229,7 +229,7 @@ describe('Playernames', () => {
     expect((await axe.run(element)).violations).toEqual([]);
   });
 
-  it('combines both available name tables into one current ID canvas', async () => {
+  it('shows both available name tables as lanes in one current ID canvas', async () => {
     const controls = fixture.componentInstance as unknown as {
       selectDatasetKind(kind: DatasetKind): void;
       selectDataset(id: string): void;
@@ -240,11 +240,78 @@ describe('Playernames', () => {
     await fixture.whenStable();
 
     const element = fixture.nativeElement as HTMLElement;
-    const union = element.querySelector('app-playername-id-union');
-    expect(union).not.toBeNull();
-    expect(union?.querySelectorAll('app-dataset-id-range')).toHaveLength(1);
-    expect(union?.textContent).toContain('playernames');
-    expect(union?.textContent).toContain('dcplayernames');
+    const lanes = element.querySelector('app-playername-id-lanes');
+    expect(lanes).not.toBeNull();
+    expect(lanes?.querySelectorAll('app-dataset-id-range')).toHaveLength(1);
+    expect(lanes?.textContent).toContain('playernames');
+    expect(lanes?.textContent).toContain('dcplayernames');
+  });
+
+  it('shows diagnostic table lanes while a duplicate-ID failure keeps Next disabled', async () => {
+    vi.mocked(window.qdbConverter!.analyzePlayernames).mockImplementationOnce(async (request) => ({
+      requestId: request.requestId,
+      datasetId: request.datasetId,
+      status: 'failed',
+      tables: [
+        { table: 'playernames', profile: profile(1) },
+        { table: 'dcplayernames', profile: profile(0, 0, 49_999) },
+      ],
+      error: {
+        code: 'playername-failed',
+        message: 'The selected dataset could not be analyzed for Playernames.',
+        details: ['Name ID 29000 is duplicated in playernames and dcplayernames.'],
+      },
+    }));
+    const controls = fixture.componentInstance as unknown as {
+      selectDatasetKind(kind: DatasetKind): void;
+      selectDataset(id: string): void;
+    };
+
+    controls.selectDatasetKind('imported');
+    controls.selectDataset(imported.id);
+    await vi.waitFor(() => expect(window.qdbConverter!.analyzePlayernames).toHaveBeenCalledOnce());
+    await fixture.whenStable();
+    const element = fixture.nativeElement as HTMLElement;
+    const nextButtons = [...element.querySelectorAll<HTMLButtonElement>('button')].filter(
+      (button) => button.textContent?.trim() === 'Next',
+    );
+
+    expect(element.textContent).toContain('Playernames analysis failed');
+    expect(element.textContent).toContain('Name ID 29000 is duplicated');
+    expect(element.querySelector('app-playername-id-lanes')).not.toBeNull();
+    expect(element.textContent).toContain('This chart is diagnostic only');
+    expect(
+      element.querySelector('section[aria-labelledby="current-id-ranges-heading"]')?.textContent,
+    ).not.toContain('Select Minimize');
+    expect(nextButtons[1]?.disabled).toBe(true);
+    expect((await axe.run(element)).violations).toEqual([]);
+  });
+
+  it('does not render an empty chart when failed analysis has no profiles', async () => {
+    vi.mocked(window.qdbConverter!.analyzePlayernames).mockImplementationOnce(async (request) => ({
+      requestId: request.requestId,
+      datasetId: request.datasetId,
+      status: 'failed',
+      tables: [],
+      error: {
+        code: 'playername-failed',
+        message: 'The selected dataset could not be analyzed for Playernames.',
+      },
+    }));
+    const controls = fixture.componentInstance as unknown as {
+      selectDatasetKind(kind: DatasetKind): void;
+      selectDataset(id: string): void;
+    };
+
+    controls.selectDatasetKind('imported');
+    controls.selectDataset(imported.id);
+    await vi.waitFor(() => expect(window.qdbConverter!.analyzePlayernames).toHaveBeenCalledOnce());
+    await fixture.whenStable();
+    const element = fixture.nativeElement as HTMLElement;
+
+    expect(element.textContent).toContain('Playernames analysis failed');
+    expect(element.querySelector('app-playername-id-lanes')).toBeNull();
+    expect(element.textContent).not.toContain('Current ID ranges');
   });
 
   it('creates a separately named managed result and shows its summary', async () => {
@@ -278,8 +345,8 @@ describe('Playernames', () => {
     const success = (fixture.nativeElement as HTMLElement).querySelector(
       'section[aria-labelledby="playernames-result-heading"]',
     );
-    expect(success?.querySelectorAll('app-playername-id-union')).toHaveLength(2);
-    expect(success?.querySelectorAll('app-playername-id-union app-dataset-id-range')).toHaveLength(
+    expect(success?.querySelectorAll('app-playername-id-lanes')).toHaveLength(2);
+    expect(success?.querySelectorAll('app-playername-id-lanes app-dataset-id-range')).toHaveLength(
       2,
     );
   });

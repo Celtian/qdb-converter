@@ -29,25 +29,25 @@ import {
   zoomDatasetIdRangeCameraAt,
 } from './dataset-id-range-camera';
 import {
+  DATASET_ID_CANVAS_HEIGHT,
   type DatasetIdLayoutSegment,
   type DatasetIdRangeModel,
+  type DatasetIdRangeSelection,
   createDatasetIdRangeLayout,
   createDatasetIdRangeModel,
+  datasetIdLaneGeometry,
+  laneAtCanvasPosition,
+  selectionInAdjacentLane,
 } from './dataset-id-range-layout';
 import { DatasetIdRangeSurface } from './dataset-id-range-surface';
-import {
-  BAR_Y,
-  type DatasetIdRangeColors,
-  type DatasetIdRangeView,
-} from './playername-id-range-renderer';
+import type { DatasetIdRangeColors, DatasetIdRangeView } from './playername-id-range-renderer';
 
-const CANVAS_HEIGHT = 96;
 const FALLBACK_CANVAS_WIDTH = 640;
 const TOOLTIP_GAP = 8;
 const TOOLTIP_MARGIN = 8;
 const EMPTY_RANGE_MODEL: DatasetIdRangeModel = {
   exact: false,
-  runs: [],
+  lanes: [],
   ranges: [],
   breakdowns: [],
   occupiedCount: 0,
@@ -73,12 +73,14 @@ export class DatasetIdRange {
   readonly label = input.required<string>();
 
   protected readonly rendererFailed = signal(false);
-  protected readonly activeSegment = signal<number | undefined>(undefined);
+  protected readonly activeSelection = signal<DatasetIdRangeSelection | undefined>(undefined);
   protected readonly camera = signal<DatasetIdRangeCamera>(FIT_DATASET_ID_CAMERA);
   protected readonly dragging = signal(false);
   protected readonly tooltipWidth = signal(0);
   protected readonly viewportWidth = signal(FALLBACK_CANVAS_WIDTH);
-  protected readonly tooltipTop = BAR_Y - TOOLTIP_GAP;
+  protected readonly tooltipTop = computed(
+    () => datasetIdLaneGeometry(0, this.model().lanes.length).y - TOOLTIP_GAP,
+  );
   protected readonly model = computed(() => {
     const rangeModel = this.rangeModel();
     if (rangeModel) return rangeModel;
@@ -93,16 +95,12 @@ export class DatasetIdRange {
     createDatasetIdRangeCameraLimits(this.model(), this.layout()),
   );
   protected readonly view = computed<DatasetIdRangeView>(() => ({
-    activeSegment: this.activeSegment(),
+    activeSelection: this.activeSelection(),
     camera: this.camera(),
     limits: this.cameraLimits(),
   }));
   protected readonly activeDescription = computed(() =>
-    this.descriptionFor(
-      this.activeSegment() === undefined
-        ? undefined
-        : this.layout().segments[this.activeSegment()!],
-    ),
+    this.descriptionFor(this.selectedSegment()),
   );
   protected readonly tooltipPosition = computed(() => {
     const segment = this.selectedSegment();
@@ -173,17 +171,29 @@ export class DatasetIdRange {
     if (!position) return;
     const handled = this.surface?.movePointer(event.pointerId, position.x, position.y) ?? false;
     if (handled && this.dragging()) {
-      this.activeSegment.set(undefined);
+      this.activeSelection.set(undefined);
       return;
     }
-    if (!this.dragging())
-      this.activeSegment.set(
-        segmentAtScreenPosition(this.layout(), this.camera(), this.viewportWidth(), position.x),
+    if (!this.dragging()) {
+      const lane = laneAtCanvasPosition(this.layout().lanes.length, position.y);
+      const segment =
+        lane === undefined
+          ? undefined
+          : segmentAtScreenPosition(
+              this.layout(),
+              this.camera(),
+              this.viewportWidth(),
+              position.x,
+              lane,
+            );
+      this.activeSelection.set(
+        lane === undefined || segment === undefined ? undefined : { lane, segment },
       );
+    }
   }
 
   protected clearPointer(): void {
-    if (!this.dragging()) this.activeSegment.set(undefined);
+    if (!this.dragging()) this.activeSelection.set(undefined);
   }
 
   protected beginPointer(event: PointerEvent): void {
@@ -203,22 +213,35 @@ export class DatasetIdRange {
   }
 
   protected inspectKeyboard(event: KeyboardEvent): void {
-    const lastIndex = this.layout().segments.length - 1;
-    if (lastIndex < 0) return;
-    const current = this.activeSegment();
-    let next: number;
+    const layout = this.layout();
+    const firstLane = layout.lanes.findIndex((lane) => lane.segments.length);
+    if (firstLane < 0) return;
+    const current = this.validSelection() ?? { lane: firstLane, segment: 0 };
+    let next: DatasetIdRangeSelection;
     switch (event.key) {
       case 'ArrowLeft':
-        next = Math.max(0, (current ?? 1) - 1);
+        next = { ...current, segment: Math.max(0, current.segment - 1) };
         break;
       case 'ArrowRight':
-        next = Math.min(lastIndex, (current ?? -1) + 1);
+        next = {
+          ...current,
+          segment: Math.min(
+            layout.lanes[current.lane]!.segments.length - 1,
+            current.segment + (this.activeSelection() ? 1 : 0),
+          ),
+        };
+        break;
+      case 'ArrowUp':
+        next = selectionInAdjacentLane(layout, current, -1);
+        break;
+      case 'ArrowDown':
+        next = selectionInAdjacentLane(layout, current, 1);
         break;
       case 'Home':
-        next = 0;
+        next = { ...current, segment: 0 };
         break;
       case 'End':
-        next = lastIndex;
+        next = { ...current, segment: layout.lanes[current.lane]!.segments.length - 1 };
         break;
       case 'PageUp':
         event.preventDefault();
@@ -245,8 +268,8 @@ export class DatasetIdRange {
         return;
     }
     event.preventDefault();
-    this.activeSegment.set(next);
-    const segment = this.layout().segments[next];
+    this.activeSelection.set(next);
+    const segment = layout.lanes[next.lane]?.segments[next.segment];
     if (segment)
       this.camera.set(
         revealDatasetIdRangeSegment(
@@ -269,7 +292,7 @@ export class DatasetIdRange {
       colors: () => this.colors(),
       draggingChanged: (dragging) => {
         this.dragging.set(dragging);
-        if (dragging) this.activeSegment.set(undefined);
+        if (dragging) this.activeSelection.set(undefined);
       },
       failed: () => this.rendererFailed.set(true),
       model: () => this.model(),
@@ -291,7 +314,10 @@ export class DatasetIdRange {
     const bounds = host.getBoundingClientRect();
     return {
       width: Math.max(1, Math.round(host.clientWidth || bounds.width || FALLBACK_CANVAS_WIDTH)),
-      height: Math.max(1, Math.round(host.clientHeight || bounds.height || CANVAS_HEIGHT)),
+      height: Math.max(
+        1,
+        Math.round(host.clientHeight || bounds.height || DATASET_ID_CANVAS_HEIGHT),
+      ),
     };
   }
 
@@ -333,7 +359,7 @@ export class DatasetIdRange {
     if (!segment) {
       const camera = this.camera();
       if (camera.scale === 1)
-        return 'Complete overview. Drag to pan; pinch or use Control or Command plus wheel to zoom. Arrow keys inspect contiguous ID ranges.';
+        return 'Complete overview. Drag to pan; pinch or use Control or Command plus wheel to zoom. Arrow keys inspect table rows and contiguous ID ranges.';
       const halfVisible = 50 / camera.scale;
       const start = Math.max(0, camera.center * 100 - halfVisible).toFixed(1);
       const end = Math.min(100, camera.center * 100 + halfVisible).toFixed(1);
@@ -433,8 +459,15 @@ export class DatasetIdRange {
   }
 
   private selectedSegment(): DatasetIdLayoutSegment | undefined {
-    const index = this.activeSegment();
-    return index === undefined ? undefined : this.layout().segments[index];
+    const selection = this.validSelection();
+    return selection ? this.layout().lanes[selection.lane]?.segments[selection.segment] : undefined;
+  }
+
+  private validSelection(): DatasetIdRangeSelection | undefined {
+    const selection = this.activeSelection();
+    return selection && this.layout().lanes[selection.lane]?.segments[selection.segment]
+      ? selection
+      : undefined;
   }
 
   private eventPosition(event: PointerEvent): { x: number; y: number } | undefined {
@@ -442,10 +475,10 @@ export class DatasetIdRange {
     if (!host) return undefined;
     const bounds = host.getBoundingClientRect();
     const displayWidth = bounds.width || this.viewportWidth();
-    const displayHeight = bounds.height || CANVAS_HEIGHT;
+    const displayHeight = bounds.height || DATASET_ID_CANVAS_HEIGHT;
     return {
       x: ((event.clientX - bounds.left) / displayWidth) * this.viewportWidth(),
-      y: ((event.clientY - bounds.top) / displayHeight) * CANVAS_HEIGHT,
+      y: ((event.clientY - bounds.top) / displayHeight) * DATASET_ID_CANVAS_HEIGHT,
     };
   }
 

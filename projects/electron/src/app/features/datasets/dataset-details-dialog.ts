@@ -6,9 +6,9 @@ import { MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
 import type { ImportedDatasetDescriptor, PlayernameOperations } from '../../../../shared/contracts';
 import { DatasetIdAnalysis } from '../../shared/dataset-id-analysis/dataset-id-analysis';
 import {
-  PlayernameIdUnion,
+  PlayernameIdLanes,
   playernameSummaryProfiles,
-} from '../../shared/playername-id-range/playername-id-union';
+} from '../../shared/playername-id-range/playername-id-lanes';
 import { StatusBadge } from '../../shared/status-badge/status-badge';
 
 export type DatasetDetailsDialogResult = 'rename';
@@ -21,7 +21,7 @@ export type DatasetDetailsDialogResult = 'rename';
     DecimalPipe,
     MatButtonModule,
     MatDialogModule,
-    PlayernameIdUnion,
+    PlayernameIdLanes,
     StatusBadge,
   ],
   templateUrl: './dataset-details-dialog.html',

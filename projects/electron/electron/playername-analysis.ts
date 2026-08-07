@@ -37,6 +37,16 @@ export interface PlayernameInspection {
   references: number[];
 }
 
+export class PlayernameInspectionError extends Error {
+  constructor(
+    message: string,
+    readonly tables: PlayernameTableAnalysis[],
+  ) {
+    super(message);
+    this.name = 'PlayernameInspectionError';
+  }
+}
+
 const cancelledError = (): Error => new Error('PLAYERNAMES_CANCELLED');
 
 export const checkPlayernameCancelled = (cancelled: () => boolean): void => {
@@ -106,30 +116,38 @@ const inspectTables = (
     if (!players.headers.includes(field)) throw new Error(`players.${field} is missing.`);
 
   const tables: InspectedNameTable[] = [];
-  for (const table of PLAYERNAME_TABLES) {
-    const source = sourceTables.get(table);
-    if (!source) continue;
-    const range = tableRange(fifaVersion, table);
-    if (!range) continue;
-    if (!source.headers.includes('nameid')) throw new Error(`${table}.nameid is missing.`);
-    const ids = source.rows.map((row, index) =>
-      playernameInteger(row['nameid'], `${table} row ${index + 1} nameid`),
-    );
-    tables.push({
-      ...source,
-      name: table,
-      ids,
-      range,
-      profile: createPlayernameIdProfile(ids, range),
-    });
-  }
-  if (!tables.some((table) => table.name === 'playernames'))
-    throw new Error('The playernames table is not supported for this FIFA version.');
+  try {
+    for (const table of PLAYERNAME_TABLES) {
+      const source = sourceTables.get(table);
+      if (!source) continue;
+      const range = tableRange(fifaVersion, table);
+      if (!range) continue;
+      if (!source.headers.includes('nameid')) throw new Error(`${table}.nameid is missing.`);
+      const ids = source.rows.map((row, index) =>
+        playernameInteger(row['nameid'], `${table} row ${index + 1} nameid`),
+      );
+      tables.push({
+        ...source,
+        name: table,
+        ids,
+        range,
+        profile: createPlayernameIdProfile(ids, range),
+      });
+    }
+    if (!tables.some((table) => table.name === 'playernames'))
+      throw new Error('The playernames table is not supported for this FIFA version.');
 
-  const ids = validateNameIds(tables);
-  const references = playerReferences(players.rows);
-  ensureReferencesExist(references, ids);
-  return { tables, players, references };
+    const ids = validateNameIds(tables);
+    const references = playerReferences(players.rows);
+    ensureReferencesExist(references, ids);
+    return { tables, players, references };
+  } catch (error) {
+    if (!tables.length || error instanceof PlayernameInspectionError) throw error;
+    throw new PlayernameInspectionError(
+      error instanceof Error ? error.message : String(error),
+      tables.map((table) => ({ table: table.name, profile: table.profile })),
+    );
+  }
 };
 
 export const inspectPlayernameTextDirectory = async (

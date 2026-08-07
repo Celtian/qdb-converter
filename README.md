@@ -170,12 +170,15 @@ and count; Page Up/Down pan, +/- zoom, and 0 resets the view. Tables without a r
 ranged key explain why a hole profile is unavailable instead of treating repeated foreign keys as
 row IDs.
 
-Playernames combines the available `playernames` and `dcplayernames` profiles in one logical-union
-canvas before a run and in retained before/after summaries. Disjoint published ranges are shown
-next to each other without treating the invalid numeric gap as capacity, while overlapping ranges
-are counted once. FIFA editions such as FIFA 23 that do not define `dcplayernames` show only
-`playernames`. Minimize can repair referenced integer IDs outside the published FIFA range when the
-tables still fit their available capacity; Remove unused alone requires IDs to already be in range.
+Playernames shows the available `playernames` and `dcplayernames` profiles as separate rows in one
+shared-axis canvas before a run and in retained before/after summaries. Matching IDs align across
+rows without obscuring each table's state, and headline totals sum both tables. Disjoint published
+ranges are shown next to each other without treating the invalid numeric gap as capacity. FIFA
+editions such as FIFA 23 that do not define `dcplayernames` show only `playernames`. Minimize can
+repair referenced integer IDs outside the published FIFA range when the tables still fit their
+available capacity; Remove unused alone requires IDs to already be in range. When strict analysis
+finds duplicate or ambiguous references after profiling the tables, the diagnostic canvas remains
+available while Playernames operations stay blocked.
 
 Explicit Playernames overwrite replaces only the selected application-owned snapshot and leaves
 its original import sources untouched. Managed deletion and external conversion output keep the

@@ -1,7 +1,10 @@
 import { parentPort, workerData } from 'node:worker_threads';
 
-import type { PlayernameDatasetRecord } from './playername-analysis';
-import { analyzePlayernameDataset } from './playername-analysis';
+import {
+  type PlayernameDatasetRecord,
+  PlayernameInspectionError,
+  analyzePlayernameDataset,
+} from './playername-analysis';
 
 interface PlayernameAnalysisWorkerData {
   dataset: PlayernameDatasetRecord;
@@ -18,6 +21,7 @@ const run = async (): Promise<void> => {
     parentPort?.postMessage({
       type: 'failed',
       message: error instanceof Error ? error.message : String(error),
+      tables: error instanceof PlayernameInspectionError ? error.tables : undefined,
     });
   }
 };

@@ -283,6 +283,7 @@ export interface PlayernameAnalysisResult {
   requestId: string;
   datasetId: string;
   status: OperationStatus;
+  /** Profiles available for diagnostics, including partial results from failed analysis. */
   tables: PlayernameTableAnalysis[];
   error?: ValidationError;
 }

@@ -8,6 +8,7 @@ import { encodeFifaText } from '../shared/text-format';
 import type { ImportedDatasetRecord } from './dataset-library';
 import { sourceProvenance } from './dataset-library';
 import {
+  PlayernameInspectionError,
   analyzePlayernameDataset,
   createPlayernameIdProfile,
   playernameInteger,
@@ -168,5 +169,60 @@ describe('Playername ID profile', () => {
       { table: 'playernames', profile: { rangeMin: 0, rangeMax: 43_999 } },
       { table: 'dcplayernames', profile: { rangeMin: 44_000, rangeMax: 50_000 } },
     ]);
+  });
+
+  it('preserves both table profiles when duplicate IDs fail validation', async () => {
+    const root = mkdtempSync(join(tmpdir(), 'qdb-playername-duplicate-analysis-'));
+    const text = join(root, 'text');
+    await mkdir(text);
+    await Promise.all([
+      writeFile(
+        join(text, 'playernames.txt'),
+        encodeFifaText(['name', 'nameid'], [{ name: 'Main', nameid: 29_000 }]),
+      ),
+      writeFile(
+        join(text, 'dcplayernames.txt'),
+        encodeFifaText(['name', 'nameid'], [{ name: 'DC', nameid: 29_000 }]),
+      ),
+      writeFile(
+        join(text, 'players.txt'),
+        encodeFifaText(
+          ['firstnameid', 'lastnameid', 'playerjerseynameid', 'commonnameid'],
+          [
+            {
+              firstnameid: 29_000,
+              lastnameid: 29_000,
+              playerjerseynameid: 29_000,
+              commonnameid: 29_000,
+            },
+          ],
+        ),
+      ),
+    ]);
+    const dataset: ImportedDatasetRecord = {
+      id: '33333333-3333-4333-8333-333333333333',
+      name: 'Duplicate name IDs',
+      fifaVersion: 11,
+      source: sourceProvenance('text-folder', ['/fixture'], {}),
+      managedFormat: 'text-folder',
+      updatedAt: new Date(0).toISOString(),
+      status: 'available',
+      tableNames: ['players', 'playernames', 'dcplayernames'],
+      tableCount: 3,
+      rowCount: 3,
+      warnings: [],
+      snapshotDirectory: root,
+    };
+
+    const error = await analyzePlayernameDataset(dataset).catch((caught: unknown) => caught);
+
+    expect(error).toBeInstanceOf(PlayernameInspectionError);
+    expect(error).toMatchObject({
+      message: 'Name ID 29000 is duplicated in playernames and dcplayernames.',
+      tables: [
+        { table: 'playernames', profile: { occupiedIds: [29_000] } },
+        { table: 'dcplayernames', profile: { occupiedIds: [29_000] } },
+      ],
+    });
   });
 });

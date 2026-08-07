@@ -4,20 +4,20 @@ import type { PlayernameTableSummary } from '../../../../shared/contracts';
 import { DatasetIdRange } from './playername-id-range';
 import {
   type PlayernameIdRangeSource,
-  createPlayernameIdRangeUnion,
-} from './playername-id-range-union';
+  createPlayernameIdRangeLanes,
+} from './playername-id-range-lanes';
 
 @Component({
-  selector: 'app-playername-id-union',
+  selector: 'app-playername-id-lanes',
   imports: [DatasetIdRange],
   template: ` <app-dataset-id-range [label]="label()" [rangeModel]="model()" /> `,
   host: { class: 'block' },
 })
-export class PlayernameIdUnion {
+export class PlayernameIdLanes {
   readonly label = input.required<string>();
   readonly tables = input.required<readonly PlayernameIdRangeSource[]>();
 
-  protected readonly model = computed(() => createPlayernameIdRangeUnion(this.tables()));
+  protected readonly model = computed(() => createPlayernameIdRangeLanes(this.tables()));
 }
 
 export const playernameSummaryProfiles = (

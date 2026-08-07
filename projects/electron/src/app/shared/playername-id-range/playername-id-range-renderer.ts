@@ -7,10 +7,12 @@ import {
   clampDatasetIdRangeCamera,
   datasetIdWorldOffset,
 } from './dataset-id-range-camera';
-import { type DatasetIdRangeModel, createDatasetIdRangeLayout } from './dataset-id-range-layout';
-
-export const BAR_Y = 18;
-export const BAR_HEIGHT = 52;
+import {
+  type DatasetIdRangeModel,
+  type DatasetIdRangeSelection,
+  createDatasetIdRangeLayout,
+  datasetIdLaneGeometry,
+} from './dataset-id-range-layout';
 
 export type PixiModule = typeof import('pixi.js');
 export type PixiViewportModule = typeof import('pixi-viewport');
@@ -25,7 +27,7 @@ export interface DatasetIdRangeColors {
 }
 
 export interface DatasetIdRangeView {
-  activeSegment?: number;
+  activeSelection?: DatasetIdRangeSelection;
   camera: DatasetIdRangeCamera;
   limits: DatasetIdRangeCameraLimits;
 }
@@ -86,29 +88,41 @@ export class DatasetIdRangeRenderer {
     this.configureLimits(view.limits);
     this.applyCamera(view.camera);
     this.graphics.clear();
-    this.graphics.roundRect(0, BAR_Y, this.width, BAR_HEIGHT, 4).fill(colors.surface);
-
-    for (const segment of layout.segments) {
-      const color =
-        segment.state === 'occupied'
-          ? colors.occupied
-          : segment.state === 'hole'
-            ? colors.holes
-            : segment.state === 'capacity'
-              ? colors.capacity
-              : colors.outOfRange;
-      this.graphics.rect(segment.x, BAR_Y, segment.width, BAR_HEIGHT).fill(color);
+    for (const [laneIndex, lane] of layout.lanes.entries()) {
+      const geometry = datasetIdLaneGeometry(laneIndex, layout.lanes.length);
+      this.graphics
+        .roundRect(lane.x, geometry.y, lane.width, geometry.height, 4)
+        .fill(colors.surface);
+      const orderedSegments = [...lane.segments].sort(
+        (left, right) =>
+          Number(left.state.includes('range')) - Number(right.state.includes('range')),
+      );
+      for (const segment of orderedSegments) {
+        const color =
+          segment.state === 'occupied'
+            ? colors.occupied
+            : segment.state === 'hole'
+              ? colors.holes
+              : segment.state === 'capacity'
+                ? colors.capacity
+                : colors.outOfRange;
+        this.graphics.rect(segment.x, geometry.y, segment.width, geometry.height).fill(color);
+      }
+      this.graphics
+        .roundRect(lane.x, geometry.y, lane.width, geometry.height, 4)
+        .stroke({ color: colors.outline, width: 1 / view.camera.scale });
     }
 
-    this.graphics
-      .roundRect(0, BAR_Y, this.width, BAR_HEIGHT, 4)
-      .stroke({ color: colors.outline, width: 1 / view.camera.scale });
-    const active =
-      view.activeSegment === undefined ? undefined : layout.segments[view.activeSegment];
-    if (active)
+    const selection = view.activeSelection;
+    const active = selection
+      ? layout.lanes[selection.lane]?.segments[selection.segment]
+      : undefined;
+    if (active && selection) {
+      const geometry = datasetIdLaneGeometry(selection.lane, layout.lanes.length);
       this.graphics
-        .rect(active.x, BAR_Y - 3, active.width, BAR_HEIGHT + 6)
+        .rect(active.x, geometry.y - 3, active.width, geometry.height + 6)
         .stroke({ color: colors.outline, width: 2 / view.camera.scale });
+    }
   }
 
   resize(width: number, height: number): void {

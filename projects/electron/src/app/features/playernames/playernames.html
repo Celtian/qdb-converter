@@ -134,23 +134,32 @@
               <p>{{ store.playernameAnalysisError() }}</p>
             </div>
           }
-          @if (analysis()?.status === 'completed') {
+          @if (currentIdProfiles().length) {
             <section class="grid w-full gap-3" aria-labelledby="current-id-ranges-heading">
               <div>
                 <h3 id="current-id-ranges-heading">Current ID ranges</h3>
                 <p class="mt-1 text-on-surface-variant">
-                  Hover over the bar or focus it and use the arrow keys to inspect contiguous ID
-                  ranges. Drag to pan; pinch or use Control or Command plus wheel to zoom.
+                  Hover over a row or focus the canvas and use the arrow keys to inspect table rows
+                  and contiguous ID ranges. Drag to pan; pinch or use Control or Command plus wheel
+                  to zoom.
                 </p>
+                @if (!analysisReady()) {
+                  <p class="mt-1 text-on-surface-variant">
+                    This chart is diagnostic only. Resolve the analysis error before running a
+                    Playernames operation.
+                  </p>
+                }
               </div>
-              <app-playername-id-union
+              <app-playername-id-lanes
                 label="Playernames current IDs"
                 [tables]="currentIdProfiles()"
               />
               @if (outOfRangeCount()) {
                 <p class="rounded-xl bg-error-container px-4 py-3 text-on-error-container">
                   {{ outOfRangeCount() | number }} IDs are outside their published FIFA range.
-                  Select Minimize ID holes to repair them.
+                  @if (analysisReady()) {
+                    Select Minimize ID holes to repair them.
+                  }
                 </p>
               }
             </section>
@@ -360,13 +369,13 @@
                 }
               </div>
               @if (resultBeforeIdProfiles().length) {
-                <app-playername-id-union
+                <app-playername-id-lanes
                   label="Playernames IDs before"
                   [tables]="resultBeforeIdProfiles()"
                 />
               }
               @if (resultAfterIdProfiles().length) {
-                <app-playername-id-union
+                <app-playername-id-lanes
                   label="Playernames IDs after"
                   [tables]="resultAfterIdProfiles()"
                 />

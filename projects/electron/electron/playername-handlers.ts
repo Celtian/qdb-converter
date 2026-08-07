@@ -186,7 +186,8 @@ export const analyzePlayernames = async (
           });
         else if (message.type === 'completed' && message.tables)
           finish({ status: 'completed', tables: message.tables });
-        else if (message.type === 'failed') finish({ status: 'failed', message: message.message });
+        else if (message.type === 'failed')
+          finish({ status: 'failed', message: message.message, tables: message.tables });
       },
     );
     worker.on('error', (error) => finish({ status: 'failed', message: error.message }));
