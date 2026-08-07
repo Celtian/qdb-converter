@@ -1,0 +1,21 @@
+projects/electron/src/app/features/converted-datasets/converted-dataset-details-dialog.spec.ts
+  s_0a915333c6bc40::t_25245378f6a038 272-274
+tools/vitest.config.ts
+  s_0a915333c6bc40::t_18288d758ef117 13
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.21",
+  "base_commit_sha": "dec3f10ee3464a51924e96e2b7acaae44e62ea7e",
+  "prompts": {},
+  "sessions": {
+    "s_0a915333c6bc40": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019fde24-27c2-7f10-a439-1cd63cb30bd3",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "Celtian <dominik.hladik@seznam.cz>"
+    }
+  }
+}
