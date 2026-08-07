@@ -1,0 +1,21 @@
+README.md
+  s_0a915333c6bc40::t_952f20efdf2cfc 64-68
+tools/images/flags.spec.ts
+  s_0a915333c6bc40::t_13b24aa0d96db5 1,13,25-28
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.21",
+  "base_commit_sha": "1115ff0174b0550b666d90f54034c1998adaefa7",
+  "prompts": {},
+  "sessions": {
+    "s_0a915333c6bc40": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019fde24-27c2-7f10-a439-1cd63cb30bd3",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "Celtian <dominik.hladik@seznam.cz>"
+    }
+  }
+}
