@@ -25,6 +25,11 @@ import { isSupportedVersion } from '../../shared/table-config';
 import { parseDatasetKinds } from '../dataset-cleanup';
 import { exportDatasetSnapshot } from '../dataset-exporter';
 import {
+  analyzeDatasetIds,
+  cancelDatasetIdAnalysis,
+  configureDatasetIdAnalysisHandlers,
+} from '../dataset-id-analysis-handlers';
+import {
   cancelDatasetImport,
   clearDatasetImportSelections,
   configureDatasetImportHandlers,
@@ -40,6 +45,13 @@ import {
   DatasetLibrary,
   type ImportedDatasetRecord,
 } from '../dataset-library';
+import {
+  analyzePlayernames,
+  cancelPlayername,
+  cancelPlayernameAnalysis,
+  configurePlayernameHandlers,
+  runPlayername,
+} from '../playername-handlers';
 
 let mainWindow: BrowserWindow | undefined;
 let library: DatasetLibrary;
@@ -188,14 +200,18 @@ const runConversion = async (
         error,
       };
     }
+    const createdAt = new Date().toISOString();
     const record: ConvertedDatasetRecord = {
       id,
       name,
+      resultKind: 'conversion',
+      sourceDatasetKind: 'imported',
       sourceDatasetId: source.id,
       sourceDatasetName: source.name,
       sourceVersion: source.fifaVersion,
       fifaVersion: request.targetVersion,
-      createdAt: new Date().toISOString(),
+      createdAt,
+      updatedAt: createdAt,
       status: 'available',
       tableNames: tables.map((table) => table.table),
       tableCount: tables.length,
@@ -279,6 +295,12 @@ const registerIpc = (): void => {
     return library.listConvertedDatasets();
   });
   ipcMain.handle('qdb:converted-datasets:create', runConversion);
+  ipcMain.handle('qdb:dataset-ids:analyze', analyzeDatasetIds);
+  ipcMain.handle('qdb:dataset-ids:cancel-analysis', cancelDatasetIdAnalysis);
+  ipcMain.handle('qdb:playernames:analyze', analyzePlayernames);
+  ipcMain.handle('qdb:playernames:cancel-analysis', cancelPlayernameAnalysis);
+  ipcMain.handle('qdb:playernames:run', runPlayername);
+  ipcMain.handle('qdb:playernames:cancel', cancelPlayername);
   ipcMain.handle('qdb:converted-datasets:rename', (event, id: string, name: string) => {
     trustedSender(event);
     validateId(id);
@@ -390,6 +412,8 @@ app.whenReady().then(async () => {
   Menu.setApplicationMenu(null);
   library = new DatasetLibrary(app.getPath('userData'));
   configureDatasetImportHandlers(library, () => mainWindow);
+  configureDatasetIdAnalysisHandlers(library);
+  configurePlayernameHandlers(library);
   registerIpc();
   if (app.isPackaged) updateElectronApp();
   await createWindow();

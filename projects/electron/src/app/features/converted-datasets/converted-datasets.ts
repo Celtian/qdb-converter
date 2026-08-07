@@ -12,7 +12,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatTableModule } from '@angular/material/table';
 import { RouterLink } from '@angular/router';
 
-import type { ConvertedDatasetDescriptor } from '../../../../shared/contracts';
+import type { ConvertedDatasetDescriptor, DatasetResultKind } from '../../../../shared/contracts';
 import { AppStore } from '../../core/app-store';
 import { ConfirmationDialog } from '../../core/confirmation-dialog/confirmation-dialog';
 import { DatasetColumnPreferences } from '../../core/dataset-column-preferences';
@@ -73,6 +73,7 @@ export class ConvertedDatasets {
     return (
       Number(filters.sourceVersion !== 'all') +
       Number(filters.targetVersion !== 'all') +
+      Number(filters.resultKind !== 'all') +
       Number(filters.status !== 'all')
     );
   });
@@ -104,12 +105,16 @@ export class ConvertedDatasets {
         (dataset) =>
           filters.targetVersion === 'all' || dataset.fifaVersion === filters.targetVersion,
       )
+      .filter(
+        (dataset) => filters.resultKind === 'all' || dataset.resultKind === filters.resultKind,
+      )
       .filter((dataset) => filters.status === 'all' || dataset.status === filters.status)
       .filter((dataset) =>
         [
           dataset.name,
           dataset.sourceDatasetName,
           dataset.status,
+          this.resultKindLabel(dataset.resultKind),
           String(dataset.sourceVersion),
           String(dataset.fifaVersion),
         ]
@@ -143,6 +148,19 @@ export class ConvertedDatasets {
     this.clearSelection();
     this.pageIndex.set(0);
     this.query.set((event.target as HTMLInputElement).value);
+  }
+
+  protected resultKindLabel(kind: DatasetResultKind): string {
+    switch (kind) {
+      case 'conversion':
+        return 'Conversion';
+      case 'playernames-minimize':
+        return 'Playernames minimize';
+      case 'playernames-remove-unused':
+        return 'Remove unused names';
+      case 'playernames-combined':
+        return 'Remove unused + minimize';
+    }
   }
 
   protected openFilters(): void {

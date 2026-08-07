@@ -59,6 +59,7 @@ export class AppNavigation {
       label: 'Dataset Tools',
       links: [
         { path: '/validate', icon: 'fact_check', label: 'Validate' },
+        { path: '/playernames', icon: 'badge', label: 'Playernames' },
         { path: '/export', icon: 'drive_file_move', label: 'Export' },
       ],
     },

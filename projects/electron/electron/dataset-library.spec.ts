@@ -22,6 +22,8 @@ const importedRecordFor = (
   name,
   fifaVersion: 23,
   source: sourceProvenance('text-folder', ['/original'], { 'players.txt': 'hash' }),
+  managedFormat: 'text-folder',
+  updatedAt: new Date(0).toISOString(),
   status: 'available',
   tableNames: ['players'],
   tableCount: 1,
@@ -38,11 +40,14 @@ const convertedRecordFor = (
 ): ConvertedDatasetRecord => ({
   id,
   name,
+  resultKind: 'conversion',
+  sourceDatasetKind: 'imported',
   sourceDatasetId: source.id,
   sourceDatasetName: source.name,
   sourceVersion: source.fifaVersion,
   fifaVersion: 22,
   createdAt: new Date(1).toISOString(),
+  updatedAt: new Date(1).toISOString(),
   status: 'available',
   tableNames: ['players'],
   tableCount: 1,
@@ -142,11 +147,136 @@ describe('dataset library', () => {
       conversions?: unknown[];
     };
     expect(registry).toMatchObject({
-      schemaVersion: 2,
+      schemaVersion: 4,
       importedDatasets: [expect.objectContaining({ id: imported.id })],
       convertedDatasets: [],
     });
     expect(registry.conversions).toBeUndefined();
+  });
+
+  it('migrates v2 converted records to explicit conversion result metadata', async () => {
+    const root = mkdtempSync(join(tmpdir(), 'qdb-library-'));
+    const library = new DatasetLibrary(root);
+    const source = importedRecordFor(library);
+    const converted = convertedRecordFor(library, source);
+    await Promise.all([mkdir(source.snapshotDirectory), mkdir(converted.snapshotDirectory)]);
+    library.installImported(source);
+    library.installConverted(converted);
+
+    const registryPath = join(root, 'registry.json');
+    const current = JSON.parse(await readFile(registryPath, 'utf8')) as {
+      importedDatasets: ImportedDatasetRecord[];
+      convertedDatasets: ConvertedDatasetRecord[];
+      preferences: unknown;
+    };
+    await writeFile(
+      registryPath,
+      JSON.stringify({
+        ...current,
+        schemaVersion: 2,
+        convertedDatasets: current.convertedDatasets.map((record) =>
+          Object.fromEntries(
+            Object.entries(record).filter(
+              ([key]) => key !== 'resultKind' && key !== 'sourceDatasetKind',
+            ),
+          ),
+        ),
+      }),
+    );
+
+    const migrated = new DatasetLibrary(root);
+    expect(migrated.listConvertedDatasets()[0]).toMatchObject({
+      resultKind: 'conversion',
+      sourceDatasetKind: 'imported',
+    });
+    expect(JSON.parse(await readFile(registryPath, 'utf8'))).toMatchObject({ schemaVersion: 4 });
+  });
+
+  it('migrates v3 managed formats and updated timestamps', async () => {
+    const root = mkdtempSync(join(tmpdir(), 'qdb-library-'));
+    const library = new DatasetLibrary(root);
+    const source = importedRecordFor(library);
+    const converted = convertedRecordFor(library, source);
+    await Promise.all([mkdir(source.snapshotDirectory), mkdir(converted.snapshotDirectory)]);
+    library.installImported(source);
+    library.installConverted(converted);
+    const registryPath = join(root, 'registry.json');
+    const current = JSON.parse(await readFile(registryPath, 'utf8')) as {
+      importedDatasets: Record<string, unknown>[];
+      convertedDatasets: Record<string, unknown>[];
+      preferences: unknown;
+    };
+    const without = (record: Record<string, unknown>, keys: string[]) =>
+      Object.fromEntries(Object.entries(record).filter(([key]) => !keys.includes(key)));
+    await writeFile(
+      registryPath,
+      JSON.stringify({
+        ...current,
+        schemaVersion: 3,
+        importedDatasets: current.importedDatasets.map((record) =>
+          without(record, ['managedFormat', 'updatedAt', 'playernameSummary']),
+        ),
+        convertedDatasets: current.convertedDatasets.map((record) =>
+          without(record, ['updatedAt']),
+        ),
+      }),
+    );
+
+    const migrated = new DatasetLibrary(root);
+    expect(migrated.listImportedDatasets()[0]).toMatchObject({
+      managedFormat: 'text-folder',
+      updatedAt: source.source.importedAt,
+    });
+    expect(migrated.listConvertedDatasets()[0]).toMatchObject({
+      updatedAt: converted.createdAt,
+    });
+  });
+
+  it('atomically replaces a managed snapshot and cleans unreferenced directories', async () => {
+    const root = mkdtempSync(join(tmpdir(), 'qdb-library-'));
+    const library = new DatasetLibrary(root);
+    const source = importedRecordFor(library);
+    await mkdir(source.snapshotDirectory);
+    await writeFile(join(source.snapshotDirectory, 'old.txt'), 'old');
+    library.installImported(source);
+    const oldDirectory = library.importedDataset(source.id).snapshotDirectory;
+    const replacementId = '77777777-7777-4777-8777-777777777777';
+    const replacementDirectory = library.replacementTemporaryDirectory(
+      'imported',
+      source.id,
+      replacementId,
+    );
+    await mkdir(join(replacementDirectory, 'text'), { recursive: true });
+    await writeFile(join(replacementDirectory, 'text', 'players.txt'), 'new');
+    const updatedAt = new Date(2).toISOString();
+    const installed = library.replaceImported(
+      {
+        ...library.importedDataset(source.id),
+        managedFormat: 'text-folder',
+        updatedAt,
+        playernameSummary: {
+          operations: { minimize: true, removeUnused: true },
+          tables: [],
+          referencesUpdated: 4,
+          totalRowsBefore: 5,
+          totalRowsAfter: 3,
+        },
+      },
+      replacementId,
+    );
+
+    expect(installed).toMatchObject({ id: source.id, name: source.name, updatedAt });
+    expect(installed.playernameSummary?.operations).toEqual({
+      minimize: true,
+      removeUnused: true,
+    });
+    expect(existsSync(oldDirectory)).toBe(false);
+    expect(existsSync(library.importedDataset(source.id).snapshotDirectory)).toBe(true);
+
+    const orphan = join(library.importedDatasetDirectory, 'orphaned-snapshot');
+    await mkdir(orphan);
+    new DatasetLibrary(root);
+    expect(existsSync(orphan)).toBe(false);
   });
 
   it('persists the last import directory and ignores it when it no longer exists', async () => {

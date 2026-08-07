@@ -11,10 +11,20 @@
     <dt>Source</dt>
     <dd>{{ dataset.source.kind === 't3db' ? 't3db' : 'Text folder' }}</dd>
 
+    <dt>Managed format</dt>
+    <dd>{{ dataset.managedFormat === 't3db' ? 't3db' : 'Text folder' }}</dd>
+
     <dt>Imported</dt>
     <dd>
       <time [attr.datetime]="dataset.source.importedAt">
         {{ dataset.source.importedAt | date: 'medium' }}
+      </time>
+    </dd>
+
+    <dt>Last updated</dt>
+    <dd>
+      <time [attr.datetime]="dataset.updatedAt">
+        {{ dataset.updatedAt | date: 'medium' }}
       </time>
     </dd>
 
@@ -50,6 +60,58 @@
       }
     </ul>
   </section>
+
+  <app-dataset-id-analysis
+    datasetKind="imported"
+    heading="Table details and ID health"
+    [datasetId]="dataset.id"
+    [status]="dataset.status"
+    [tableNames]="dataset.tableNames"
+  />
+
+  @if (dataset.playernameSummary; as playernames) {
+    <section
+      class="mt-4 border-t border-outline-variant pt-4"
+      aria-labelledby="imported-playername-details-heading"
+    >
+      <h3 id="imported-playername-details-heading">Latest Playernames operation</h3>
+      <p class="mt-2">{{ operationsLabel(playernames.operations) }}</p>
+      <p class="mt-2">
+        {{ playernames.totalRowsBefore | number }} name rows before ·
+        {{ playernames.totalRowsAfter | number }} after
+      </p>
+      @if (playernames.operations.minimize) {
+        <p class="mt-2">{{ playernames.referencesUpdated | number }} player references updated.</p>
+      }
+      @if (playernames.tables.length) {
+        <ul class="mt-3 grid list-none gap-3 p-0">
+          @for (summary of playernames.tables; track summary.table) {
+            <li>
+              <h4>{{ summary.table }}</h4>
+              <p>
+                {{ summary.beforeRows | number }} rows before ·
+                {{ summary.afterRows | number }} after
+              </p>
+            </li>
+          }
+        </ul>
+      }
+      @if (playernameBeforeProfiles.length) {
+        <app-playername-id-lanes
+          class="mt-3"
+          label="Playernames IDs before"
+          [tables]="playernameBeforeProfiles"
+        />
+      }
+      @if (playernameAfterProfiles.length) {
+        <app-playername-id-lanes
+          class="mt-3"
+          label="Playernames IDs after"
+          [tables]="playernameAfterProfiles"
+        />
+      }
+    </section>
+  }
 
   @if (dataset.warnings.length) {
     <section

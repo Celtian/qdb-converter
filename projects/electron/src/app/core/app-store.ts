@@ -7,6 +7,9 @@ import type {
   DatasetKind,
   ExportDatasetRequest,
   ImportedDatasetDescriptor,
+  PlayernameAnalysisRequest,
+  PlayernameRunRequest,
+  ValidationError,
 } from '../../../shared/contracts';
 import { DesktopApi } from './desktop-api';
 
@@ -28,10 +31,20 @@ export class AppStore {
   readonly error = signal('');
   readonly importProgress = signal('');
   readonly conversionProgress = signal('');
+  readonly playernameAnalysisLoading = signal(false);
+  readonly playernameAnalysisError = signal('');
+  readonly playernameAnalysisProgress = signal('');
+  readonly playernameProgress = signal('');
+  private readonly activePlayernameAnalysisId = signal('');
 
   constructor() {
     this.desktop.onImportProgress((message) => this.importProgress.set(message));
     this.desktop.onConversionProgress((progress) => this.conversionProgress.set(progress.message));
+    this.desktop.onPlayernameAnalysisProgress((progress) => {
+      if (progress.requestId === this.activePlayernameAnalysisId())
+        this.playernameAnalysisProgress.set(progress.message);
+    });
+    this.desktop.onPlayernameProgress((progress) => this.playernameProgress.set(progress.message));
   }
 
   async refresh(): Promise<void> {
@@ -86,7 +99,7 @@ export class AppStore {
     this.error.set('');
     try {
       const result = await this.desktop.createConvertedDataset(request);
-      if (result.error) this.error.set(result.error.message);
+      if (result.error) this.error.set(this.validationErrorMessage(result.error));
       if (result.status === 'completed') await this.refresh();
       return result;
     } catch (error) {
@@ -109,6 +122,52 @@ export class AppStore {
 
   async removeConvertedDatasets(ids: string[]): Promise<boolean> {
     return this.runDeletion(async () => this.desktop.removeConvertedDatasets(ids));
+  }
+
+  async runPlayername(request: PlayernameRunRequest) {
+    this.loading.set(true);
+    this.error.set('');
+    try {
+      const result = await this.desktop.runPlayername(request);
+      if (result.error) this.error.set(this.validationErrorMessage(result.error));
+      if (result.status === 'completed' && result.dataset) await this.refresh();
+      return result;
+    } catch (error) {
+      this.error.set(this.errorMessage(error));
+      throw error;
+    } finally {
+      this.loading.set(false);
+      this.playernameProgress.set('');
+    }
+  }
+
+  async analyzePlayernames(request: PlayernameAnalysisRequest) {
+    this.activePlayernameAnalysisId.set(request.requestId);
+    this.playernameAnalysisLoading.set(true);
+    this.playernameAnalysisError.set('');
+    this.playernameAnalysisProgress.set('');
+    try {
+      const result = await this.desktop.analyzePlayernames(request);
+      if (result.error && result.status !== 'cancelled')
+        this.playernameAnalysisError.set(this.validationErrorMessage(result.error));
+      return result;
+    } catch (error) {
+      this.playernameAnalysisError.set(this.errorMessage(error));
+      throw error;
+    } finally {
+      if (this.activePlayernameAnalysisId() === request.requestId) {
+        this.playernameAnalysisLoading.set(false);
+        this.playernameAnalysisProgress.set('');
+      }
+    }
+  }
+
+  async cancelPlayernameAnalysis(requestId: string): Promise<boolean> {
+    return this.desktop.cancelPlayernameAnalysis(requestId);
+  }
+
+  cancelPlayername(requestId: string): void {
+    void this.desktop.cancelPlayername(requestId);
   }
 
   selectExportDirectory() {
@@ -153,5 +212,9 @@ export class AppStore {
 
   private errorMessage(error: unknown): string {
     return error instanceof Error ? error.message : String(error);
+  }
+
+  private validationErrorMessage(error: ValidationError): string {
+    return [error.message, ...(error.details ?? [])].join(' ');
   }
 }

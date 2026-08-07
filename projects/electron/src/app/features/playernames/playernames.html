@@ -1,0 +1,421 @@
+<section class="mx-auto w-full max-w-360 p-8 max-nav:p-4">
+  <app-page-header
+    heading="Playernames"
+    description="Close player-name ID holes, remove unused names, or combine both in a managed dataset."
+  />
+
+  <mat-card appearance="outlined" class="overflow-hidden">
+    <mat-stepper linear aria-label="Playernames dataset wizard">
+      <ng-template let-index="index" matStepperIcon="number">
+        <span aria-hidden="true">{{ index + 1 }}</span>
+      </ng-template>
+      <ng-template let-index="index" matStepperIcon="edit">
+        <span aria-hidden="true">{{ index + 1 }}</span>
+      </ng-template>
+      <ng-template let-index="index" matStepperIcon="done">
+        <span aria-hidden="true">{{ index + 1 }}</span>
+      </ng-template>
+
+      <mat-step [completed]="!!selectedDatasetKind()">
+        <ng-template matStepLabel>Select dataset type</ng-template>
+        <div class="grid justify-items-start gap-6 pt-6 pb-2">
+          <div class="grid gap-2">
+            <h2>Choose dataset type</h2>
+            <p class="text-on-surface-variant">
+              Select which managed dataset library contains the source.
+            </p>
+          </div>
+          <mat-radio-group
+            class="grid w-full max-w-208 gap-3"
+            aria-label="Playernames dataset type"
+            [value]="selectedDatasetKind()"
+            (change)="selectDatasetKind($event.value)"
+          >
+            <mat-radio-button value="imported">
+              <span class="grid gap-micro">
+                <strong>Imported dataset</strong>
+                <small>Use a managed text or t3db source snapshot.</small>
+              </span>
+            </mat-radio-button>
+            <mat-radio-button value="converted">
+              <span class="grid gap-micro">
+                <strong>Converted dataset</strong>
+                <small>Use an existing generated text dataset.</small>
+              </span>
+            </mat-radio-button>
+          </mat-radio-group>
+          <div class="flex w-full justify-end">
+            <button
+              type="button"
+              matButton="filled"
+              matStepperNext
+              [disabled]="!selectedDatasetKind()"
+            >
+              Next
+            </button>
+          </div>
+        </div>
+      </mat-step>
+
+      <mat-step [completed]="!!selectedDataset() && analysisReady()">
+        <ng-template matStepLabel>Select dataset</ng-template>
+        <div class="grid justify-items-start gap-6 pt-6 pb-2">
+          <mat-form-field class="w-full" appearance="outline">
+            <mat-label>{{ datasetTypeLabel() }} dataset</mat-label>
+            <input
+              type="text"
+              matInput
+              [value]="datasetQuery()"
+              [matAutocomplete]="datasetAutocomplete"
+              [disabled]="!availableDatasets().length"
+              (input)="filterDatasets($event)"
+            />
+            <mat-icon matSuffix aria-hidden="true">search</mat-icon>
+            <mat-hint>Choose a dataset containing players and playernames</mat-hint>
+            <mat-autocomplete
+              #datasetAutocomplete="matAutocomplete"
+              [autoActiveFirstOption]="true"
+              [displayWith]="displayDatasetName"
+              [requireSelection]="true"
+              (closed)="restoreDatasetQuery()"
+              (optionSelected)="selectDataset($event.option.value)"
+            >
+              @for (dataset of filteredDatasets(); track dataset.id) {
+                <mat-option
+                  class="min-h-16"
+                  [value]="dataset.id"
+                  [disabled]="!isCompatible(dataset)"
+                >
+                  <span class="grid py-1.5 leading-option">
+                    <strong>{{ dataset.name }}</strong>
+                    <span class="text-sm text-on-surface-variant">
+                      FIFA {{ dataset.fifaVersion }} · {{ dataset.tableCount }} tables ·
+                      {{ dataset.rowCount | number }} rows
+                      @if (!isCompatible(dataset)) {
+                        · Missing players or playernames
+                      }
+                    </span>
+                  </span>
+                </mat-option>
+              } @empty {
+                <mat-option disabled>No matching datasets</mat-option>
+              }
+            </mat-autocomplete>
+          </mat-form-field>
+          @if (!availableDatasets().length) {
+            <p>
+              No {{ datasetTypeLabel().toLocaleLowerCase() }} datasets are available. Add or create
+              one first.
+            </p>
+          }
+          @if (selectedDataset(); as dataset) {
+            <mat-card appearance="outlined" class="grid w-full gap-2 p-4">
+              <strong>{{ dataset.name }}</strong>
+              <p class="text-on-surface-variant">
+                FIFA {{ dataset.fifaVersion }} · {{ dataset.tableCount }} tables ·
+                {{ dataset.rowCount | number }} rows
+              </p>
+            </mat-card>
+          }
+          @if (store.playernameAnalysisLoading()) {
+            <div class="grid w-full gap-3" aria-live="polite" aria-busy="true">
+              <mat-progress-bar mode="indeterminate" />
+              <p>
+                {{ store.playernameAnalysisProgress() || 'Analyzing player-name ID ranges…' }}
+              </p>
+            </div>
+          }
+          @if (store.playernameAnalysisError() && !store.playernameAnalysisLoading()) {
+            <div
+              class="grid w-full gap-2 rounded-xl bg-error-container px-4 py-3 text-on-error-container"
+              role="alert"
+            >
+              <strong>Playernames analysis failed</strong>
+              <p>{{ store.playernameAnalysisError() }}</p>
+            </div>
+          }
+          @if (currentIdProfiles().length) {
+            <section class="grid w-full gap-3" aria-labelledby="current-id-ranges-heading">
+              <div>
+                <h3 id="current-id-ranges-heading">Current ID ranges</h3>
+                <p class="mt-1 text-on-surface-variant">
+                  Hover over a row or focus the canvas and use the arrow keys to inspect table rows
+                  and contiguous ID ranges. Drag to pan; pinch or use Control or Command plus wheel
+                  to zoom.
+                </p>
+                @if (!analysisReady()) {
+                  <p class="mt-1 text-on-surface-variant">
+                    This chart is diagnostic only. Resolve the analysis error before running a
+                    Playernames operation.
+                  </p>
+                }
+              </div>
+              <app-playername-id-lanes
+                label="Playernames current IDs"
+                [tables]="currentIdProfiles()"
+              />
+              @if (outOfRangeCount()) {
+                <p class="rounded-xl bg-error-container px-4 py-3 text-on-error-container">
+                  {{ outOfRangeCount() | number }} IDs are outside their published FIFA range.
+                  @if (analysisReady()) {
+                    Select Minimize ID holes to repair them.
+                  }
+                </p>
+              }
+            </section>
+          }
+          <div class="flex w-full justify-end gap-2 max-xs:*:flex-1">
+            <button type="button" matButton matStepperPrevious>Back</button>
+            <button
+              type="button"
+              matButton="filled"
+              matStepperNext
+              [disabled]="!selectedDataset() || !analysisReady()"
+            >
+              Next
+            </button>
+          </div>
+        </div>
+      </mat-step>
+
+      <mat-step [completed]="operationsAllowed()">
+        <ng-template matStepLabel>Choose operation</ng-template>
+        <div class="grid justify-items-start gap-6 pt-6 pb-2">
+          <div class="grid gap-2">
+            <h2>Choose Playernames operation</h2>
+            <p id="playernames-operation-hint" class="text-on-surface-variant">
+              Select one operation or combine both. Remove unused always runs before Minimize.
+            </p>
+          </div>
+          <div
+            class="grid w-full max-w-208 gap-3"
+            role="group"
+            aria-labelledby="playernames-operation-hint"
+          >
+            <mat-checkbox
+              [checked]="operations().minimize"
+              (change)="selectOperation('minimize', $event.checked)"
+            >
+              <span class="grid gap-micro">
+                <strong>Minimize ID holes</strong>
+                <small>
+                  Reassign contiguous name IDs and update all four references in players.
+                </small>
+              </span>
+            </mat-checkbox>
+            <mat-checkbox
+              [checked]="operations().removeUnused"
+              (change)="selectOperation('removeUnused', $event.checked)"
+            >
+              <span class="grid gap-micro">
+                <strong>Remove unused names</strong>
+                <small>Delete unreferenced name rows without changing surviving IDs.</small>
+              </span>
+            </mat-checkbox>
+          </div>
+          @if (!hasOperations()) {
+            <p class="text-error" role="status">Select at least one operation.</p>
+          }
+          @if (hasOperations() && outOfRangeCount() && !operations().minimize) {
+            <p class="text-error" role="alert">
+              Minimize ID holes is required to repair the {{ outOfRangeCount() | number }}
+              out-of-range IDs found during analysis.
+            </p>
+          }
+          <div class="flex w-full justify-end gap-2 max-xs:*:flex-1">
+            <button type="button" matButton matStepperPrevious>Back</button>
+            <button
+              type="button"
+              matButton="filled"
+              matStepperNext
+              [disabled]="!operationsAllowed()"
+            >
+              Next
+            </button>
+          </div>
+        </div>
+      </mat-step>
+
+      <mat-step
+        [completed]="
+          outputKind() === 'new-converted' ? nameForm().valid() : outputKind() === 'overwrite'
+        "
+      >
+        <ng-template matStepLabel>Choose output</ng-template>
+        <div class="grid justify-items-start gap-6 pt-6 pb-2">
+          <mat-radio-group
+            class="grid w-full max-w-208 gap-3"
+            aria-label="Playernames output destination"
+            [value]="outputKind()"
+            (change)="selectOutputKind($event.value)"
+          >
+            <mat-radio-button value="overwrite">
+              <span class="grid gap-micro">
+                <strong>Overwrite selected dataset</strong>
+                <small>
+                  Replace its managed copy. Original external source files stay untouched.
+                </small>
+              </span>
+            </mat-radio-button>
+            <mat-radio-button value="new-converted">
+              <span class="grid gap-micro">
+                <strong>Create new Converted dataset</strong>
+                <small>Keep the source and create an independent managed result.</small>
+              </span>
+            </mat-radio-button>
+          </mat-radio-group>
+
+          @if (outputKind() === 'new-converted') {
+            <mat-form-field class="w-full" appearance="outline">
+              <mat-label>Managed dataset name</mat-label>
+              <input matInput [formField]="nameForm.name" />
+              <mat-hint align="end">{{ nameModel().name.length }}/80</mat-hint>
+              @if (nameForm.name().touched() && nameForm.name().errors()[0]; as error) {
+                <mat-error>{{ error.message }}</mat-error>
+              }
+            </mat-form-field>
+          }
+
+          <div class="flex w-full justify-end gap-2 max-xs:*:flex-1">
+            <button type="button" matButton matStepperPrevious>Back</button>
+            <button
+              type="button"
+              matButton="filled"
+              matStepperNext
+              [disabled]="
+                outputKind() === 'new-converted'
+                  ? nameForm().invalid()
+                  : outputKind() !== 'overwrite'
+              "
+            >
+              Review
+            </button>
+          </div>
+        </div>
+      </mat-step>
+
+      <mat-step [completed]="result()?.status === 'completed'">
+        <ng-template matStepLabel>Review and run</ng-template>
+        <div class="grid justify-items-start gap-6 pt-6 pb-2">
+          @if (selectedDataset(); as dataset) {
+            <mat-card appearance="outlined" class="grid w-full gap-3 p-4">
+              <h2>Review Playernames operation</h2>
+              <dl class="grid grid-cols-details gap-x-5 gap-y-2 max-compact:grid-cols-1">
+                <dt>Source</dt>
+                <dd>{{ dataset.name }} · FIFA {{ dataset.fifaVersion }}</dd>
+                <dt>Operation</dt>
+                <dd>{{ operationsLabel() }}</dd>
+                <dt>Output</dt>
+                <dd>
+                  @if (outputKind() === 'new-converted') {
+                    {{ nameModel().name }} in Converted datasets
+                  } @else {
+                    Overwrite {{ dataset.name }} in the {{ selectedDatasetKind() }} library
+                  }
+                </dd>
+              </dl>
+            </mat-card>
+          }
+
+          @if (store.loading()) {
+            <div class="grid w-full gap-3" aria-live="polite" aria-busy="true">
+              <mat-progress-bar mode="indeterminate" />
+              <p>{{ store.playernameProgress() || 'Preparing Playernames operation…' }}</p>
+              <button type="button" matButton class="justify-self-start" (click)="cancel()">
+                Cancel
+              </button>
+            </div>
+          }
+
+          @if (store.error() && !store.loading()) {
+            <div
+              class="grid gap-3 rounded-xl bg-error-container px-4 py-3 text-on-error-container"
+              role="alert"
+            >
+              <strong>Playernames operation failed</strong>
+              <p>{{ store.error() }}</p>
+            </div>
+          }
+
+          @if (result()?.status === 'cancelled') {
+            <p class="rounded-xl bg-surface-container-high px-4 py-3" role="status">
+              Playernames operation was cancelled. No output was kept.
+            </p>
+          }
+
+          @if (result()?.summary; as summary) {
+            <section class="grid w-full gap-4" aria-labelledby="playernames-result-heading">
+              <div class="flex items-center gap-2 text-primary" role="status">
+                <mat-icon aria-hidden="true">check_circle</mat-icon>
+                <h2 id="playernames-result-heading">Playernames operation completed</h2>
+              </div>
+              <div class="grid grid-cols-2 gap-3 max-sm:grid-cols-1">
+                @for (table of summary.tables; track table.table) {
+                  <mat-card appearance="outlined" class="grid gap-2 p-4">
+                    <h3>{{ table.table }}</h3>
+                    <p>
+                      {{ table.beforeRows | number }} rows before ·
+                      {{ table.afterRows | number }} after
+                    </p>
+                    @if (summary.operations.minimize) {
+                      <p>
+                        IDs {{ table.minBefore ?? '—' }}–{{ table.maxBefore ?? '—' }} became
+                        {{ table.minAfter ?? '—' }}–{{ table.maxAfter ?? '—' }}
+                      </p>
+                    } @else {
+                      <p>{{ table.removedRows | number }} unused rows removed</p>
+                    }
+                  </mat-card>
+                }
+              </div>
+              @if (resultBeforeIdProfiles().length) {
+                <app-playername-id-lanes
+                  label="Playernames IDs before"
+                  [tables]="resultBeforeIdProfiles()"
+                />
+              }
+              @if (resultAfterIdProfiles().length) {
+                <app-playername-id-lanes
+                  label="Playernames IDs after"
+                  [tables]="resultAfterIdProfiles()"
+                />
+              }
+              @if (summary.operations.minimize) {
+                <p>{{ summary.referencesUpdated | number }} player references updated.</p>
+              }
+              @if (summary.operations.removeUnused) {
+                <p>
+                  {{ summary.totalRowsBefore - summary.totalRowsAfter | number }} unused rows
+                  removed.
+                </p>
+              }
+            </section>
+          }
+
+          <div class="flex w-full flex-wrap justify-end gap-2">
+            <button type="button" matButton matStepperPrevious [disabled]="store.loading()">
+              Back
+            </button>
+            @if (result()?.status === 'completed') {
+              @if (result()?.dataset) {
+                <a matButton="tonal" [routerLink]="resultRoute()">
+                  <mat-icon aria-hidden="true">folder_open</mat-icon>
+                  Open {{ resultRoute() === '/' ? 'Imported' : 'Converted' }} datasets
+                </a>
+              }
+              <button type="button" matButton="filled" (click)="reset()">Start another</button>
+            } @else {
+              <button type="button" matButton="filled" [disabled]="!canRun()" (click)="run()">
+                {{
+                  store.error() || result()?.status === 'cancelled'
+                    ? 'Try again'
+                    : 'Run Playernames'
+                }}
+              </button>
+            }
+          </div>
+        </div>
+      </mat-step>
+    </mat-stepper>
+  </mat-card>
+</section>

@@ -38,7 +38,37 @@
           <mat-option value="t3db">t3db</mat-option>
         </mat-select>
       </mat-form-field>
+
+      <mat-form-field appearance="outline" subscriptSizing="dynamic">
+        <mat-label>Playernames operation</mat-label>
+        <mat-select
+          aria-label="Filter imported datasets by Playernames operation"
+          [value]="filtersModel().playernameResult"
+          (valueChange)="setPlayernameResult($event)"
+        >
+          <mat-option value="all">All operations</mat-option>
+          <mat-option value="none">Not optimized</mat-option>
+          <mat-option value="playernames-minimize">Playernames minimize</mat-option>
+          <mat-option value="playernames-remove-unused">Remove unused playernames</mat-option>
+          <mat-option value="playernames-combined">Remove unused and minimize</mat-option>
+        </mat-select>
+      </mat-form-field>
     } @else {
+      <mat-form-field appearance="outline" subscriptSizing="dynamic">
+        <mat-label>Operation</mat-label>
+        <mat-select
+          aria-label="Filter generated datasets by operation"
+          [value]="filtersModel().resultKind"
+          (valueChange)="setResultKind($event)"
+        >
+          <mat-option value="all">All operations</mat-option>
+          <mat-option value="conversion">Conversion</mat-option>
+          <mat-option value="playernames-minimize">Playernames minimize</mat-option>
+          <mat-option value="playernames-remove-unused">Remove unused playernames</mat-option>
+          <mat-option value="playernames-combined">Remove unused and minimize</mat-option>
+        </mat-select>
+      </mat-form-field>
+
       <mat-form-field appearance="outline" subscriptSizing="dynamic">
         <mat-label>Source FIFA version</mat-label>
         <mat-select

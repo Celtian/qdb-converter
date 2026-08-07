@@ -300,7 +300,7 @@ export const validateDatasetSnapshot = async (
         'Managed table file is missing.',
         state,
       );
-    } else if (dataset.source.kind === 'text-folder')
+    } else if ((dataset.managedFormat ?? dataset.source.kind) === 'text-folder')
       await validateTextSource(
         join(dataset.snapshotDirectory, 'text'),
         dataset.fifaVersion,

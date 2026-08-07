@@ -1,0 +1,33 @@
+h3,
+h4 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+[data-table-id-analysis] {
+  padding: 0.75rem;
+  border: 1px solid var(--mat-sys-outline-variant);
+  border-radius: 0.75rem;
+  background: var(--mat-sys-surface-container-low);
+}
+
+dl dt {
+  color: var(--mat-sys-on-surface-variant);
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+dl dd {
+  min-width: 0;
+  margin: 0;
+}
+
+dl > div {
+  display: grid;
+  gap: 0.125rem;
+}
+
+code {
+  overflow-wrap: anywhere;
+  user-select: text;
+}

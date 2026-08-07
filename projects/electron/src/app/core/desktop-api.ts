@@ -2,11 +2,14 @@ import { Service } from '@angular/core';
 
 import type {
   CreateConvertedDatasetRequest,
+  DatasetIdAnalysisRequest,
   DatasetImportRequest,
   DatasetImportValidationRequest,
   DatasetKind,
   DatasetValidationRequest,
   ExportDatasetRequest,
+  PlayernameAnalysisRequest,
+  PlayernameRunRequest,
   QdbConverterApi,
   T3dbSourcePreparationRequest,
 } from '../../../shared/contracts';
@@ -76,6 +79,24 @@ export class DesktopApi {
   removeConvertedDatasets(ids: string[]) {
     return this.api.removeConvertedDatasets(ids);
   }
+  analyzeDatasetIds(request: DatasetIdAnalysisRequest) {
+    return this.api.analyzeDatasetIds(request);
+  }
+  cancelDatasetIdAnalysis(requestId: string) {
+    return this.api.cancelDatasetIdAnalysis(requestId);
+  }
+  analyzePlayernames(request: PlayernameAnalysisRequest) {
+    return this.api.analyzePlayernames(request);
+  }
+  cancelPlayernameAnalysis(requestId: string) {
+    return this.api.cancelPlayernameAnalysis(requestId);
+  }
+  runPlayername(request: PlayernameRunRequest) {
+    return this.api.runPlayername(request);
+  }
+  cancelPlayername(requestId: string) {
+    return this.api.cancelPlayername(requestId);
+  }
   selectExportDirectory() {
     return this.api.selectExportDirectory();
   }
@@ -90,5 +111,18 @@ export class DesktopApi {
   }
   onConversionProgress(listener: Parameters<QdbConverterApi['onConversionProgress']>[0]) {
     return window.qdbConverter?.onConversionProgress(listener) ?? (() => undefined);
+  }
+  onDatasetIdAnalysisProgress(
+    listener: Parameters<QdbConverterApi['onDatasetIdAnalysisProgress']>[0],
+  ) {
+    return window.qdbConverter?.onDatasetIdAnalysisProgress?.(listener) ?? (() => undefined);
+  }
+  onPlayernameAnalysisProgress(
+    listener: Parameters<QdbConverterApi['onPlayernameAnalysisProgress']>[0],
+  ) {
+    return window.qdbConverter?.onPlayernameAnalysisProgress?.(listener) ?? (() => undefined);
+  }
+  onPlayernameProgress(listener: Parameters<QdbConverterApi['onPlayernameProgress']>[0]) {
+    return window.qdbConverter?.onPlayernameProgress?.(listener) ?? (() => undefined);
   }
 }

@@ -67,7 +67,7 @@ describe('DatasetColumnEditor', () => {
     const preference = fixture.componentInstance.preference();
     expect(preference.order.slice(0, 2)).toEqual(['version', 'name']);
     expect((fixture.nativeElement as HTMLElement).textContent).toContain(
-      'Name moved to position 2 of 8.',
+      'Name moved to position 2 of 9.',
     );
   });
 

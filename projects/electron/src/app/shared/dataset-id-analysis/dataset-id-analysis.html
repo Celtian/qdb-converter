@@ -1,0 +1,126 @@
+<section
+  class="mt-4 border-t border-outline-variant pt-4"
+  aria-labelledby="dataset-id-health-heading"
+>
+  <h3 id="dataset-id-health-heading">{{ heading() }}</h3>
+  <p class="mt-2 text-on-surface-variant">
+    Inspect occupied IDs, holes, remaining capacity, and values outside each published range.
+  </p>
+
+  @if (status() !== 'available') {
+    <p class="mt-3 rounded-lg bg-error-container p-3 text-on-error-container">
+      ID analysis is unavailable because the managed dataset is not available.
+    </p>
+  } @else {
+    @if (loading()) {
+      <div class="mt-3 flex items-center gap-3" role="status">
+        <progress class="w-40 max-w-full" aria-label="Analyzing table IDs"></progress>
+        <span>{{ progress() }}</span>
+      </div>
+    }
+
+    @if (error()) {
+      <div class="mt-3 rounded-lg bg-error-container p-3 text-on-error-container" role="alert">
+        <p>{{ error() }}</p>
+        <button class="mt-2" type="button" matButton="outlined" (click)="retry()">
+          Retry ID analysis
+        </button>
+      </div>
+    }
+  }
+
+  @if (tables().length) {
+    <ul class="mt-3 grid list-none gap-3 p-0">
+      @for (table of tables(); track table.name) {
+        <li data-table-id-analysis>
+          <h4>{{ table.name }}</h4>
+
+          @if (table.conversion; as conversion) {
+            <dl class="mt-3 grid grid-cols-table-summary gap-3 max-compact:grid-cols-1">
+              <div>
+                <dt>{{ conversion.rows === 1 ? 'Row' : 'Rows' }}</dt>
+                <dd>{{ conversion.rows | number }}</dd>
+              </div>
+              <div>
+                <dt>Default substitutions</dt>
+                <dd>{{ conversion.defaultSubstitutions | number }}</dd>
+              </div>
+              <div>
+                <dt>Rating differences</dt>
+                <dd>{{ conversion.ratingDifferences | number }}</dd>
+              </div>
+            </dl>
+            @if (conversion.warnings.length) {
+              <div class="mt-3 border-t border-outline-variant pt-3">
+                <strong>
+                  {{ conversion.warnings.length === 1 ? 'Warning' : 'Warnings' }}
+                  ({{ conversion.warnings.length | number }})
+                </strong>
+                <ul class="mt-2 grid gap-tight ps-5">
+                  @for (warning of conversion.warnings; track $index) {
+                    <li>{{ warning }}</li>
+                  }
+                </ul>
+              </div>
+            }
+          } @else if (table.analysis; as analysis) {
+            <p class="mt-2">
+              {{ analysis.rows | number }} {{ analysis.rows === 1 ? 'row' : 'rows' }}
+            </p>
+          }
+
+          @if (table.analysis; as analysis) {
+            @if (analysis.profile; as profile) {
+              <p class="mt-3 text-sm text-on-surface-variant">
+                ID field <code>{{ analysis.keyField }}</code>
+              </p>
+              <app-dataset-id-range
+                class="mt-2"
+                [label]="table.name + '.' + analysis.keyField"
+                [profile]="profile"
+              />
+              @if (analysis.duplicateCount || analysis.invalidCount) {
+                <div class="mt-3 rounded-lg bg-error-container p-3 text-on-error-container">
+                  @if (analysis.duplicateCount) {
+                    <p>
+                      {{ analysis.duplicateCount | number }} duplicate
+                      {{ analysis.duplicateCount === 1 ? 'value' : 'values' }}.
+                      @if (analysis.duplicateSamples.length) {
+                        Samples: {{ duplicateSamples(analysis) }}.
+                      }
+                    </p>
+                  }
+                  @if (analysis.invalidCount) {
+                    <p [class.mt-2]="analysis.duplicateCount > 0">
+                      {{ analysis.invalidCount | number }} invalid
+                      {{ analysis.invalidCount === 1 ? 'value' : 'values' }}.
+                      @if (analysis.invalidSamples.length) {
+                        Samples: {{ invalidSamples(analysis) }}.
+                      }
+                    </p>
+                  }
+                </div>
+              }
+            } @else if (analysis.unavailableReason) {
+              <p class="mt-3 rounded-lg bg-surface-container-low p-3 text-on-surface-variant">
+                {{ analysis.unavailableReason }}
+              </p>
+            } @else if (analysis.error) {
+              <p class="mt-3 rounded-lg bg-error-container p-3 text-on-error-container">
+                ID analysis failed for this table: {{ analysis.error }}
+              </p>
+            }
+          } @else if (!error()) {
+            <p class="mt-3 text-on-surface-variant">
+              {{ loading() ? 'Waiting for ID analysis…' : 'ID analysis is not available.' }}
+            </p>
+          }
+        </li>
+      }
+    </ul>
+  } @else if (!loading()) {
+    <p class="mt-3 text-on-surface-variant">
+      No fifatables-supported tables were recorded for this dataset.
+    </p>
+  }
+</section>

@@ -16,11 +16,14 @@ import { ConvertedDatasets } from './converted-datasets';
 const dataset: ConvertedDatasetDescriptor = {
   id: '33333333-3333-4333-8333-333333333333',
   name: 'Fixture — FIFA 22',
+  resultKind: 'conversion',
+  sourceDatasetKind: 'imported',
   sourceDatasetId: '11111111-1111-4111-8111-111111111111',
   sourceDatasetName: 'Fixture',
   sourceVersion: 23,
   fifaVersion: 22,
   createdAt: new Date(1).toISOString(),
+  updatedAt: new Date(1).toISOString(),
   status: 'available',
   tableNames: ['players'],
   tableCount: 1,
@@ -37,6 +40,7 @@ const secondDataset: ConvertedDatasetDescriptor = {
   sourceVersion: 21,
   fifaVersion: 20,
   createdAt: new Date(2).toISOString(),
+  updatedAt: new Date(2).toISOString(),
   status: 'corrupt',
 };
 
@@ -159,7 +163,7 @@ describe('ConvertedDatasets', () => {
     const element = fixture.nativeElement as HTMLElement;
 
     expect(element.querySelector('div[role="status"] h2')?.textContent).toBe(
-      'No converted datasets',
+      'No generated datasets',
     );
     expect(element.textContent).not.toContain('history');
     expect((await axe.run(element)).violations).toEqual([]);

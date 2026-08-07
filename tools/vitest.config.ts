@@ -10,7 +10,7 @@ export default defineConfig({
       include: ['projects/electron/{electron,shared}/**/*.ts'],
       exclude: [
         '**/*.spec.ts',
-        '**/dataset-import-handlers.ts',
+        '**/*-handlers.ts',
         '**/main/index.ts',
         '**/preload.ts',
         '**/*-worker.ts',

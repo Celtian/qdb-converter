@@ -37,7 +37,8 @@
               "material-icons/iconfont/material-icons.css",
               "projects/electron/src/theme.scss",
               "projects/electron/src/styles.css"
-            ]
+            ],
+            "allowedCommonJsDependencies": ["@xmldom/xmldom"]
           },
           "configurations": {
             "production": {

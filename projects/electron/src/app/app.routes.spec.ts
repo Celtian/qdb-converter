@@ -8,6 +8,7 @@ describe('application routes', () => {
       'import',
       'datasets',
       'validate',
+      'playernames',
       'export',
       'conversions',
       'settings',

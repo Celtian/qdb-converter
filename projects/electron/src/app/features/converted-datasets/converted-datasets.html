@@ -1,7 +1,7 @@
 <section class="mx-auto w-full max-w-360 p-8 max-nav:p-4" [class.pb-32]="selectedCount() > 0">
   <app-page-header
     heading="Datasets"
-    description="Converted FIFA datasets stored independently and ready to export."
+    description="Generated FIFA datasets stored independently and ready to export."
   >
     <a matButton="filled" routerLink="/convert">
       <mat-icon>add</mat-icon>
@@ -127,6 +127,10 @@
             <th *matHeaderCellDef mat-header-cell>Source</th>
             <td *matCellDef="let dataset" mat-cell>FIFA {{ dataset.sourceVersion }}</td>
           </ng-container>
+          <ng-container matColumnDef="operation">
+            <th *matHeaderCellDef mat-header-cell>Operation</th>
+            <td *matCellDef="let dataset" mat-cell>{{ resultKindLabel(dataset.resultKind) }}</td>
+          </ng-container>
           <ng-container matColumnDef="target">
             <th *matHeaderCellDef mat-header-cell>Target</th>
             <td *matCellDef="let dataset" mat-cell>FIFA {{ dataset.fifaVersion }}</td>
@@ -200,8 +204,8 @@
         @if (!store.convertedDatasets().length) {
           <div role="status">
             <mat-icon class="size-12 text-5xl">database</mat-icon>
-            <h2>No converted datasets</h2>
-            <p>Convert an imported dataset to create your first exportable dataset.</p>
+            <h2>No generated datasets</h2>
+            <p>Convert or process a dataset to create your first managed result.</p>
           </div>
           <a matButton="filled" routerLink="/convert">Convert dataset</a>
         } @else {

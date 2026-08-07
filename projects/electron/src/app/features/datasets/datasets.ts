@@ -33,13 +33,15 @@ import {
   type DatasetFilterDrawerData,
   type DatasetFilters,
   type ImportedDatasetFilters,
+  type PlayernameResultFilter,
   emptyImportedDatasetFilters,
 } from '../../shared/dataset-filter-drawer/dataset-filter-drawer';
 import { PageHeader } from '../../shared/page-header/page-header';
 import { StatusBadge } from '../../shared/status-badge/status-badge';
 import { DatasetDetailsDialog, type DatasetDetailsDialogResult } from './dataset-details-dialog';
 
-type DatasetSortKey = 'imported' | 'name' | 'rows' | 'source' | 'status' | 'tables' | 'version';
+type DatasetSortKey =
+  'imported' | 'name' | 'operation' | 'rows' | 'source' | 'status' | 'tables' | 'version';
 
 interface DatasetSort {
   active: DatasetSortKey;
@@ -49,6 +51,7 @@ interface DatasetSort {
 const sortLabels: Record<DatasetSortKey, string> = {
   imported: 'Imported',
   name: 'Name',
+  operation: 'Latest operation',
   rows: 'Rows',
   source: 'Source',
   status: 'Status',
@@ -86,7 +89,11 @@ export class ImportedDatasets {
   private readonly filters = signal<ImportedDatasetFilters>(emptyImportedDatasetFilters());
   protected readonly activeFilterCount = computed(() => {
     const filters = this.filters();
-    return Number(filters.fifaVersion !== 'all') + Number(filters.sourceKind !== 'all');
+    return (
+      Number(filters.fifaVersion !== 'all') +
+      Number(filters.sourceKind !== 'all') +
+      Number(filters.playernameResult !== 'all')
+    );
   });
   protected readonly pageIndex = signal(0);
   protected readonly pageSize = signal(25);
@@ -117,10 +124,17 @@ export class ImportedDatasets {
       .filter(
         (dataset) => filters.sourceKind === 'all' || dataset.source.kind === filters.sourceKind,
       )
+      .filter(
+        (dataset) =>
+          filters.playernameResult === 'all' ||
+          this.playernameResultKind(dataset) === filters.playernameResult,
+      )
       .filter((dataset) =>
         [
           dataset.name,
           dataset.source.kind,
+          dataset.managedFormat,
+          this.playernameOperationLabel(dataset),
           String(dataset.fifaVersion),
           ...dataset.source.originalPaths,
         ]
@@ -156,7 +170,7 @@ export class ImportedDatasets {
         DatasetDetailsDialog,
         {
           data: dataset,
-          width: '520px',
+          width: '720px',
           maxWidth: 'calc(100vw - 2rem)',
           autoFocus: 'dialog',
         },
@@ -165,6 +179,19 @@ export class ImportedDatasets {
       .subscribe((result) => {
         if (result === 'rename') this.rename(dataset);
       });
+  }
+
+  protected playernameOperationLabel(dataset: ImportedDatasetDescriptor): string {
+    switch (this.playernameResultKind(dataset)) {
+      case 'none':
+        return 'Not optimized';
+      case 'playernames-minimize':
+        return 'Playernames minimize';
+      case 'playernames-remove-unused':
+        return 'Remove unused names';
+      case 'playernames-combined':
+        return 'Remove unused + minimize';
+    }
   }
 
   protected rename(dataset: ImportedDatasetDescriptor): void {
@@ -359,6 +386,11 @@ export class ImportedDatasets {
       case 'source':
         comparison = left.source.kind.localeCompare(right.source.kind);
         break;
+      case 'operation':
+        comparison = this.playernameOperationLabel(left).localeCompare(
+          this.playernameOperationLabel(right),
+        );
+        break;
       case 'tables':
         comparison = left.tableCount - right.tableCount;
         break;
@@ -378,6 +410,15 @@ export class ImportedDatasets {
 
   private isSortKey(value: string): value is DatasetSortKey {
     return value in sortLabels;
+  }
+
+  private playernameResultKind(
+    dataset: ImportedDatasetDescriptor,
+  ): Exclude<PlayernameResultFilter, 'all'> {
+    const operations = dataset.playernameSummary?.operations;
+    if (!operations) return 'none';
+    if (operations.minimize && operations.removeUnused) return 'playernames-combined';
+    return operations.minimize ? 'playernames-minimize' : 'playernames-remove-unused';
   }
 
   private async deleteDataset(id: string): Promise<void> {

@@ -76,6 +76,8 @@
     "fifatables": "^0.3.0",
     "material-icons": "1.13.14",
     "ngx-app-version": "^3.0.1",
+    "pixi-viewport": "^6.0.3",
+    "pixi.js": "^8.19.0",
     "rxjs": "~7.8.2",
     "tslib": "2.8.1",
     "update-electron-app": "3.3.0"

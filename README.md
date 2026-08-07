@@ -25,10 +25,14 @@ exports.
 - 🗃️ Browse, search, filter, sort, rename, validate, and safely remove imported source snapshots.
 - 🔄 Convert one imported dataset to FIFA 11–23 as an independent managed dataset containing every
   target-compatible table.
+- 🪪 Minimize holes in player-name IDs, remove unused name rows, or apply both in one run using a
+  snapshot from either managed library.
+- 📊 Open any imported or converted dataset to inspect compact, zoomable per-table ID-run
+  overviews with range tooltips and accessible keyboard controls.
 - 🧮 Preserve stored overall ratings, report target-formula differences, and keep source contract
   and loan dates when they remain valid for the target schema.
-- 📤 Export a converted dataset on demand into a unique external text folder without overwriting
-  earlier exports.
+- 📤 Atomically overwrite the selected managed snapshot or save a new Playernames result in the
+  Converted library; export converted datasets without overwriting earlier output.
 - 🎨 Follow the system theme or choose a persistent light or dark appearance.
 - ⬆️ Check GitHub Releases automatically for packaged-application updates.
 - 🔒 Keep filesystem access, validation, imports, and conversions behind a narrow typed Electron
@@ -53,9 +57,9 @@ exports.
 - `tools` — Node-side test configuration and supporting development tooling.
 
 The Angular renderer never receives direct filesystem access. Electron main-process handlers
-validate requests and run imports, validation, and conversions in worker threads. Imported and
-converted catalogs use separate managed snapshots under Electron's `userData` directory; source
-files and external exports are never removed by catalog actions.
+validate requests and run imports, validation, conversions, and Playernames operations in worker
+threads. Imported and converted catalogs use separate managed snapshots under Electron's
+`userData` directory; source files and external results are never removed by catalog actions.
 
 ## 🚀 Getting started
 
@@ -148,12 +152,37 @@ To regenerate the changelog without creating a release, run `bun run changelog`.
 ## 🔒 Security
 
 The Angular renderer has no Node.js or direct filesystem access. Electron uses context isolation and
-a sandboxed renderer; the preload bridge exposes only typed dataset and conversion operations.
+a sandboxed renderer; the preload bridge exposes only typed dataset, conversion, and Playernames
+operations.
 Main-process handlers validate IPC input, constrain source and output paths, and isolate lengthy
-imports, validations, and conversions in worker threads.
+imports, validations, conversions, and Playernames operations in worker threads.
 
-Managed snapshot deletion affects only application-owned copies. Original import sources and
-external conversion output remain untouched.
+Dataset details analyze the current managed snapshot in a worker and show cards only for tables
+supported by `fifatables`, with an accessible PixiJS range chart when a canonical ranged row ID is
+available. Unsupported text files remain safely preserved and summarized by the import warning,
+but do not appear as misleading table cards. Green occupied runs and amber hole runs share a
+proportional active span, the full remaining range is represented by a compact gray capacity tail,
+and red edge indicators identify occupied values outside the published range.
+Drag horizontally to pan, pinch or use Ctrl/Cmd plus the mouse wheel to zoom around the pointer,
+and double-click to restore the complete overview. Ordinary vertical wheel input continues to
+scroll the details dialog. Pointer and keyboard inspection report each contiguous run’s start, end,
+and count; Page Up/Down pan, +/- zoom, and 0 resets the view. Tables without a reliable unique
+ranged key explain why a hole profile is unavailable instead of treating repeated foreign keys as
+row IDs.
+
+Playernames shows the available `playernames` and `dcplayernames` profiles as separate rows in one
+shared-axis canvas before a run and in retained before/after summaries. Matching IDs align across
+rows without obscuring each table's state, and headline totals sum both tables. Disjoint published
+ranges are shown next to each other without treating the invalid numeric gap as capacity. FIFA
+editions such as FIFA 23 that do not define `dcplayernames` show only `playernames`. Minimize can
+repair referenced integer IDs outside the published FIFA range when the tables still fit their
+available capacity; Remove unused alone requires IDs to already be in range. When strict analysis
+finds duplicate or ambiguous references after profiling the tables, the diagnostic canvas remains
+available while Playernames operations stay blocked.
+
+Explicit Playernames overwrite replaces only the selected application-owned snapshot and leaves
+its original import sources untouched. Managed deletion and external conversion output keep the
+same safety boundary.
 
 Report suspected vulnerabilities privately according to [SECURITY.md](SECURITY.md).
 

@@ -1,0 +1,138 @@
+:host {
+  --dataset-id-occupied-color: light-dark(#2e7d32, #81c784);
+  --dataset-id-hole-color: light-dark(#b36b00, #ffca55);
+  --dataset-id-capacity-color: light-dark(#d9dde1, #4b5056);
+  --dataset-id-out-of-range-color: light-dark(#ba1a1a, #ffb4ab);
+}
+
+[data-range-canvas] {
+  width: 100%;
+  height: 96px;
+  overflow: hidden;
+  border-radius: 0.5rem;
+  outline-offset: 3px;
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+}
+
+[data-range-canvas][data-dragging] {
+  cursor: grabbing;
+}
+
+[data-range-canvas] canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+[data-range-tooltip] {
+  max-width: min(24rem, calc(100% - 1rem));
+}
+
+[data-range-lanes] {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.375rem 1rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.75rem;
+}
+
+[data-range-lanes] li {
+  display: flex;
+  gap: 0.25rem;
+}
+
+[data-range-counts] {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.75rem;
+  margin: 0;
+}
+
+[data-range-counts] div {
+  display: grid;
+  gap: 0.125rem;
+}
+
+[data-range-counts] dt {
+  color: var(--mat-sys-on-surface-variant);
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+[data-range-counts] dd {
+  margin: 0;
+}
+
+[data-range-breakdowns] {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.75rem;
+  text-align: end;
+}
+
+[data-range-breakdowns] caption {
+  margin-block-end: 0.375rem;
+  color: var(--mat-sys-on-surface-variant);
+  font-weight: 500;
+  text-align: start;
+}
+
+[data-range-breakdowns] th,
+[data-range-breakdowns] td {
+  padding: 0.25rem 0.375rem;
+  border-block-start: 1px solid var(--mat-sys-outline-variant);
+}
+
+[data-range-breakdowns] th:first-child {
+  text-align: start;
+}
+
+[data-range-legend] {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  color: var(--mat-sys-on-surface-variant);
+  font-size: 0.75rem;
+}
+
+[data-range-legend] li {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+}
+
+[data-range-swatch] {
+  width: 1rem;
+  height: 0.75rem;
+  border: 1px solid var(--mat-sys-outline);
+  border-radius: 0.125rem;
+}
+
+[data-range-swatch='occupied'] {
+  background: var(--dataset-id-occupied-color);
+}
+
+[data-range-swatch='holes'] {
+  background: var(--dataset-id-hole-color);
+}
+
+[data-range-swatch='capacity'] {
+  background: var(--dataset-id-capacity-color);
+}
+
+[data-range-swatch='out-of-range'] {
+  background: var(--dataset-id-out-of-range-color);
+}
+
+@media (width < 600px) {
+  [data-range-counts] {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

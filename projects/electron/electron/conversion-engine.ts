@@ -121,7 +121,7 @@ export const createConvertedDatasetSnapshot = async (
   cancelled: () => boolean = () => false,
 ): Promise<DatasetConversionOutput> => {
   const source =
-    dataset.source.kind === 'text-folder'
+    (dataset.managedFormat ?? dataset.source.kind) === 'text-folder'
       ? await textSource(join(dataset.snapshotDirectory, 'text'))
       : await t3dbSource(dataset.snapshotDirectory);
   await mkdir(outputDirectory, { recursive: true });
