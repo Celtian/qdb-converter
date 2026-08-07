@@ -35,6 +35,12 @@ export const routes: Routes = [
       ),
   },
   {
+    path: 'playernames',
+    title: 'Playernames · QDB Converter',
+    loadComponent: () =>
+      import('./features/playernames/playernames').then((module) => module.Playernames),
+  },
+  {
     path: 'export',
     title: 'Export · QDB Converter',
     loadComponent: () =>

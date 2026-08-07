@@ -1,0 +1,23 @@
+mat-stepper {
+  --mat-stepper-container-color: transparent;
+}
+
+mat-stepper h2 {
+  font-size: 1.35rem;
+}
+
+mat-radio-group small {
+  color: var(--mat-sys-on-surface-variant);
+  white-space: normal;
+}
+
+mat-radio-group mat-radio-button {
+  padding: 1rem;
+  border: 1px solid var(--mat-sys-outline-variant);
+  border-radius: 0.75rem;
+}
+
+mat-radio-group mat-radio-button:has(input:checked) {
+  border-color: var(--mat-sys-primary);
+  background: var(--mat-sys-secondary-container);
+}

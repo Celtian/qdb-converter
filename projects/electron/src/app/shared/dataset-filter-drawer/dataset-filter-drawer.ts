@@ -5,19 +5,27 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
 
-import type { DatasetSourceKind, DatasetStatus } from '../../../../shared/contracts';
+import type {
+  DatasetResultKind,
+  DatasetSourceKind,
+  DatasetStatus,
+} from '../../../../shared/contracts';
 import { SUPPORTED_FIFA_VERSIONS } from '../../../../shared/table-config';
 
 export type DatasetVersionFilter = number | 'all';
+export type PlayernameResultFilter =
+  'all' | 'none' | 'playernames-minimize' | 'playernames-remove-unused' | 'playernames-combined';
 
 export interface ImportedDatasetFilters {
   kind: 'imported';
   fifaVersion: DatasetVersionFilter;
   sourceKind: DatasetSourceKind | 'all';
+  playernameResult: PlayernameResultFilter;
 }
 
 export interface ConvertedDatasetFilters {
   kind: 'converted';
+  resultKind: DatasetResultKind | 'all';
   sourceVersion: DatasetVersionFilter;
   targetVersion: DatasetVersionFilter;
   status: DatasetStatus | 'all';
@@ -32,19 +40,23 @@ export interface DatasetFilterDrawerData {
 interface DatasetFilterFormValue {
   fifaVersion: DatasetVersionFilter;
   sourceKind: DatasetSourceKind | 'all';
+  playernameResult: PlayernameResultFilter;
   sourceVersion: DatasetVersionFilter;
   targetVersion: DatasetVersionFilter;
   status: DatasetStatus | 'all';
+  resultKind: DatasetResultKind | 'all';
 }
 
 export const emptyImportedDatasetFilters = (): ImportedDatasetFilters => ({
   kind: 'imported',
   fifaVersion: 'all',
   sourceKind: 'all',
+  playernameResult: 'all',
 });
 
 export const emptyConvertedDatasetFilters = (): ConvertedDatasetFilters => ({
   kind: 'converted',
+  resultKind: 'all',
   sourceVersion: 'all',
   targetVersion: 'all',
   status: 'all',
@@ -53,9 +65,11 @@ export const emptyConvertedDatasetFilters = (): ConvertedDatasetFilters => ({
 const toFormValue = (filters: DatasetFilters): DatasetFilterFormValue => ({
   fifaVersion: filters.kind === 'imported' ? filters.fifaVersion : 'all',
   sourceKind: filters.kind === 'imported' ? filters.sourceKind : 'all',
+  playernameResult: filters.kind === 'imported' ? filters.playernameResult : 'all',
   sourceVersion: filters.kind === 'converted' ? filters.sourceVersion : 'all',
   targetVersion: filters.kind === 'converted' ? filters.targetVersion : 'all',
   status: filters.kind === 'converted' ? filters.status : 'all',
+  resultKind: filters.kind === 'converted' ? filters.resultKind : 'all',
 });
 
 @Component({
@@ -91,6 +105,14 @@ export class DatasetFilterDrawer {
     this.filtersModel.update((filters) => ({ ...filters, status }));
   }
 
+  protected setResultKind(resultKind: DatasetResultKind | 'all'): void {
+    this.filtersModel.update((filters) => ({ ...filters, resultKind }));
+  }
+
+  protected setPlayernameResult(playernameResult: PlayernameResultFilter): void {
+    this.filtersModel.update((filters) => ({ ...filters, playernameResult }));
+  }
+
   protected clearAll(): void {
     const filters =
       this.kind === 'imported' ? emptyImportedDatasetFilters() : emptyConvertedDatasetFilters();
@@ -105,9 +127,11 @@ export class DatasetFilterDrawer {
             kind: 'imported',
             fifaVersion: value.fifaVersion,
             sourceKind: value.sourceKind,
+            playernameResult: value.playernameResult,
           }
         : {
             kind: 'converted',
+            resultKind: value.resultKind,
             sourceVersion: value.sourceVersion,
             targetVersion: value.targetVersion,
             status: value.status,

@@ -5,6 +5,7 @@ export type DatasetColumnKey =
   | 'created'
   | 'imported'
   | 'name'
+  | 'operation'
   | 'rows'
   | 'source'
   | 'status'
@@ -43,6 +44,7 @@ export const columnsByDatasetTable: Record<DatasetTableKind, readonly DatasetCol
     defineColumn('name', 'Name', true),
     defineColumn('version', 'Version'),
     defineColumn('source', 'Source'),
+    defineColumn('operation', 'Latest operation'),
     defineColumn('tables', 'Tables'),
     defineColumn('rows', 'Rows'),
     defineColumn('imported', 'Imported'),
@@ -51,6 +53,7 @@ export const columnsByDatasetTable: Record<DatasetTableKind, readonly DatasetCol
   ],
   converted: [
     defineColumn('name', 'Name', true),
+    defineColumn('operation', 'Operation'),
     defineColumn('source', 'Source'),
     defineColumn('target', 'Target'),
     defineColumn('tables', 'Tables'),

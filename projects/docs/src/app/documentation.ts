@@ -23,7 +23,7 @@ export const documentationPages: readonly DocumentationPage[] = [
       eyebrow: 'Local-first desktop app',
       title: 'Convert FIFA databases with a reviewable workflow',
       summary:
-        'Import DB Master text folders or paired PC t3db sources, validate managed snapshots, convert compatible tables between FIFA 11–23, and export deterministic text datasets.',
+        'Import DB Master text folders or paired PC t3db sources, validate managed snapshots, convert compatible tables between FIFA 11–23, repair player-name tables, and export deterministic text datasets.',
       actions: [
         { label: 'Download for Windows', route: '/download', primary: true },
         { label: 'Start with importing', route: '/importing' },
@@ -61,10 +61,10 @@ export const documentationPages: readonly DocumentationPage[] = [
           actions: [{ label: 'Understand conversion', route: '/converting' }],
         },
         {
-          eyebrow: '04 · Validate and export',
-          title: 'Check the snapshot, then take it outside',
+          eyebrow: '04 · Dataset tools',
+          title: 'Validate, optimize player names, and export',
           paragraphs: [
-            'Run validation on either library at any time. Export a converted dataset to a unique child folder containing deterministic UTF-16LE, tab-separated, CRLF text files without overwriting an earlier export.',
+            'Run validation on either library at any time. Inspect player-name ID ranges, close holes, repair out-of-range integer IDs, remove unused names, or combine both operations, then overwrite the selected managed snapshot or create a new Converted result. Export remains the path to an external folder.',
           ],
           actions: [{ label: 'Validation and export guide', route: '/validation-and-export' }],
         },
@@ -72,7 +72,7 @@ export const documentationPages: readonly DocumentationPage[] = [
           eyebrow: 'Security',
           title: 'Filesystem access stays in Electron',
           paragraphs: [
-            'The Angular renderer has no Node.js or direct filesystem access. A typed preload bridge exposes only dataset operations, while Electron validates requests and runs inspection, import, validation, and conversion work outside the renderer.',
+            'The Angular renderer has no Node.js or direct filesystem access. A typed preload bridge exposes only dataset operations, while Electron validates requests and runs inspection, import, validation, conversion, and Playernames work outside the renderer.',
           ],
           wide: true,
         },
@@ -112,7 +112,7 @@ export const documentationPages: readonly DocumentationPage[] = [
           eyebrow: 'Libraries',
           title: 'Manage application-owned copies',
           paragraphs: [
-            'Imported and converted datasets have separate catalogs and details. Search and filters run against the current library, columns can be shown, hidden, and reordered, and destructive actions identify exactly which managed copies will be removed.',
+            'Imported and converted datasets have separate catalogs and details. Opening details analyzes every managed table and shows its current ID holes, capacity, and out-of-range values when a canonical ranged row ID exists. Search and filters run against the current library, columns can be shown, hidden, and reordered, and destructive actions identify exactly which managed copies will be removed.',
           ],
           items: [
             'Independent names and status badges',
@@ -136,9 +136,9 @@ export const documentationPages: readonly DocumentationPage[] = [
         },
         {
           eyebrow: 'Output',
-          title: 'Validate and export on demand',
+          title: 'Validate, optimize, and export on demand',
           paragraphs: [
-            'Validate imported or converted snapshots without changing them. Exported folders are created outside managed storage with collision-safe names and can be revealed directly in the operating-system file manager.',
+            'Validate imported or converted snapshots without changing them. Playernames shows accessible before-and-after ID-range bars, can minimize and repair referenced IDs, remove unused rows, or apply both, then atomically overwrite the managed snapshot or create a new Converted result. Exports can be revealed directly in the operating-system file manager.',
           ],
         },
         {
@@ -321,9 +321,10 @@ export const documentationPages: readonly DocumentationPage[] = [
         },
         {
           eyebrow: 'Details',
-          title: 'Inspect provenance and conversion summaries',
+          title: 'Inspect provenance, IDs, and conversion summaries',
           paragraphs: [
             'Imported details show the source format, original paths, detected FIFA edition, integrity status, size, table and row totals, and import time. Converted details add the source dataset, source and target editions, conversion time, and per-table conversion summary.',
+            'Each table card analyzes the current managed snapshot in a read-only worker. Its control-free range overview renders green occupied runs and amber hole runs proportionally across the active span, represents the complete remaining range with a compact gray capacity tail, and uses red edge indicators for occupied out-of-range values. Drag horizontally to pan; pinch or use Ctrl/Cmd plus the wheel to zoom while ordinary vertical wheel input continues scrolling the dialog. Double-click or press 0 to reset. Pointer and arrow-key inspection report each contiguous run’s start, end, and count, while Page Up/Down and +/- provide keyboard pan and zoom. Duplicate and invalid identifiers remain visibly reported, and tables without a reliable unique ranged row ID show an explanatory unavailable state.',
           ],
         },
         {

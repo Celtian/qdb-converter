@@ -28,6 +28,8 @@ const dataset: ImportedDatasetDescriptor = {
     hashes: {},
     importedAt: new Date(0).toISOString(),
   },
+  managedFormat: 'text-folder',
+  updatedAt: new Date(0).toISOString(),
   status: 'available',
   tableNames: ['players'],
   tableCount: 1,
@@ -129,7 +131,7 @@ describe('ImportedDatasets', () => {
 
     expect(open).toHaveBeenNthCalledWith(1, DatasetDetailsDialog, {
       data: dataset,
-      width: '520px',
+      width: '720px',
       maxWidth: 'calc(100vw - 2rem)',
       autoFocus: 'dialog',
     });

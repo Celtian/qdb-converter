@@ -16,13 +16,53 @@ describe('DatasetColumnPreferences', () => {
 
     expect(preferences.load('imported')).toEqual({
       version: 1,
-      order: ['name', 'version', 'source', 'tables', 'rows', 'imported', 'status', 'actions'],
-      visible: ['name', 'version', 'source', 'tables', 'rows', 'imported', 'status', 'actions'],
+      order: [
+        'name',
+        'version',
+        'source',
+        'operation',
+        'tables',
+        'rows',
+        'imported',
+        'status',
+        'actions',
+      ],
+      visible: [
+        'name',
+        'version',
+        'source',
+        'operation',
+        'tables',
+        'rows',
+        'imported',
+        'status',
+        'actions',
+      ],
     });
     expect(preferences.load('converted')).toEqual({
       version: 1,
-      order: ['name', 'source', 'target', 'tables', 'rows', 'created', 'status', 'actions'],
-      visible: ['name', 'source', 'target', 'tables', 'rows', 'created', 'status', 'actions'],
+      order: [
+        'name',
+        'operation',
+        'source',
+        'target',
+        'tables',
+        'rows',
+        'created',
+        'status',
+        'actions',
+      ],
+      visible: [
+        'name',
+        'operation',
+        'source',
+        'target',
+        'tables',
+        'rows',
+        'created',
+        'status',
+        'actions',
+      ],
     });
   });
 
@@ -30,13 +70,33 @@ describe('DatasetColumnPreferences', () => {
     const preferences = TestBed.inject(DatasetColumnPreferences);
     preferences.save('imported', {
       version: 1,
-      order: ['status', 'actions', 'name', 'rows', 'source', 'tables', 'version', 'imported'],
+      order: [
+        'status',
+        'actions',
+        'name',
+        'rows',
+        'source',
+        'tables',
+        'version',
+        'imported',
+        'operation',
+      ],
       visible: ['status'],
     });
 
     expect(preferences.load('imported')).toEqual({
       version: 1,
-      order: ['status', 'actions', 'name', 'rows', 'source', 'tables', 'version', 'imported'],
+      order: [
+        'status',
+        'actions',
+        'name',
+        'rows',
+        'source',
+        'tables',
+        'version',
+        'imported',
+        'operation',
+      ],
       visible: ['status', 'actions', 'name'],
     });
     expect(localStorage.getItem(datasetColumnPreferenceKey('converted'))).toBeNull();
@@ -56,8 +116,28 @@ describe('DatasetColumnPreferences', () => {
 
     expect(preferences.load('converted')).toEqual({
       version: 1,
-      order: ['status', 'name', 'source', 'target', 'tables', 'rows', 'created', 'actions'],
-      visible: ['status', 'name', 'source', 'target', 'tables', 'rows', 'created', 'actions'],
+      order: [
+        'status',
+        'name',
+        'operation',
+        'source',
+        'target',
+        'tables',
+        'rows',
+        'created',
+        'actions',
+      ],
+      visible: [
+        'status',
+        'name',
+        'operation',
+        'source',
+        'target',
+        'tables',
+        'rows',
+        'created',
+        'actions',
+      ],
     });
   });
 

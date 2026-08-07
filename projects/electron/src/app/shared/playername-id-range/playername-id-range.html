@@ -1,0 +1,125 @@
+<figure class="m-0 grid gap-3 rounded-xl border border-outline-variant p-4">
+  <div class="flex flex-wrap items-baseline justify-between gap-2">
+    <strong>{{ label() }}</strong>
+    <span class="text-sm text-on-surface-variant">
+      Published {{ model().ranges.length === 1 ? 'range' : 'ranges' }}
+      @for (range of model().ranges; track range.label ?? range.min) {
+        @if (!$first) {
+          ·
+        }
+        @if (range.label) {
+          {{ range.label }}
+        }
+        {{ range.min | number }}–{{ range.max | number }}
+      }
+    </span>
+  </div>
+
+  @if (hasExactIds()) {
+    <div class="relative">
+      <div
+        #canvasHost
+        data-range-canvas
+        role="group"
+        tabindex="0"
+        aria-keyshortcuts="ArrowLeft ArrowRight Home End PageUp PageDown + - 0"
+        [attr.data-dragging]="dragging() ? '' : null"
+        [attr.aria-label]="summary()"
+        [attr.aria-describedby]="statusId()"
+        (dblclick)="resetCamera()"
+        (pointerdown)="beginPointer($event)"
+        (pointermove)="inspectPointer($event)"
+        (pointerup)="endPointer($event)"
+        (pointercancel)="endPointer($event)"
+        (pointerleave)="clearPointer()"
+        (keydown)="inspectKeyboard($event)"
+      ></div>
+      @if (activeSegment() !== undefined) {
+        <div
+          #tooltip
+          class="pointer-events-none absolute z-10 w-max -translate-x-1/2 -translate-y-full rounded-md bg-inverse-surface px-2 py-1 text-xs break-words text-inverse-on-surface shadow-md"
+          data-range-tooltip
+          aria-hidden="true"
+          [style.left.px]="tooltipPosition()"
+          [style.top.px]="tooltipTop"
+        >
+          {{ activeDescription() }}
+        </div>
+      }
+    </div>
+
+    @if (rendererFailed()) {
+      <p class="text-sm text-on-surface-variant" role="status">
+        Canvas visualization is unavailable. The complete numeric summary remains below.
+      </p>
+    }
+
+    <p class="min-h-5 text-sm text-on-surface-variant" aria-live="polite" [id]="statusId()">
+      {{ activeDescription() }}
+    </p>
+  } @else {
+    <p
+      class="rounded-lg bg-surface-container-low p-3 text-sm text-on-surface-variant"
+      role="status"
+    >
+      An exact ID map was not retained for this historical result. The numeric summary remains
+      available below as per-table totals.
+    </p>
+  }
+
+  <dl data-range-counts>
+    <div>
+      <dt>Occupied</dt>
+      <dd>{{ model().occupiedCount | number }}</dd>
+    </div>
+    <div>
+      <dt>Holes</dt>
+      <dd>{{ model().holeCount | number }}</dd>
+    </div>
+    <div>
+      <dt>Free capacity</dt>
+      <dd>{{ model().capacityCount | number }}</dd>
+    </div>
+    <div>
+      <dt>Out of range</dt>
+      <dd>{{ model().outOfRangeCount | number }}</dd>
+    </div>
+  </dl>
+
+  @if (model().breakdowns.length) {
+    <table data-range-breakdowns>
+      <caption>
+        Per-table ID totals
+      </caption>
+      <thead>
+        <tr>
+          <th scope="col">Table</th>
+          <th scope="col">Occupied</th>
+          <th scope="col">Holes</th>
+          <th scope="col">Free</th>
+          <th scope="col">Out of range</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (breakdown of model().breakdowns; track breakdown.label) {
+          <tr>
+            <th scope="row">{{ breakdown.label }}</th>
+            <td>{{ breakdown.occupiedCount | number }}</td>
+            <td>{{ breakdown.holeCount | number }}</td>
+            <td>{{ breakdown.capacityCount | number }}</td>
+            <td>{{ breakdown.outOfRangeCount | number }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  }
+
+  @if (hasExactIds()) {
+    <ul aria-label="ID range legend" data-range-legend>
+      <li><span aria-hidden="true" data-range-swatch="occupied"></span>Occupied</li>
+      <li><span aria-hidden="true" data-range-swatch="holes"></span>Hole</li>
+      <li><span aria-hidden="true" data-range-swatch="capacity"></span>Free capacity</li>
+      <li><span aria-hidden="true" data-range-swatch="out-of-range"></span>Out of range</li>
+    </ul>
+  }
+</figure>

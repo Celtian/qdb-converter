@@ -24,11 +24,14 @@ import { ConvertedDatasets } from './converted-datasets';
 const dataset: ConvertedDatasetDescriptor = {
   id: '33333333-3333-4333-8333-333333333333',
   name: 'Fixture — FIFA 22',
+  resultKind: 'conversion',
+  sourceDatasetKind: 'imported',
   sourceDatasetId: '11111111-1111-4111-8111-111111111111',
   sourceDatasetName: 'Fixture',
   sourceVersion: 23,
   fifaVersion: 22,
   createdAt: new Date(1).toISOString(),
+  updatedAt: new Date(1).toISOString(),
   status: 'available',
   tableNames: ['players'],
   tableCount: 1,
@@ -45,6 +48,7 @@ const secondDataset: ConvertedDatasetDescriptor = {
   sourceVersion: 21,
   fifaVersion: 20,
   createdAt: new Date(2).toISOString(),
+  updatedAt: new Date(2).toISOString(),
   status: 'corrupt',
 };
 
@@ -84,6 +88,12 @@ describe('ConvertedDatasets', () => {
     const controls = component as unknown as {
       applyFilters(filters: {
         kind: 'converted';
+        resultKind:
+          | 'conversion'
+          | 'playernames-minimize'
+          | 'playernames-remove-unused'
+          | 'playernames-combined'
+          | 'all';
         sourceVersion: number | 'all';
         targetVersion: number | 'all';
         status: 'available' | 'corrupt' | 'all';
@@ -117,6 +127,7 @@ describe('ConvertedDatasets', () => {
     controls.clearFilters();
     controls.applyFilters({
       kind: 'converted',
+      resultKind: 'all',
       sourceVersion: 21,
       targetVersion: 'all',
       status: 'all',

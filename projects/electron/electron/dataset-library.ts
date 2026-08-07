@@ -1,14 +1,13 @@
 import {
   existsSync,
   mkdirSync,
-  readFileSync,
   readdirSync,
   renameSync,
   rmSync,
   statSync,
   writeFileSync,
 } from 'node:fs';
-import { isAbsolute, join } from 'node:path';
+import { isAbsolute, join, resolve } from 'node:path';
 
 import type {
   ConvertedDatasetDescriptor,
@@ -18,43 +17,14 @@ import type {
   ImportedDatasetDescriptor,
   SourceProvenance,
 } from '../shared/contracts';
+import {
+  type ConvertedDatasetRecord,
+  type ImportedDatasetRecord,
+  type RegistryFile,
+  readDatasetRegistry,
+} from './dataset-registry';
 
-export interface ImportedDatasetRecord extends ImportedDatasetDescriptor {
-  snapshotDirectory: string;
-}
-
-export interface ConvertedDatasetRecord extends ConvertedDatasetDescriptor {
-  snapshotDirectory: string;
-}
-
-interface RegistryPreferences {
-  lastImportDirectory?: string;
-}
-
-interface RegistryFile {
-  schemaVersion: 2;
-  importedDatasets: ImportedDatasetRecord[];
-  convertedDatasets: ConvertedDatasetRecord[];
-  preferences: RegistryPreferences;
-}
-
-interface LegacyRegistryFile {
-  schemaVersion: 1;
-  datasets: ImportedDatasetRecord[];
-  preferences?: RegistryPreferences;
-}
-
-interface RegistryReadResult {
-  registry: RegistryFile;
-  migrated: boolean;
-}
-
-const EMPTY_REGISTRY: RegistryFile = {
-  schemaVersion: 2,
-  importedDatasets: [],
-  convertedDatasets: [],
-  preferences: {},
-};
+export type { ConvertedDatasetRecord, ImportedDatasetRecord } from './dataset-registry';
 const uuidPattern = /^[0-9a-f-]{36}$/i;
 
 export class DatasetLibrary {
@@ -69,10 +39,10 @@ export class DatasetLibrary {
     this.registryPath = join(userDataPath, 'registry.json');
     mkdirSync(this.importedDatasetDirectory, { recursive: true });
     mkdirSync(this.convertedDatasetDirectory, { recursive: true });
-    this.cleanupTemporaryDirectories();
-    const result = this.readRegistry();
+    const result = readDatasetRegistry(this.registryPath);
     this.registry = result.registry;
     if (result.migrated) this.persist();
+    this.cleanupManagedDirectories(result.cleanupOrphans);
   }
 
   listImportedDatasets(): ImportedDatasetDescriptor[] {
@@ -138,6 +108,14 @@ export class DatasetLibrary {
     return join(this.convertedDatasetDirectory, id);
   }
 
+  replacementTemporaryDirectory(kind: DatasetKind, id: string, replacementId: string): string {
+    this.validateId(id);
+    this.validateId(replacementId);
+    const directory =
+      kind === 'imported' ? this.importedDatasetDirectory : this.convertedDatasetDirectory;
+    return join(directory, `${id}.${replacementId}.replacing`);
+  }
+
   ensureUniqueImportedName(name: string, exceptId?: string): string {
     return this.ensureUniqueName(name, this.registry.importedDatasets, exceptId);
   }
@@ -166,7 +144,40 @@ export class DatasetLibrary {
     renameSync(temporary, destination);
     const installed = { ...record, snapshotDirectory: destination };
     this.registry.convertedDatasets.push(installed);
-    this.persist();
+    try {
+      this.persist();
+    } catch (error) {
+      this.registry.convertedDatasets.pop();
+      renameSync(destination, temporary);
+      throw error;
+    }
+    return this.describeConverted(installed);
+  }
+
+  replaceImported(record: ImportedDatasetRecord, replacementId: string): ImportedDatasetDescriptor {
+    const current = this.importedDataset(record.id);
+    const installed = this.replaceSnapshot(
+      'imported',
+      current,
+      record,
+      replacementId,
+      this.registry.importedDatasets,
+    );
+    return this.describeImported(installed);
+  }
+
+  replaceConverted(
+    record: ConvertedDatasetRecord,
+    replacementId: string,
+  ): ConvertedDatasetDescriptor {
+    const current = this.convertedDataset(record.id);
+    const installed = this.replaceSnapshot(
+      'converted',
+      current,
+      record,
+      replacementId,
+      this.registry.convertedDatasets,
+    );
     return this.describeConverted(installed);
   }
 
@@ -251,10 +262,13 @@ export class DatasetLibrary {
       name: record.name,
       fifaVersion: record.fifaVersion,
       source: record.source,
+      managedFormat: record.managedFormat,
+      updatedAt: record.updatedAt,
       tableNames: record.tableNames,
       tableCount: record.tableCount,
       rowCount: record.rowCount,
       warnings: record.warnings,
+      playernameSummary: record.playernameSummary,
       status,
       error: status === 'corrupt' ? 'The managed imported snapshot is missing.' : undefined,
     };
@@ -267,13 +281,17 @@ export class DatasetLibrary {
       name: record.name,
       sourceDatasetId: record.sourceDatasetId,
       sourceDatasetName: record.sourceDatasetName,
+      resultKind: record.resultKind,
+      sourceDatasetKind: record.sourceDatasetKind,
       sourceVersion: record.sourceVersion,
       fifaVersion: record.fifaVersion,
       createdAt: record.createdAt,
+      updatedAt: record.updatedAt,
       tableNames: record.tableNames,
       tableCount: record.tableCount,
       rowCount: record.rowCount,
       tableSummaries: record.tableSummaries,
+      playernameSummary: record.playernameSummary,
       warnings: record.warnings,
       status,
       error: status === 'corrupt' ? 'The managed converted snapshot is missing.' : undefined,
@@ -298,51 +316,6 @@ export class DatasetLibrary {
     return trimmed;
   }
 
-  private readRegistry(): RegistryReadResult {
-    if (!existsSync(this.registryPath))
-      return { registry: structuredClone(EMPTY_REGISTRY), migrated: false };
-    try {
-      const parsed = JSON.parse(readFileSync(this.registryPath, 'utf8')) as
-        Partial<RegistryFile> | Partial<LegacyRegistryFile>;
-      if (parsed.schemaVersion === 2 && 'importedDatasets' in parsed) {
-        if (!Array.isArray(parsed.importedDatasets) || !Array.isArray(parsed.convertedDatasets))
-          throw new Error('Unsupported registry format.');
-        return {
-          registry: {
-            schemaVersion: 2,
-            importedDatasets: parsed.importedDatasets,
-            convertedDatasets: parsed.convertedDatasets,
-            preferences: this.validPreferences(parsed.preferences),
-          },
-          migrated: false,
-        };
-      }
-      if (parsed.schemaVersion === 1 && 'datasets' in parsed && Array.isArray(parsed.datasets)) {
-        return {
-          registry: {
-            schemaVersion: 2,
-            importedDatasets: parsed.datasets,
-            convertedDatasets: [],
-            preferences: this.validPreferences(parsed.preferences),
-          },
-          migrated: true,
-        };
-      }
-      throw new Error('Unsupported registry format.');
-    } catch {
-      const backup = `${this.registryPath}.corrupt-${Date.now()}`;
-      renameSync(this.registryPath, backup);
-      return { registry: structuredClone(EMPTY_REGISTRY), migrated: false };
-    }
-  }
-
-  private validPreferences(preferences: RegistryPreferences | undefined): RegistryPreferences {
-    return typeof preferences?.lastImportDirectory === 'string' &&
-      isAbsolute(preferences.lastImportDirectory)
-      ? { lastImportDirectory: preferences.lastImportDirectory }
-      : {};
-  }
-
   private persist(): void {
     mkdirSync(this.userDataPath, { recursive: true });
     const temporary = `${this.registryPath}.tmp`;
@@ -350,16 +323,49 @@ export class DatasetLibrary {
     renameSync(temporary, this.registryPath);
   }
 
-  private cleanupTemporaryDirectories(): void {
-    for (const entry of readdirSync(this.importedDatasetDirectory, { withFileTypes: true }))
-      if (entry.isDirectory() && entry.name.endsWith('.importing'))
-        rmSync(join(this.importedDatasetDirectory, entry.name), { recursive: true, force: true });
-    for (const entry of readdirSync(this.convertedDatasetDirectory, { withFileTypes: true }))
-      if (entry.isDirectory() && entry.name.endsWith('.creating'))
-        rmSync(join(this.convertedDatasetDirectory, entry.name), {
-          recursive: true,
-          force: true,
-        });
+  private replaceSnapshot<T extends ImportedDatasetRecord | ConvertedDatasetRecord>(
+    kind: DatasetKind,
+    current: T,
+    replacement: T,
+    replacementId: string,
+    records: T[],
+  ): T {
+    const temporary = this.replacementTemporaryDirectory(kind, current.id, replacementId);
+    if (!existsSync(temporary)) throw new Error('Replacement snapshot is missing.');
+    const destination = temporary.replace(/\.replacing$/, '');
+    renameSync(temporary, destination);
+    const index = records.findIndex((candidate) => candidate.id === current.id);
+    const installed = { ...replacement, snapshotDirectory: destination };
+    records[index] = installed;
+    try {
+      this.persist();
+    } catch (error) {
+      records[index] = current;
+      rmSync(destination, { recursive: true, force: true });
+      throw error;
+    }
+    try {
+      rmSync(current.snapshotDirectory, { recursive: true, force: true });
+    } catch {
+      // The registry already points at the replacement. Startup cleanup will retry this orphan.
+    }
+    return installed;
+  }
+
+  private cleanupManagedDirectories(cleanupOrphans: boolean): void {
+    const referenced = new Set(
+      [...this.registry.importedDatasets, ...this.registry.convertedDatasets].map((record) =>
+        resolve(record.snapshotDirectory),
+      ),
+    );
+    for (const directory of [this.importedDatasetDirectory, this.convertedDatasetDirectory])
+      for (const entry of readdirSync(directory, { withFileTypes: true })) {
+        if (!entry.isDirectory()) continue;
+        const path = join(directory, entry.name);
+        const temporary = /\.(importing|creating|replacing)$/.test(entry.name);
+        if (temporary || (cleanupOrphans && !referenced.has(resolve(path))))
+          rmSync(path, { recursive: true, force: true });
+      }
   }
 
   private validateId(id: string): void {

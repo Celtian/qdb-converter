@@ -6,14 +6,14 @@ export const additionalDocumentationPages: readonly DocumentationPage[] = [
   {
     path: 'validation-and-export',
     slug: 'validation-and-export',
-    title: 'Validation and export',
-    label: 'Validation & export',
+    title: 'Dataset tools',
+    label: 'Dataset tools',
     icon: 'fact_check',
     content: {
       eyebrow: 'Dataset tools',
-      title: 'Check managed data and create a portable text folder',
+      title: 'Check, optimize, and publish managed data',
       summary:
-        'Validation is read-only and works with either library. Export is available for converted datasets and always creates a new external folder.',
+        'Validation and Playernames work with either library. Playernames overwrites the selected managed copy or creates a new Converted result, while Export creates an external copy.',
       actions: [
         { label: 'Manage datasets', route: '/managing-datasets', primary: true },
         { label: 'Conversion guide', route: '/converting' },
@@ -30,6 +30,23 @@ export const additionalDocumentationPages: readonly DocumentationPage[] = [
             'Converted snapshots are checked against their target FIFA edition.',
             'Validation does not modify or repair the snapshot.',
             'Run the report again after replacing or recreating problematic data.',
+          ],
+        },
+        {
+          eyebrow: 'Playernames',
+          title: 'Close ID holes or remove unused names',
+          paragraphs: [
+            'Choose an imported or converted snapshot, then select Minimize, Remove unused, or both. Combined runs remove unreferenced playernames and dcplayernames rows first, then assign contiguous IDs and rewrite firstnameid, lastnameid, playerjerseynameid, and commonnameid references in players.',
+            'Before the run, one control-free logical-union canvas combines the available playernames and dcplayernames ranges. Disjoint schema ranges are placed next to each other without inventing holes in the invalid numeric gap, overlapping ranges are counted once, and editions without dcplayernames omit it. The canvas distinguishes occupied runs, active-span holes, remaining capacity, and IDs outside each table’s published FIFA range. Drag horizontally to pan, pinch or use Ctrl/Cmd plus the wheel to zoom, and double-click to reset. Hover or use the arrow keys to inspect a source-labeled contiguous run. Dataset details retain the same combined before-and-after Playernames views, while their live inspection shows separate cards only for fifatables-supported tables. Preserved unsupported text files remain listed through the import warning instead of appearing as table cards.',
+            'Overwrite the selected application-managed dataset after confirmation or save a new entry in Converted datasets. Both choices produce a complete DB Master text snapshot, including unaffected and otherwise unsupported text tables.',
+          ],
+          items: [
+            'Overwrite changes only the selected managed copy; original external sources are never modified.',
+            'Managed names must be unique and no longer than 80 characters.',
+            'Minimize repairs referenced integer IDs outside the published range when capacity permits; Remove unused alone requires IDs to already be in range.',
+            'Missing or ambiguous references, duplicate or invalid IDs, and range-capacity overflow stop the operation.',
+            'Copy-on-write installation leaves the existing managed snapshot active after failure or cancellation.',
+            'Overwriting a managed t3db import converts its application-owned representation to text while preserving its original t3db provenance.',
           ],
         },
         {
@@ -56,9 +73,9 @@ export const additionalDocumentationPages: readonly DocumentationPage[] = [
           eyebrow: 'Safety',
           title: 'Keep managed and external files independent',
           paragraphs: [
-            'Deleting a converted dataset later removes only its application-owned managed copy. Previously exported folders remain where you created them.',
+            'Deleting a converted or Playernames result later removes only its application-owned managed copy. Previously exported folders remain where you created them.',
           ],
-          note: 'Export requires a converted dataset; use the Convert workflow before exporting an imported source.',
+          note: 'Export requires a converted dataset. Playernames can use either an imported or converted source.',
         },
       ],
     },

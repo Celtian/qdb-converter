@@ -162,6 +162,17 @@
               {{ dataset.source.kind === 't3db' ? 't3db' : 'Text folder' }}
             </td>
           </ng-container>
+          <ng-container matColumnDef="operation">
+            <th
+              *matHeaderCellDef
+              mat-header-cell
+              mat-sort-header
+              sortActionDescription="Sort by latest operation"
+            >
+              Latest operation
+            </th>
+            <td *matCellDef="let dataset" mat-cell>{{ playernameOperationLabel(dataset) }}</td>
+          </ng-container>
           <ng-container matColumnDef="tables">
             <th
               *matHeaderCellDef

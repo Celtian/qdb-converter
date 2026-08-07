@@ -10,16 +10,34 @@
     <dt>Source dataset</dt>
     <dd>{{ dataset.sourceDatasetName }}</dd>
 
-    <dt>Source version</dt>
-    <dd>FIFA {{ dataset.sourceVersion }}</dd>
+    <dt>Operation</dt>
+    <dd>{{ resultKindLabel(dataset.resultKind) }}</dd>
 
-    <dt>Target version</dt>
-    <dd>FIFA {{ dataset.fifaVersion }}</dd>
+    <dt>Source library</dt>
+    <dd>{{ dataset.sourceDatasetKind === 'imported' ? 'Imported' : 'Converted' }}</dd>
+
+    @if (dataset.resultKind === 'conversion' || dataset.tableSummaries.length) {
+      <dt>Source version</dt>
+      <dd>FIFA {{ dataset.sourceVersion }}</dd>
+
+      <dt>Target version</dt>
+      <dd>FIFA {{ dataset.fifaVersion }}</dd>
+    } @else {
+      <dt>FIFA version</dt>
+      <dd>FIFA {{ dataset.fifaVersion }}</dd>
+    }
 
     <dt>Created</dt>
     <dd>
       <time [attr.datetime]="dataset.createdAt">
         {{ dataset.createdAt | date: 'medium' }}
+      </time>
+    </dd>
+
+    <dt>Last updated</dt>
+    <dd>
+      <time [attr.datetime]="dataset.updatedAt">
+        {{ dataset.updatedAt | date: 'medium' }}
       </time>
     </dd>
 
@@ -40,64 +58,64 @@
     </section>
   }
 
-  <section
-    class="mt-4 border-t border-outline-variant pt-4"
-    aria-labelledby="converted-table-details-heading"
-  >
-    <h3 id="converted-table-details-heading">Table conversion details</h3>
+  <app-dataset-id-analysis
+    datasetKind="converted"
+    heading="Table conversion details and ID health"
+    [conversionSummaries]="dataset.tableSummaries"
+    [datasetId]="dataset.id"
+    [status]="dataset.status"
+    [tableNames]="dataset.tableNames"
+  />
 
-    @if (dataset.tableSummaries.length) {
+  @if (dataset.playernameSummary; as playernames) {
+    <section
+      class="mt-4 border-t border-outline-variant pt-4"
+      aria-labelledby="playername-table-details-heading"
+    >
+      <h3 id="playername-table-details-heading">Playernames details</h3>
+      <p class="mt-2">
+        {{ playernames.totalRowsBefore | number }} name rows before ·
+        {{ playernames.totalRowsAfter | number }} after
+      </p>
+      <p class="mt-2">{{ operationsLabel(playernames.operations) }}</p>
+      @if (playernames.operations.minimize) {
+        <p class="mt-2">{{ playernames.referencesUpdated | number }} player references updated.</p>
+      }
       <ul class="mt-3 grid list-none gap-3 p-0">
-        @for (summary of dataset.tableSummaries; track summary.table) {
+        @for (summary of playernames.tables; track summary.table) {
           <li>
             <h4>{{ summary.table }}</h4>
-            <dl class="mt-3 grid grid-cols-table-summary gap-3 max-compact:grid-cols-1">
-              <div>
-                <dt>{{ summary.rows === 1 ? 'Row' : 'Rows' }}</dt>
-                <dd>{{ summary.rows | number }}</dd>
-              </div>
-              <div>
-                <dt>Default substitutions</dt>
-                <dd>{{ summary.defaultSubstitutions | number }}</dd>
-              </div>
-              <div>
-                <dt>Rating differences</dt>
-                <dd>{{ summary.ratingDifferences | number }}</dd>
-              </div>
-            </dl>
-
-            @if (summary.warnings.length) {
-              <div class="mt-3 border-t border-outline-variant pt-3">
-                <strong>
-                  {{ summary.warnings.length === 1 ? 'Warning' : 'Warnings' }} ({{
-                    summary.warnings.length | number
-                  }})
-                </strong>
-                <ul class="mt-2 grid gap-tight ps-5">
-                  @for (warning of summary.warnings; track $index) {
-                    <li>{{ warning }}</li>
-                  }
-                </ul>
-              </div>
+            <p>
+              {{ summary.beforeRows | number }} rows before · {{ summary.afterRows | number }} after
+            </p>
+            @if (playernames.operations.minimize) {
+              <p>
+                IDs {{ summary.minBefore ?? '—' }}–{{ summary.maxBefore ?? '—' }} became
+                {{ summary.minAfter ?? '—' }}–{{ summary.maxAfter ?? '—' }}
+              </p>
+            }
+            @if (playernames.operations.removeUnused) {
+              <p>{{ summary.removedRows | number }} unused rows removed</p>
             }
           </li>
         }
       </ul>
-    } @else if (dataset.tableNames.length) {
-      <p class="mt-2 text-on-surface-variant">
-        Detailed conversion statistics were not recorded for this dataset.
-      </p>
-      <ul class="mt-2 grid gap-tight ps-5">
-        @for (tableName of dataset.tableNames; track tableName) {
-          <li>
-            <code>{{ tableName }}</code>
-          </li>
-        }
-      </ul>
-    } @else {
-      <p class="mt-2 text-on-surface-variant">No table details were recorded for this dataset.</p>
-    }
-  </section>
+      @if (playernameBeforeProfiles.length) {
+        <app-playername-id-union
+          class="mt-3"
+          label="Playernames IDs before"
+          [tables]="playernameBeforeProfiles"
+        />
+      }
+      @if (playernameAfterProfiles.length) {
+        <app-playername-id-union
+          class="mt-3"
+          label="Playernames IDs after"
+          [tables]="playernameAfterProfiles"
+        />
+      }
+    </section>
+  }
 
   @if (dataset.warnings.length) {
     <section
@@ -105,7 +123,8 @@
       aria-labelledby="converted-dataset-warnings-heading"
     >
       <h3 id="converted-dataset-warnings-heading">
-        Conversion {{ dataset.warnings.length === 1 ? 'warning' : 'warnings' }} ({{
+        {{ dataset.resultKind === 'conversion' ? 'Conversion ' : ''
+        }}{{ dataset.warnings.length === 1 ? 'warning' : 'warnings' }} ({{
           dataset.warnings.length | number
         }})
       </h3>

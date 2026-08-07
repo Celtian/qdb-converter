@@ -18,6 +18,8 @@ const importedDataset: ImportedDatasetDescriptor = {
     hashes: {},
     importedAt: new Date(0).toISOString(),
   },
+  managedFormat: 'text-folder',
+  updatedAt: new Date(0).toISOString(),
   status: 'available',
   tableNames: ['players'],
   tableCount: 1,
@@ -28,11 +30,14 @@ const importedDataset: ImportedDatasetDescriptor = {
 const convertedDataset: ConvertedDatasetDescriptor = {
   id: '33333333-3333-4333-8333-333333333333',
   name: 'Fixture — FIFA 22',
+  resultKind: 'conversion',
+  sourceDatasetKind: 'imported',
   sourceDatasetId: importedDataset.id,
   sourceDatasetName: importedDataset.name,
   sourceVersion: 23,
   fifaVersion: 22,
   createdAt: new Date(1).toISOString(),
+  updatedAt: new Date(1).toISOString(),
   status: 'available',
   tableNames: ['players'],
   tableCount: 1,
@@ -72,6 +77,26 @@ const api = (): QdbConverterApi => ({
   renameConvertedDataset: vi.fn(async () => convertedDataset),
   removeConvertedDataset: vi.fn(async () => true),
   removeConvertedDatasets: vi.fn(async () => 1),
+  analyzeDatasetIds: vi.fn(async (request) => ({
+    requestId: request.requestId,
+    datasetId: request.datasetId,
+    status: 'completed' as const,
+    tables: [],
+  })),
+  cancelDatasetIdAnalysis: vi.fn(async () => true),
+  analyzePlayernames: vi.fn(async (request) => ({
+    requestId: request.requestId,
+    datasetId: request.datasetId,
+    status: 'completed' as const,
+    tables: [],
+  })),
+  cancelPlayernameAnalysis: vi.fn(async () => true),
+  runPlayername: vi.fn(async () => ({
+    sourceDatasetId: importedDataset.id,
+    status: 'completed' as const,
+    dataset: convertedDataset,
+  })),
+  cancelPlayername: vi.fn(async () => true),
   selectExportDirectory: vi.fn(async () => '/output'),
   exportDataset: vi.fn(async () => ({
     datasetId: convertedDataset.id,
@@ -80,6 +105,9 @@ const api = (): QdbConverterApi => ({
   revealExport: vi.fn(async () => true),
   onImportProgress: vi.fn(() => () => undefined),
   onConversionProgress: vi.fn(() => () => undefined),
+  onDatasetIdAnalysisProgress: vi.fn(() => () => undefined),
+  onPlayernameAnalysisProgress: vi.fn(() => () => undefined),
+  onPlayernameProgress: vi.fn(() => () => undefined),
 });
 
 describe('AppStore', () => {
@@ -148,6 +176,25 @@ describe('AppStore', () => {
     await service.refresh();
     expect(service.error()).toBe('offline');
     expect(service.loading()).toBe(false);
+  });
+
+  it('analyzes and cancels Playernames diagnostics independently', async () => {
+    const request = {
+      requestId: '22222222-2222-4222-8222-222222222222',
+      datasetKind: 'imported' as const,
+      datasetId: importedDataset.id,
+    };
+
+    await expect(service.analyzePlayernames(request)).resolves.toMatchObject({
+      status: 'completed',
+      datasetId: importedDataset.id,
+    });
+    await expect(service.cancelPlayernameAnalysis(request.requestId)).resolves.toBe(true);
+
+    expect(desktop.analyzePlayernames).toHaveBeenCalledWith(request);
+    expect(desktop.cancelPlayernameAnalysis).toHaveBeenCalledWith(request.requestId);
+    expect(service.playernameAnalysisLoading()).toBe(false);
+    expect(service.playernameAnalysisError()).toBe('');
   });
 
   it('retains catalog state after imported deletion failures', async () => {

@@ -70,6 +70,7 @@ describe('AppNavigation', () => {
       ],
       [
         { label: 'fact_checkValidate', path: '/validate' },
+        { label: 'badgePlayernames', path: '/playernames' },
         { label: 'drive_file_moveExport', path: '/export' },
       ],
     ]);

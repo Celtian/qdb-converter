@@ -30,6 +30,8 @@ const dataset: ImportedDatasetDescriptor = {
     hashes: {},
     importedAt: new Date(0).toISOString(),
   },
+  managedFormat: 'text-folder',
+  updatedAt: new Date(0).toISOString(),
   status: 'available',
   tableNames: ['players'],
   tableCount: 1,
@@ -96,6 +98,7 @@ describe('ImportedDatasets', () => {
         kind: 'imported';
         fifaVersion: number | 'all';
         sourceKind: 'text-folder' | 't3db' | 'all';
+        playernameResult: 'all';
       }): void;
       clearFilters(): void;
       pageChanged(event: { pageIndex: number; pageSize: number; length: number }): void;
@@ -124,7 +127,12 @@ describe('ImportedDatasets', () => {
     expect(rowCount().textContent?.trim()).toBe('1 row');
 
     controls.clearFilters();
-    controls.applyFilters({ kind: 'imported', fifaVersion: 22, sourceKind: 'all' });
+    controls.applyFilters({
+      kind: 'imported',
+      fifaVersion: 22,
+      sourceKind: 'all',
+      playernameResult: 'all',
+    });
     await fixture.whenStable();
     expect(rowCount().textContent?.trim()).toBe('1 row');
 

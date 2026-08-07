@@ -63,11 +63,18 @@ export const importDatasetSnapshot = async (
       .reduce((total, table) => total + table.validRecordCount, 0);
   }
 
+  const sourceDetails = sourceProvenance(
+    source.inspection.sourceKind,
+    source.inspection.originalPaths,
+    hashes,
+  );
   return {
     id,
     name,
     fifaVersion,
-    source: sourceProvenance(source.inspection.sourceKind, source.inspection.originalPaths, hashes),
+    source: sourceDetails,
+    managedFormat: source.inspection.sourceKind,
+    updatedAt: sourceDetails.importedAt,
     status: 'available',
     tableNames,
     tableCount: tableNames.length,

@@ -26,6 +26,8 @@ describe('DesktopApi', () => {
         'renameConvertedDataset',
         'removeConvertedDataset',
         'removeConvertedDatasets',
+        'analyzeDatasetIds',
+        'cancelDatasetIdAnalysis',
         'selectExportDirectory',
         'exportDataset',
         'revealExport',
@@ -33,6 +35,7 @@ describe('DesktopApi', () => {
     ) as unknown as QdbConverterApi;
     fake.onImportProgress = vi.fn(() => () => undefined);
     fake.onConversionProgress = vi.fn(() => () => undefined);
+    fake.onDatasetIdAnalysisProgress = vi.fn(() => () => undefined);
     window.qdbConverter = fake;
     TestBed.configureTestingModule({});
     const service = TestBed.inject(DesktopApi);
@@ -66,6 +69,12 @@ describe('DesktopApi', () => {
     await service.renameConvertedDataset(convertedDatasetId, 'Renamed');
     await service.removeConvertedDataset(convertedDatasetId);
     await service.removeConvertedDatasets([convertedDatasetId]);
+    await service.analyzeDatasetIds({
+      requestId: request.requestId,
+      datasetKind: 'converted',
+      datasetId: convertedDatasetId,
+    });
+    await service.cancelDatasetIdAnalysis(request.requestId);
     await service.selectExportDirectory();
     await service.exportDataset({
       datasetKind: 'converted',
@@ -75,6 +84,7 @@ describe('DesktopApi', () => {
     await service.revealExport('/output/export');
     service.onImportProgress(() => undefined)();
     service.onConversionProgress(() => undefined)();
+    service.onDatasetIdAnalysisProgress(() => undefined)();
 
     expect(fake.removeImportedDatasets).toHaveBeenCalledWith([sourceDatasetId]);
     expect(fake.removeAllDatasets).toHaveBeenCalledWith(['imported']);
@@ -84,6 +94,11 @@ describe('DesktopApi', () => {
     });
     expect(fake.createConvertedDataset).toHaveBeenCalledWith(request);
     expect(fake.removeConvertedDatasets).toHaveBeenCalledWith([convertedDatasetId]);
+    expect(fake.analyzeDatasetIds).toHaveBeenCalledWith({
+      requestId: request.requestId,
+      datasetKind: 'converted',
+      datasetId: convertedDatasetId,
+    });
     expect(fake.exportDataset).toHaveBeenCalledWith({
       datasetKind: 'converted',
       datasetId: convertedDatasetId,
@@ -98,5 +113,6 @@ describe('DesktopApi', () => {
     expect(() => service.listImportedDatasets()).toThrow(/unavailable/);
     expect(service.onImportProgress(() => undefined)).toBeTypeOf('function');
     expect(service.onConversionProgress(() => undefined)).toBeTypeOf('function');
+    expect(service.onDatasetIdAnalysisProgress(() => undefined)).toBeTypeOf('function');
   });
 });
