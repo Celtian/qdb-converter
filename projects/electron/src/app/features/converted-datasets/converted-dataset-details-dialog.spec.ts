@@ -269,7 +269,9 @@ describe('ConvertedDatasetDetailsDialog', () => {
     await fixture.whenStable();
     const element = fixture.nativeElement as HTMLElement;
 
-    expect(element.textContent).toContain('No managed tables were recorded for this dataset.');
+    expect(element.textContent).toContain(
+      'No fifatables-supported tables were recorded for this dataset.',
+    );
     expect(element.querySelector('[data-table-id-analysis]')).toBeNull();
     expect((await axe.run(element)).violations).toEqual([]);
   });
