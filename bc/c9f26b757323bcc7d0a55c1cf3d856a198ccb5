@@ -1,0 +1,528 @@
+projects/electron/src/app/features/playernames/playernames.spec.ts
+  s_6826a29b975abb::t_e0d9f182e7c5e1 318-332,335-344,374
+  s_6826a29b975abb::t_8b1d1f9726b549 60
+  s_6826a29b975abb::t_d8d736489ddc2e 4
+  s_6826a29b975abb::t_4c08b20e8a2bfe 159-165
+  s_6826a29b975abb::t_83f64bd82687c7 97-98
+  s_6826a29b975abb::t_97d81f62643e48 1,5,7-11,14-21,87-96,99-115,117-128,130-134,140-142,146,148-157,166,179-194,205-208,210-213,215-229,248-253,256-259,264-272,275-277,285-286,291-293,296-299,305-312,315-317,415
+  s_6826a29b975abb::t_0b5273da3829cf 61-66,69,74-76,167-178,199-202,230-247
+  s_6826a29b975abb::t_ac820913e9a7cc 12,22-26,30-46,56-59,67-68,70-73,77-86,158,195-198,203-204,209,260-261,300-301,333-334,345-373
+  s_6826a29b975abb::t_cf09286abcb2c5 375-379,381-401,405-414
+  s_6826a29b975abb::t_627a54da42cb02 27-29,47-55
+  s_6826a29b975abb::t_cd481afd7a3838 278-284
+  s_6826a29b975abb::t_39ac6015a4dec7 3,214
+  s_6826a29b975abb::t_b66fc2a9039755 380
+  s_6826a29b975abb::t_35004325c4fe67 2,6,13,129,135-139,143-145,147,254-255,262-263,273-274,287-290,294-295,302-304,313-314
+  s_6826a29b975abb::t_7519b8f8e7d50e 116
+  s_6826a29b975abb::t_870c10c34731f7 402-404
+package.json
+  s_6826a29b975abb::t_db7cedba3b795b 79
+  s_6826a29b975abb::t_a0d14cc4284cef 80
+projects/electron/src/app/features/validate-dataset/validate-dataset.spec.ts
+  s_6826a29b975abb::t_116ce167391092 51-52
+  s_6826a29b975abb::t_83f64bd82687c7 31-32
+  s_6826a29b975abb::t_7519b8f8e7d50e 58
+projects/electron/src/app/shared/playername-id-range/playername-id-range-renderer.ts
+  s_6826a29b975abb::t_b866eefde0d858 31-32,90,92,94,96,98-99
+  s_6826a29b975abb::t_469fa6f5557dc8 18,38
+  s_6826a29b975abb::t_5962adfd401ab2 84-85
+  s_6826a29b975abb::t_6d0553ec3b6d30 125
+  s_6826a29b975abb::t_4eb82f66a88cca 3,11,14-15,17,19-26,39,43-46,51,53,82-83,88,101-103,112-113,119,127,148,163
+  s_6826a29b975abb::t_7b4005f7e04499 2,55-57,132-133
+  s_6826a29b975abb::t_8b1d1f9726b549 10
+  s_6826a29b975abb::t_fe6b64d02dbf87 27-28,91,93,95,97,100,106-110
+  s_6826a29b975abb::t_fe9860ece005b0 1,4-9,16,29-30,33-37,40-42,47-50,52,54,58-81,86-87,89,104-105,111,114-118,120-124,126,128-131,134-147,149-162
+  s_6826a29b975abb::t_a949840c2ab62c 12-13
+projects/electron/src/app/app.routes.ts
+  s_6826a29b975abb::t_96e3a1db31fca9 38-41
+  s_6826a29b975abb::t_8f15ae7c9ca3a1 42
+  s_6826a29b975abb::t_0cc5012452dac2 37
+projects/electron/electron/main/index.ts
+  s_6826a29b975abb::t_4a5b7487b1f056 207-208
+  s_6826a29b975abb::t_1cb0c409929a71 49,300-301
+  s_6826a29b975abb::t_0b717525028533 203,213-214,416
+  s_6826a29b975abb::t_9e6b00360c8c04 51
+  s_6826a29b975abb::t_294e4d1fc72e7a 27-31,298-299,415
+  s_6826a29b975abb::t_8360e1c16f993f 48,50,52-54,302-303
+projects/electron/src/app/core/desktop-api.ts
+  s_6826a29b975abb::t_294e4d1fc72e7a 82-87,115-118
+  s_6826a29b975abb::t_3abbceecaf6990 12,94-99,124-125,127
+  s_6826a29b975abb::t_1cb0c409929a71 11,88-93,119-123
+  s_6826a29b975abb::t_f8eefa22d3da81 126
+  s_6826a29b975abb::t_36f580133c1801 5
+projects/electron/src/app/shared/dataset-id-analysis/dataset-id-analysis.spec.ts
+  s_6826a29b975abb::t_32bf8a2af0ecbf 16
+  s_6826a29b975abb::t_6e8beeb211a634 1-15,17-51,61-66,68-80,85-91,93-113,115-133,135-139,141-143,150-158,160-165,169-170
+  s_6826a29b975abb::t_36f580133c1801 140,144-149,166-168
+  s_6826a29b975abb::t_b60504cf58f6b2 81-84
+  s_6826a29b975abb::t_9897cec4adc102 52-60,92,114,134,159
+  s_6826a29b975abb::t_3130842fa53393 67
+projects/electron/electron/conversion-engine.spec.ts
+  s_6826a29b975abb::t_45fb121d4e49b1 26,31-32,83-84,120-121
+projects/electron/src/app/core/desktop-api.spec.ts
+  s_6826a29b975abb::t_6075501c1548e9 29-30,38,72-77,87,97-101,116
+projects/electron/src/app/features/export-dataset/export-dataset.spec.ts
+  s_6826a29b975abb::t_116ce167391092 41-42
+  s_6826a29b975abb::t_83f64bd82687c7 29-30
+  s_6826a29b975abb::t_7519b8f8e7d50e 48
+projects/electron/src/app/shared/playername-id-range/dataset-id-range-layout.ts
+  s_6826a29b975abb::t_e02b0c0eef710d 14,26-51,123-133,140-153,156,158-171
+  s_6826a29b975abb::t_4eec2335638d4d 135,138
+  s_6826a29b975abb::t_fe6b64d02dbf87 1-5,7-13,15-25,52-59,61-122,134,136-137,139,154,157,172-175,177-184
+  s_6826a29b975abb::t_ece01f771c00ae 6,60,176
+  s_6826a29b975abb::t_8b1d1f9726b549 155
+projects/electron/electron/dataset-validator.spec.ts
+  s_6826a29b975abb::t_97ff27f2301dab 45-47,254-255
+  s_6826a29b975abb::t_07da0cab5450ba 173-174,211-212
+  s_6826a29b975abb::t_fa9c2a9e4822e0 180,219
+  s_6826a29b975abb::t_a0874342a7c053 181,218
+projects/electron/electron/playername-engine.spec.ts
+  s_6826a29b975abb::t_053f3bad0a2ac9 246-251,257-263,269-270,285-291,293-299
+  s_6826a29b975abb::t_77e20f55e54ec1 292
+  s_6826a29b975abb::t_14a669571a1dbf 81-85,114-118,208-212,223-227,238-242,252-256,264-268
+  s_6826a29b975abb::t_119aefa9f7b5e6 169,173-188,271-284
+  s_6826a29b975abb::t_bc5a1c90c2e25e 137-168
+  s_6826a29b975abb::t_fab7f04e4e1dd0 1-6,8-55,58-73,80,86-106,113,119-136,189,196,198-207,213-222,228-230,237,243-245,300
+  s_6826a29b975abb::t_466fa00ba9ed41 75,232
+  s_6826a29b975abb::t_9e6b00360c8c04 170-172
+  s_6826a29b975abb::t_1ca3bdf3c5105d 197
+  s_6826a29b975abb::t_d8d736489ddc2e 7,74,76-79,107-112,190-195,231,233-236
+  s_6826a29b975abb::t_8b55b52f16eb57 56-57
+projects/electron/electron/playername-worker.ts
+  s_6826a29b975abb::t_a09ecf5263109a 1-2,4-8,10-17,19-31
+  s_6826a29b975abb::t_1eb6b6f537b105 3,9,18
+projects/electron/src/app/shared/playername-id-range/playername-id-range.ts
+  s_6826a29b975abb::t_1cec0815e9760e 31-36,48-57,71-72,82-88,90,93,126-133,163,275
+  s_6826a29b975abb::t_c4e4fea9fc4225 349,357
+  s_6826a29b975abb::t_912337e52c9858 37,136,264-265,267,269,274,277-279,286-287,367,457-458
+  s_6826a29b975abb::t_d09062d8de4571 18,61,76,89,95-96,100-106,164,206-209,212,215,218,221,248,276,332,342-344,346-348,350,352-356
+  s_6826a29b975abb::t_75824e2a317794 333-337,340-341
+  s_6826a29b975abb::t_d58b74b5aaea35 7,38-42,46-47,70,79,81,110-116,144-161
+  s_6826a29b975abb::t_277e127188cbc3 20-30,77-78,92,94,97-98,108-109,117,140,172-180,182,186-192,195-204,223-243,249-258,268,270-273,280-281,366,380-407,409-450,456
+  s_6826a29b975abb::t_a28135655d759f 107,118
+  s_6826a29b975abb::t_627a54da42cb02 73,120,122-123
+  s_6826a29b975abb::t_7b4005f7e04499 19,181,338-339,408
+  s_6826a29b975abb::t_56805b60e46abd 119,124
+  s_6826a29b975abb::t_469fa6f5557dc8 16,60,66,121,302,322
+  s_6826a29b975abb::t_7d707706a97473 44-45,282-283,288-295,362,364,374
+  s_6826a29b975abb::t_d23fb14c5a8d29 69,74,80,91,99,183-184,216,222,259-260,262-263,303-312,321,323-324,351,365
+  s_6826a29b975abb::t_65e3670cf90d3b 266
+  s_6826a29b975abb::t_8b1d1f9726b549 345
+  s_6826a29b975abb::t_8b46b19836ca1b 313-320,328-329
+  s_6826a29b975abb::t_4eb82f66a88cca 1-6,8-15,17,43,58-59,62-65,67-68,75,125,134-135,137-139,141-143,162,165-171,185,193-194,205,210-211,213-214,217,219-220,244-247,261,300-301,325-327,330-331,358-361,363,368-373,375-379,451-455,459-460
+  s_6826a29b975abb::t_6062a51c5e7ff8 284-285
+  s_6826a29b975abb::t_4128fcf6cdb574 296-299
+projects/electron/electron/dataset-library.ts
+  s_6826a29b975abb::t_58b37abc3b895a 284-285,294
+  s_6826a29b975abb::t_745cfca8ec36a1 10,45,111-113,116-117,154-156,158-180,265-266,271,289,326-346,352-368
+  s_6826a29b975abb::t_51d9bd89311297 20-25,27,42
+  s_6826a29b975abb::t_67b26ec63f35f9 114-115,157
+  s_6826a29b975abb::t_8d52f7464f9aac 147-153
+  s_6826a29b975abb::t_bac80bb041cdbb 347-351
+  s_1126bef123b598::t_4ef60dc6233039 118
+projects/electron/electron/dataset-registry.ts
+  s_6826a29b975abb::t_43e421091a7dec 4
+  s_6826a29b975abb::t_fd56bc78c5e2b1 1-3,5-157
+projects/electron/src/app/shared/playername-id-range/dataset-id-range-surface.ts
+  s_6826a29b975abb::t_1679c26b1ebffa 9,28,89
+  s_6826a29b975abb::t_7b4005f7e04499 3,67,264
+  s_6826a29b975abb::t_e89c29c00d7150 1-2,4,6-8,10,12-22,24,26,42-43,45-54,58-66,68,71-86,88,90-97,99-110,112-113,179-182,185-189,191-208,221-243,245-263,266-286,303-341
+  s_6826a29b975abb::t_8b1d1f9726b549 5
+  s_6826a29b975abb::t_690a8ae17ef331 11,23,25,29-41,44,55-57,69-70,111,114-178,183-184,190,209-219,265,287-302
+  s_6826a29b975abb::t_5962adfd401ab2 27,87,98,220,244
+projects/electron/src/app/features/converted-datasets/converted-datasets.html
+  s_6826a29b975abb::t_08492c0124f494 4,130-133,207-208
+projects/electron/src/app/shared/playername-id-range/playername-id-range-union.ts
+  s_6826a29b975abb::t_30732ce364d092 91-100,121-124
+  s_6826a29b975abb::t_e02b0c0eef710d 1,3-26,29-75,77-90,101-120,125-142,145,151-171
+  s_6826a29b975abb::t_8b1d1f9726b549 2,76,143-144,146-150
+  s_6826a29b975abb::t_e72ffd6bd853b9 27-28
+projects/electron/electron/playername-engine-t3db.spec.ts
+  s_6826a29b975abb::t_a8dcb51a24748e 1-32,35,40-50,52-65,68-74,83,85,89-95
+  s_6826a29b975abb::t_f6b8595e14aa75 51,75-82
+  s_6826a29b975abb::t_1ca3bdf3c5105d 84
+  s_6826a29b975abb::t_8b55b52f16eb57 66-67
+  s_6826a29b975abb::t_d8d736489ddc2e 33-34,36-39,86-88
+angular.json
+  s_6826a29b975abb::t_084a0711971563 40-41
+projects/electron/electron/preload.ts
+  s_6826a29b975abb::t_294e4d1fc72e7a 6-7,46-49,73-79
+  s_6826a29b975abb::t_1b51591ae32d41 14-15,56,88-94
+  s_6826a29b975abb::t_1cb0c409929a71 12-13,50-53,80-87
+  s_6826a29b975abb::t_d8d736489ddc2e 54-55
+projects/electron/src/app/features/datasets/datasets.html
+  s_6826a29b975abb::t_053ef1a2de1a28 165-175
+projects/electron/src/app/core/app-navigation/app-navigation.spec.ts
+  s_6826a29b975abb::t_219d5ab4a9c585 73
+projects/electron/src/app/shared/dataset-id-analysis/dataset-id-analysis.ts
+  s_6826a29b975abb::t_33dce8e8c16690 33
+  s_6826a29b975abb::t_dea36dfa2dc873 1-18,20-32,34-54,56,58-126
+  s_6826a29b975abb::t_2ce5cd5c752213 19,55,57
+projects/docs/src/app/documentation.ts
+  s_6826a29b975abb::t_c6eb32b2dd5f48 67,141
+  s_6826a29b975abb::t_08d17a64c12868 327
+  s_6826a29b975abb::t_e3ef380ef03d91 115,324
+  s_6826a29b975abb::t_6f250191fdcd91 26,64-65,75,139
+projects/electron/src/app/shared/dataset-filter-drawer/dataset-filter-drawer.ts
+  s_6826a29b975abb::t_d777d075bfaf82 16,23,54,68,112-115,130
+  s_6826a29b975abb::t_642eb635cd5345 43
+  s_6826a29b975abb::t_b676f05981f695 47
+  s_6826a29b975abb::t_fe234b396fd9a1 8-12,28,59,72,108-111,134
+  s_6826a29b975abb::t_67b26ec63f35f9 17
+projects/electron/src/app/features/converted-datasets/converted-dataset-details-dialog.spec.ts
+  s_6826a29b975abb::t_116ce167391092 38-39
+  s_6826a29b975abb::t_32bf8a2af0ecbf 19
+  s_6826a29b975abb::t_40613c92d50a93 8-12,74-95,114,131,189,193-197,235,272-273
+  s_6826a29b975abb::t_b60504cf58f6b2 70-73
+  s_6826a29b975abb::t_7519b8f8e7d50e 45
+  s_6826a29b975abb::t_cd481afd7a3838 198-202
+  s_6826a29b975abb::t_30b06e8e92b7c5 203-204
+  s_6826a29b975abb::t_e4d5a11c62ab61 149-170,173-188,190-192,205-207
+  s_6826a29b975abb::t_f8b8998da6a517 15-18,20-34,171-172
+  s_6826a29b975abb::t_50352e6e8b8081 244-249
+projects/electron/src/app/features/settings/settings.spec.ts
+  s_6826a29b975abb::t_116ce167391092 48-49
+  s_6826a29b975abb::t_7519b8f8e7d50e 55
+  s_6826a29b975abb::t_83f64bd82687c7 36-37
+projects/electron/electron/dataset-importer.ts
+  s_6826a29b975abb::t_b102330387e19c 66-70,75-77
+projects/electron/src/app/shared/dataset-filter-drawer/dataset-filter-drawer.html
+  s_6826a29b975abb::t_d777d075bfaf82 41-55,57
+  s_6826a29b975abb::t_fe234b396fd9a1 58-67,69-71
+  s_6826a29b975abb::t_10cc65661c19cb 68
+projects/electron/electron/playername-engine.ts
+  s_6826a29b975abb::t_8d52f7464f9aac 82
+  s_6826a29b975abb::t_c6657a01c5f530 1-5,7-9,11,21-22,24-44,46-51,59-71,74-81,83-87,89,91-102,105-121,126-142,144-171,184-185,187-191,194,196-198,211,231-232,234-235,237-238,240,244,246,248-255
+  s_6826a29b975abb::t_67b26ec63f35f9 241-243
+  s_6826a29b975abb::t_d8d736489ddc2e 52-58,88,122-125
+  s_6826a29b975abb::t_a5018c6cc03e0e 6,172-178,180-183,186,192-193,212,214-217,219-220,222-228,230,236,245,247
+  s_6826a29b975abb::t_c27784607edfda 73
+  s_6826a29b975abb::t_e3dc6f76a0c946 10,12,14,16-20,23,45,72,90,103-104,143,179,195,199-210,213,218,221,229,233,239
+  s_6826a29b975abb::t_2087799e2b8fac 13,15
+projects/electron/electron/dataset-library.spec.ts
+  s_6826a29b975abb::t_8b470705ef1105 177-182
+  s_6826a29b975abb::t_11a3922f431218 25-26,43-44,50,150,192
+  s_6826a29b975abb::t_7fb4398289c6de 157-176,183-191
+  s_6826a29b975abb::t_2335ffc1a16871 193,195-281
+  s_6826a29b975abb::t_c91ed1925832d5 194
+projects/electron/electron/dataset-library-remove-all.spec.ts
+  s_6826a29b975abb::t_116ce167391092 41-42
+  s_6826a29b975abb::t_11a3922f431218 21-22,48
+README.md
+  s_6826a29b975abb::t_39c28b541148fe 160-165
+  s_6826a29b975abb::t_e3ef380ef03d91 172
+  s_6826a29b975abb::t_0eebcff6344262 173-178
+  s_6826a29b975abb::t_08d17a64c12868 30-31,166-171
+  s_6826a29b975abb::t_c6eb32b2dd5f48 159
+  s_6826a29b975abb::t_f0c19d0178b176 28-29,34-35,180-182
+  s_6826a29b975abb::t_6f250191fdcd91 60-62,155-156,158
+  s_6826a29b975abb::t_a4cf3a8624815f 179
+projects/electron/electron/dataset-id-analysis-handlers.ts
+  s_6826a29b975abb::t_261e92aa220218 36,56
+  s_6826a29b975abb::t_e982e258a7f064 1-35,39-55,57-140
+  s_6826a29b975abb::t_36f580133c1801 37-38
+projects/electron/electron/dataset-id-analysis.spec.ts
+  s_6826a29b975abb::t_8da5d96689659b 1-5,7-12,14-15,17-23,25-41,43-96,113-124,126-135,137-144,148-150
+  s_6826a29b975abb::t_7c66eda64c1799 24
+  s_6826a29b975abb::t_9897cec4adc102 111-112,125,145-147
+  s_6826a29b975abb::t_d902decbb1bd4f 6,97-110
+  s_6826a29b975abb::t_2f4cb4c2893e75 16,42
+  s_6826a29b975abb::t_36f580133c1801 13,136
+projects/electron/electron/dataset-id-analysis-handlers.spec.ts
+  s_6826a29b975abb::t_261e92aa220218 1-39
+projects/electron/src/app/shared/playername-id-range/dataset-id-range-camera.spec.ts
+  s_6826a29b975abb::t_ef1dc3e6c36a38 19
+  s_6826a29b975abb::t_dc3e395262fbca 1-8,10-18,20-131,145-146
+  s_6826a29b975abb::t_b4e14648809c19 9,132-144
+projects/electron/src/app/features/playernames/playernames.css
+  s_6826a29b975abb::t_a3fb6bde8ce6df 1-23
+projects/electron/src/app/features/datasets/datasets.ts
+  s_6826a29b975abb::t_67b26ec63f35f9 44
+  s_6826a29b975abb::t_053ef1a2de1a28 36,43,54,92-96,127-131,136-137,184-196,389-393,418-421
+  s_6826a29b975abb::t_72a2016d31a095 415-417
+  s_6826a29b975abb::t_2a5872c6f77d42 173
+  s_6826a29b975abb::t_febf6ac2a210fe 422-423
+projects/electron/src/app/shared/playername-id-range/playername-id-range.html
+  s_6826a29b975abb::t_12105fe7ce799e 18-19,21-24,27-28,31,34-36,38,41,45-60,65,117-124
+  s_6826a29b975abb::t_d09062d8de4571 37
+  s_6826a29b975abb::t_c4e4fea9fc4225 5-14,66,73,77,81,85,88-115
+  s_6826a29b975abb::t_4eb82f66a88cca 1-4,15-17,67-69,71-72,74-76,78-80,82-84,86-87,116,125
+  s_6826a29b975abb::t_d58b74b5aaea35 39,42,44
+  s_6826a29b975abb::t_596380f1e2fbec 25-26
+  s_6826a29b975abb::t_e7ef6de2369180 61-64
+  s_6826a29b975abb::t_a28135655d759f 20
+  s_6826a29b975abb::t_09fa8a443d5f0f 40
+  s_6826a29b975abb::t_627a54da42cb02 70
+  s_6826a29b975abb::t_75824e2a317794 29-30,32-33,43
+projects/electron/src/app/core/app-store.ts
+  s_6826a29b975abb::t_9e6b00360c8c04 10
+  s_6826a29b975abb::t_8d52f7464f9aac 12,102,216-218
+  s_6826a29b975abb::t_3abbceecaf6990 11,37,47,127-131,133-141,167-171,219
+  s_6826a29b975abb::t_0cbb88f9bf4329 132
+  s_6826a29b975abb::t_0fc8ba389d0b1a 34-36,38,43-46,142-166
+  s_6826a29b975abb::t_817cfed62f0406 172
+projects/docs/src/app/documentation.spec.ts
+  s_6826a29b975abb::t_c6eb32b2dd5f48 92
+  s_6826a29b975abb::t_54ea0dfe239ff3 35
+projects/electron/electron/dataset-exporter.spec.ts
+  s_6826a29b975abb::t_07da0cab5450ba 29-30
+  s_6826a29b975abb::t_a0874342a7c053 36
+  s_6826a29b975abb::t_d9e3e7fbb5f12d 93-94
+  s_6826a29b975abb::t_fa9c2a9e4822e0 37
+projects/electron/src/app/shared/playername-id-range/playername-id-range.spec.ts
+  s_6826a29b975abb::t_122c008ff6f27a 59-61
+  s_6826a29b975abb::t_bbaf1e693a3966 39-52,166,171-173,383-384,407-408,410-424,426-432,470
+  s_6826a29b975abb::t_4a3f666041361d 176,210-212,221-222,224-225,227-230,232,234-237,302,304,311,314,316-317,319-323,325
+  s_6826a29b975abb::t_744e6503d1c125 15,192
+  s_6826a29b975abb::t_326480ad245928 435-466,468-469
+  s_6826a29b975abb::t_18580365a11742 23-38,92,99-153,160-165
+  s_6826a29b975abb::t_45d082eccb2440 409,472
+  s_6826a29b975abb::t_627a54da42cb02 183,214-216
+  s_6826a29b975abb::t_fd255b3db486fa 220,223
+  s_6826a29b975abb::t_f0b7707711d704 7,156,168,177,329,473
+  s_6826a29b975abb::t_e7f9ada7a85eb8 6
+  s_6826a29b975abb::t_dcc29257c8e43d 1-5,8-14,16-18,20-22,64-91,93,95-98,154-155,157,159,167,169,178-182,184,206-207,218-219,328,330-335,341-342,344-349,351,474-482,485,499-500
+  s_6826a29b975abb::t_c405a8258b07f6 299
+  s_6826a29b975abb::t_62f40d2985555f 174-175,193-205,238-298
+  s_6826a29b975abb::t_2f4cb4c2893e75 303,305-309,313,315,318,324,326-327
+  s_6826a29b975abb::t_736e928f68554d 356
+  s_6826a29b975abb::t_79da72a4cfe602 359,378
+  s_6826a29b975abb::t_6d0553ec3b6d30 19,94
+  s_6826a29b975abb::t_ca258423159794 385-406
+  s_6826a29b975abb::t_0aea2398afe2ce 310,312
+  s_6826a29b975abb::t_9726a3ef069eb1 213
+  s_6826a29b975abb::t_86cc1ee2df83db 53-58,62-63,158,170,336-340,343
+  s_6826a29b975abb::t_0dd791206dd933 217,226,231,233,300-301,425,486-498
+  s_6826a29b975abb::t_d2de2b09431682 467
+  s_6826a29b975abb::t_1e28b657cd600c 185-191,208-209,350,352-355,357-358,360-377,379-382,433-434,471,483-484
+projects/electron/src/app/shared/playername-id-range/dataset-id-range-camera.ts
+  s_6826a29b975abb::t_5962adfd401ab2 2-6,34-35
+  s_6826a29b975abb::t_125426e0733ad8 7-26,28-33,36-122,125-127,134
+  s_6826a29b975abb::t_4eec2335638d4d 1,27
+  s_6826a29b975abb::t_d58b74b5aaea35 123-124,128-133
+projects/electron/electron/dataset-id-analysis.ts
+  s_6826a29b975abb::t_5a7670fdef093d 61
+  s_6826a29b975abb::t_29024b958f8818 1,3-58,63-70,72-100,102-115,119-183,187-210,213-217,221-230,236-254,258-288
+  s_6826a29b975abb::t_7c66eda64c1799 59,101
+  s_6826a29b975abb::t_36f580133c1801 2,62,116-118,184-186,211-212,231-235
+  s_6826a29b975abb::t_dba72e5d70eba6 71
+  s_6826a29b975abb::t_2ce5cd5c752213 218-220,255-257
+  s_6826a29b975abb::t_e7ef6de2369180 60
+projects/docs/src/app/documentation.additional.ts
+  s_6826a29b975abb::t_6f250191fdcd91 9-10,14,36-38,42-43,45,50-51,78
+  s_6826a29b975abb::t_4899473f6da384 49
+  s_6826a29b975abb::t_c6eb32b2dd5f48 46-47
+  s_6826a29b975abb::t_f0c19d0178b176 16,39,41,44,48,76
+  s_6826a29b975abb::t_39c28b541148fe 40
+  s_6826a29b975abb::t_64ba8c93c5e005 35
+projects/electron/src/app/shared/dataset-id-analysis/dataset-id-analysis.html
+  s_6826a29b975abb::t_9c94b9ea38de56 5-29,31,37,65,71,103,111-112,125-126
+  s_6826a29b975abb::t_8da077c599b075 105
+  s_6826a29b975abb::t_36f580133c1801 1-4,33-36,38-64,66-70,72-102,104,106-110,113-120
+  s_6826a29b975abb::t_2ce5cd5c752213 122-124
+  s_6826a29b975abb::t_b54d324e82b985 30,32,121
+projects/electron/src/app/features/converted-datasets/converted-dataset-details-dialog.html
+  s_6826a29b975abb::t_d8d736489ddc2e 89,126-127
+  s_6826a29b975abb::t_66b13c17eb3edf 103-116
+  s_6826a29b975abb::t_0ef8582d0ff1d4 61-68
+  s_6826a29b975abb::t_6957a009877c5b 13-14,16-18,20-28,71-79,82-83,85,88,90,92-95,98,117-118
+  s_6826a29b975abb::t_10cc65661c19cb 19,37-43,70,80-81,91,96-97
+projects/electron/src/app/core/dataset-column-preferences.spec.ts
+  s_6826a29b975abb::t_fa28e51497a293 89-99
+  s_6826a29b975abb::t_24571a12b9aba6 44-65,119-140
+  s_6826a29b975abb::t_bb69ca10a5a36e 19-40,73-83
+projects/electron/src/app/shared/dataset-column-editor/dataset-table-columns.ts
+  s_6826a29b975abb::t_fe234b396fd9a1 8,56
+  s_6826a29b975abb::t_d777d075bfaf82 47
+projects/electron/electron/dataset-validator.ts
+  s_6826a29b975abb::t_c27784607edfda 303
+projects/electron/electron/conversion-engine.ts
+  s_6826a29b975abb::t_c27784607edfda 124
+projects/electron/src/app/features/datasets/dataset-details-dialog.spec.ts
+  s_6826a29b975abb::t_10bab162aa0717 158-170,181-198,209-210
+  s_6826a29b975abb::t_f8b8998da6a517 15-18,20-34,171-180
+  s_6826a29b975abb::t_40613c92d50a93 8-12,59-80,113-114,199-203
+  s_6826a29b975abb::t_83f64bd82687c7 45-46
+  s_6826a29b975abb::t_b60504cf58f6b2 55-58
+  s_6826a29b975abb::t_32bf8a2af0ecbf 19
+  s_6826a29b975abb::t_cd481afd7a3838 204-208
+projects/electron/shared/contracts.ts
+  s_6826a29b975abb::t_7c66eda64c1799 162-163
+  s_6826a29b975abb::t_67b26ec63f35f9 5
+  s_6826a29b975abb::t_cc54c2c891a144 4,6,20-21,27,221,297,302-306,309,315,328
+  s_6826a29b975abb::t_7da167e5f7dcfa 128
+  s_6826a29b975abb::t_eab114946cbc28 143-161,164-210,267-269,368-369,379
+  s_6826a29b975abb::t_2087799e2b8fac 380-382
+  s_6826a29b975abb::t_fb1e3ebe2b2861 263-266,270-295,370-371
+  s_6826a29b975abb::t_b86080d1e10bb5 129,214-215,227,254-262,296,298-301,307-308,310-314,316-327,329-332,372-373,383
+projects/electron/src/app/shared/playername-id-range/playername-id-range.css
+  s_6826a29b975abb::t_d58b74b5aaea35 29-32
+  s_6826a29b975abb::t_c4e4fea9fc4225 55-78
+  s_6826a29b975abb::t_75824e2a317794 14-20
+  s_6826a29b975abb::t_12105fe7ce799e 2-5,104,108,112,116
+  s_6826a29b975abb::t_627a54da42cb02 8,23,33,40,45,51,79,90,96,103,107,111,115,120
+  s_6826a29b975abb::t_888c5eced0e297 25-26
+  s_6826a29b975abb::t_4eb82f66a88cca 1,6-7,9-13,21-22,24,27-28,34-39,41-44,46-50,52-54,80-89,91-95,97-102,105-106,109-110,113-114,117-119,121-123
+projects/electron/src/app/features/datasets/dataset-details-dialog.ts
+  s_6826a29b975abb::t_67b26ec63f35f9 6
+  s_6826a29b975abb::t_f0b7707711d704 18-19,21-23,25-26
+  s_6826a29b975abb::t_a53aafb041001f 42-47
+  s_6826a29b975abb::t_66b13c17eb3edf 8-11,24,34-41
+  s_6826a29b975abb::t_0ef8582d0ff1d4 7,20
+projects/electron/electron/playername-analysis.ts
+  s_6826a29b975abb::t_a55b110ee6a4c8 1-4,6-7,10-46,49-61,63-117,125-205
+  s_6826a29b975abb::t_36f580133c1801 5,9
+  s_6826a29b975abb::t_a26690b62be73f 8,62
+  s_6826a29b975abb::t_a575e7d1fedf51 47-48
+  s_6826a29b975abb::t_2087799e2b8fac 118-124
+projects/electron/src/app/shared/dataset-id-analysis/dataset-id-analysis.css
+  s_6826a29b975abb::t_33dce8e8c16690 1-33
+projects/electron/src/app/features/datasets/dataset-details-dialog.html
+  s_6826a29b975abb::t_5470a0fe6577de 86-90,95-97,112
+  s_6826a29b975abb::t_a53aafb041001f 14-16,24-27,72-85,113-114
+  s_6826a29b975abb::t_0ef8582d0ff1d4 64-71
+  s_6826a29b975abb::t_66b13c17eb3edf 91-94,98-111
+  s_6826a29b975abb::t_ef0ed0a15d802f 28-30
+  s_6826a29b975abb::t_bbeff39a763385 115
+projects/electron/src/app/features/converted-datasets/converted-datasets.spec.ts
+  s_6826a29b975abb::t_116ce167391092 27-28
+  s_6826a29b975abb::t_7519b8f8e7d50e 34,51
+  s_6826a29b975abb::t_bac80bb041cdbb 91-96
+  s_6826a29b975abb::t_24571a12b9aba6 130
+projects/electron/src/app/features/playernames/playernames.html
+  s_6826a29b975abb::t_912442d5902fea 177-179,181,183-184,186-189,196-200,205-209,243,245-248,251,253-254,259,277,279,298,301,304,351,374,376-381
+  s_6826a29b975abb::t_d8d736489ddc2e 322-325,400-404
+  s_6826a29b975abb::t_67b26ec63f35f9 232
+  s_6826a29b975abb::t_2804d03459bd7b 386,391-396
+  s_6826a29b975abb::t_1c23bdab3d8967 142-143,146-149,362-373
+  s_6826a29b975abb::t_bac80bb041cdbb 4
+  s_6826a29b975abb::t_0eeaf4c9e7e185 60,120-141,144-145,150-157,160-165,172,210-215,218-223
+  s_6826a29b975abb::t_ddcbd36c4500a3 1-3,5-59,61-119,158-159,166-171,173-176,180,182,185,190-195,201-204,216-217,224-231,233-242,244,249-250,252,255-258,260-276,278,280-297,299-300,302-303,305-321,326-350,352-361,375,382-385,387-390,397-399,405-412
+projects/electron/src/app/shared/playername-id-range/playername-id-range-tooltip.spec.ts
+  s_6826a29b975abb::t_96fc0ace4aef4f 5,152-191
+  s_6826a29b975abb::t_a5a8ec521536cf 110-111
+  s_6826a29b975abb::t_1f46272364ae4f 115-129
+  s_6826a29b975abb::t_986b0e2b243c11 28,42-44
+  s_6826a29b975abb::t_b4e14648809c19 1-4,6-22,24,29-31,40,45-100,103-109,112-114,130-142,145-149,151,192-193
+  s_6826a29b975abb::t_5c80cd8823496b 23,25-27,32-39,41,101-102,143-144,150
+projects/electron/src/app/shared/playername-id-range/playername-id-union.ts
+  s_6826a29b975abb::t_99997bbb32fdd3 1-6,8-12,14-30
+  s_6826a29b975abb::t_8b1d1f9726b549 7,13
+projects/electron/src/app/shared/playername-id-range/playername-id-range-union.spec.ts
+  s_6826a29b975abb::t_89935c56d91f44 70
+  s_6826a29b975abb::t_8b1d1f9726b549 5,77
+  s_6826a29b975abb::t_be599cd0ab030b 1-4,6-69,71-76,78-137
+projects/electron/src/app/features/converted-datasets/converted-datasets.ts
+  s_6826a29b975abb::t_08492c0124f494 76,108-110,117,153-160,163
+  s_6826a29b975abb::t_10cc65661c19cb 161-162
+  s_6826a29b975abb::t_d8d736489ddc2e 15
+  s_6826a29b975abb::t_622c820877bf93 164-165
+projects/electron/electron/playername-analysis.spec.ts
+  s_6826a29b975abb::t_a575e7d1fedf51 17-21
+  s_6826a29b975abb::t_6581290bf4f623 10-14
+  s_6826a29b975abb::t_fe557fa48638e9 1-4,7-9,73-118
+  s_6826a29b975abb::t_1a6cbf034e4e99 123-130,132-142,144,146-167,169-171
+  s_6826a29b975abb::t_89935c56d91f44 131,143,145,168
+  s_6826a29b975abb::t_119aefa9f7b5e6 5-6,15-16,22-28,30-72,122,172
+  s_6826a29b975abb::t_0dd791206dd933 29
+  s_6826a29b975abb::t_dec60198d8a2ef 119-121
+projects/electron/src/app/core/app-store.spec.ts
+  s_6826a29b975abb::t_3130842fa53393 80-86,108
+  s_6826a29b975abb::t_d74440ff8d1a33 87-93,109,181-197
+  s_6826a29b975abb::t_dc4df93b43de4c 94-99,110
+  s_6826a29b975abb::t_116ce167391092 33-34
+  s_6826a29b975abb::t_7519b8f8e7d50e 40
+  s_6826a29b975abb::t_83f64bd82687c7 21-22
+  s_6826a29b975abb::t_b2bc1d0a6e95a4 198-199
+projects/electron/electron/dataset-id-analysis-worker.ts
+  s_6826a29b975abb::t_e982e258a7f064 1-25
+projects/electron/electron/playername-handlers.ts
+  s_6826a29b975abb::t_ce0e981a261913 1,32
+  s_6826a29b975abb::t_0fc8ba389d0b1a 225,228,233
+  s_6826a29b975abb::t_34f98bcba9872d 2,5-7,10-12,14-27,31,33-53,62-75,78-99,101-119,131,235-247,250,253-254,259,268-273,275-282,288-291,319-321,323-328,331-335,338-354,356-360,366-380
+  s_6826a29b975abb::t_d8d736489ddc2e 100,264
+  s_6826a29b975abb::t_8d52f7464f9aac 76,283-287,361-365
+  s_6826a29b975abb::t_5f5d64e2b80369 3-4,54-61,77,120-130,248,251-252,255,257-258,260-263,267,274,292-318,322,330,336-337,355
+  s_6826a29b975abb::t_d30d4a17e47ffa 249,256,329
+  s_6826a29b975abb::t_374768f683d2ff 8-9,13,28-30,132-134,137-224,226-227,229-232,234
+  s_6826a29b975abb::t_9e6b00360c8c04 135-136
+  s_6826a29b975abb::t_67b26ec63f35f9 265-266
+projects/electron/src/app/app.routes.spec.ts
+  s_6826a29b975abb::t_219d5ab4a9c585 11
+projects/electron/src/app/features/datasets/datasets.behavior.spec.ts
+  s_6826a29b975abb::t_83f64bd82687c7 31-32
+  s_6826a29b975abb::t_fcd86257411aab 134
+projects/electron/src/app/shared/playername-id-range/dataset-id-range-canvas-renderer.ts
+  s_6826a29b975abb::t_82238cdec30b5c 1,50-52,63-64,67
+  s_6826a29b975abb::t_a949840c2ab62c 4-6,8-9,11-32,34,36-38,53-54,57-58,69-76
+  s_6826a29b975abb::t_8b1d1f9726b549 2
+  s_6826a29b975abb::t_9760232ad84871 55-56,59
+  s_6826a29b975abb::t_fe6b64d02dbf87 7,41,43,45,47,60-62,65-66,68
+  s_6826a29b975abb::t_b866eefde0d858 10,39-40,42,44,46,48-49
+  s_6826a29b975abb::t_5962adfd401ab2 3,33,35
+projects/electron/src/app/features/datasets/datasets.spec.ts
+  s_6826a29b975abb::t_83f64bd82687c7 33-34
+  s_6826a29b975abb::t_bb69ca10a5a36e 101,130-135
+projects/electron/src/app/shared/playername-id-range/dataset-id-range.fixture.ts
+  s_6826a29b975abb::t_e7f9ada7a85eb8 1-15
+projects/electron/electron/dataset-id-analysis-t3db.spec.ts
+  s_6826a29b975abb::t_842f812fd66e06 36
+  s_6826a29b975abb::t_36f580133c1801 24-29
+  s_6826a29b975abb::t_23c236d7deac9d 18,21,51,70
+  s_6826a29b975abb::t_a436b8193a2736 1,3-17,19-20,22-23,30-35,37-50,52-69,71-72
+  s_6826a29b975abb::t_20df9e90b8e1cf 2
+projects/electron/src/app/core/app-navigation/app-navigation.ts
+  s_6826a29b975abb::t_96e3a1db31fca9 62
+projects/electron/src/app/features/converted-datasets/converted-dataset-details-dialog.ts
+  s_6826a29b975abb::t_f0b7707711d704 22-23,25-27,29-30
+  s_6826a29b975abb::t_10cc65661c19cb 55-56
+  s_6826a29b975abb::t_2dd1d399c0ed95 46-54,57,64
+  s_6826a29b975abb::t_d723d3e53d9882 6-10,58-63
+  s_6826a29b975abb::t_0ef8582d0ff1d4 11,24
+  s_6826a29b975abb::t_66b13c17eb3edf 12-15,28,38-45
+projects/electron/src/app/features/playernames/playernames.ts
+  s_6826a29b975abb::t_37ca3554f5f221 7-8,22,51,68,74-77,162-163,166-168,170,172-175,211-212,220,224,228-243,256,264-269,272-274,280,282,285-287,295,308,344-351
+  s_6826a29b975abb::t_42b8105cfa6fff 21,94-95,121-127,139-142,164-165,182,191,198,252,260,311,313-339
+  s_6826a29b975abb::t_67b26ec63f35f9 28
+  s_6826a29b975abb::t_1c23bdab3d8967 30-33,59,130-138
+  s_6826a29b975abb::t_f0b7707711d704 128-129
+  s_6826a29b975abb::t_a3fb6bde8ce6df 1-6,9-20,23-27,29,34-50,52-58,60-67,69-73,78-93,96-120,143-161,169,171,176-181,183-190,192-197,199-210,213-219,221-223,225-227,244-251,253-255,257-259,261-263,270-271,275-279,281,283-284,288-294,296-307,309-310,312,340-343,352-365
+projects/electron/src/app/shared/dataset-column-editor/dataset-column-editor.spec.ts
+  s_6826a29b975abb::t_bb69ca10a5a36e 70
+projects/electron/src/app/features/convert/convert.spec.ts
+  s_6826a29b975abb::t_116ce167391092 39-40
+  s_6826a29b975abb::t_7519b8f8e7d50e 46
+  s_6826a29b975abb::t_83f64bd82687c7 27-28
+projects/electron/src/app/features/converted-datasets/converted-datasets.deletion.spec.ts
+  s_6826a29b975abb::t_df184fd4c21d13 166
+  s_6826a29b975abb::t_7519b8f8e7d50e 26,43
+  s_6826a29b975abb::t_116ce167391092 19-20
+projects/electron/electron/playername-analysis-worker.ts
+  s_6826a29b975abb::t_374768f683d2ff 1-25
+bun.lock
+  s_6826a29b975abb::t_408979fa7037bf 27-28,642-643,744-745,908-910,1184-1185,1400-1401,1550-1551,1568-1569,1842-1843,1882-1885,2156-2157,2640-2641
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.21",
+  "base_commit_sha": "bcc9f26b757323bcc7d0a55c1cf3d856a198ccb5",
+  "prompts": {},
+  "sessions": {
+    "s_1126bef123b598": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019fdbd2-33e9-7672-92e6-65a7a04ac8ed",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "Celtian <dominik.hladik@seznam.cz>"
+    },
+    "s_6826a29b975abb": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019fdb7a-184b-72e3-b5b6-e66cf0437fc3",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "Celtian <dominik.hladik@seznam.cz>"
+    }
+  }
+}
