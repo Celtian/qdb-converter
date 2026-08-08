@@ -1,6 +1,5 @@
-import { access } from 'node:fs/promises';
+import { access, readFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
-import sharp from 'sharp';
 import { describe, expect, it } from 'vitest';
 
 import { FLAGS } from '../../projects/electron/src/app/shared/country-flag/country-flags.generated';
@@ -11,7 +10,7 @@ describe('generated flag assets', () => {
     [40, 30],
     [60, 45],
   ])('generates %i×%i PNGs with exact dimensions', async (width, height) => {
-    const image = sharp(
+    const image = await readFile(
       resolve(
         process.cwd(),
         'projects',
@@ -23,7 +22,10 @@ describe('generated flag assets', () => {
       ),
     );
 
-    await expect(image.metadata()).resolves.toMatchObject({ width, height, format: 'png' });
+    expect(image.subarray(0, 8)).toEqual(Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]));
+    expect(image.toString('ascii', 12, 16)).toBe('IHDR');
+    expect(image.readUInt32BE(16)).toBe(width);
+    expect(image.readUInt32BE(20)).toBe(height);
   });
 
   it.each(['au', 'ca', 'de', 'es', 'it', 'us'])('keeps national flag %s', (code) => {

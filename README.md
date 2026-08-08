@@ -61,6 +61,11 @@ validate requests and run imports, validation, conversions, and Playernames oper
 threads. Imported and converted catalogs use separate managed snapshots under Electron's
 `userData` directory; source files and external results are never removed by catalog actions.
 
+Brand artwork is maintained and generated in
+[`Celtian/app-logos`](https://github.com/Celtian/app-logos) under the `qdb-converter` project. This
+repository checks in only the generated logo and favicon it consumes, plus the derived Windows
+packaging icon. Update the canonical artwork there before refreshing these assets.
+
 ## 🚀 Getting started
 
 Requirements:
