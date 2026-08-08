@@ -1,0 +1,16 @@
+CHANGELOG.md
+  h_aa1f579535d063 7-10,13-14,19
+package.json
+  h_aa1f579535d063 3
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.21",
+  "base_commit_sha": "242b46011877c76330ec2cbb4e0c4ac7a1aa1f8a",
+  "prompts": {},
+  "humans": {
+    "h_aa1f579535d063": {
+      "author": "Celtian <dominik.hladik@seznam.cz>"
+    }
+  }
+}
