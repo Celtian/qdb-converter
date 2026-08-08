@@ -105,7 +105,7 @@ const inspectSource = (
   data: { kind: 'text-folder'; paths: [string] } | { kind: 't3db'; paths: [string, string] },
 ): Promise<InspectedSource> =>
   new Promise((resolveInspection, rejectInspection) => {
-    const worker = new Worker(join(__dirname, '..', 'inspection-worker.js'), { workerData: data });
+    const worker = new Worker(join(__dirname, 'inspection-worker.js'), { workerData: data });
     worker.once(
       'message',
       (message: { type?: string; inspection?: InspectedSource; message?: string }) => {
@@ -128,7 +128,7 @@ type ValidationWorkerResult = DatasetValidationResult | DatasetImportValidationR
 
 const runValidationWorker = (data: ValidationWorkerData): Promise<ValidationWorkerResult> =>
   new Promise((resolveValidation, rejectValidation) => {
-    const worker = new Worker(join(__dirname, '..', 'validation-worker.js'), {
+    const worker = new Worker(join(__dirname, 'validation-worker.js'), {
       workerData: data,
     });
     let settled = false;
@@ -299,7 +299,7 @@ const runImportWorker = (
   },
 ): Promise<ImportWorkerResult> =>
   new Promise((resolve) => {
-    const worker = new Worker(join(__dirname, '..', 'import-worker.js'), { workerData: data });
+    const worker = new Worker(join(__dirname, 'import-worker.js'), { workerData: data });
     activeImportWorker = worker;
     let settled = false;
     const finish = (result: ImportWorkerResult): void => {
