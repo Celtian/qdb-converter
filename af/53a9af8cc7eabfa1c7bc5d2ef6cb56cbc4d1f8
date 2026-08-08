@@ -1,0 +1,23 @@
+projects/electron/electron/dataset-import-handlers.ts
+  s_ba8b0736c2d607::t_d82f761d1df281 108,131,302
+projects/electron/electron/dataset-import-handlers.spec.ts
+  s_ba8b0736c2d607::t_d82f761d1df281 1-11,13-17,24-29,31-37,71-72,75-80,82-151,156-184
+  s_ba8b0736c2d607::t_bfad2b68547672 18-23,30,38-70,73-74,81
+  s_ba8b0736c2d607::t_965e899a2f211d 12,152-155
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.21",
+  "base_commit_sha": "af53a9af8cc7eabfa1c7bc5d2ef6cb56cbc4d1f8",
+  "prompts": {},
+  "sessions": {
+    "s_ba8b0736c2d607": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019fe236-3e93-7bf3-b8db-b8235d9f98f0",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "Celtian <dominik.hladik@seznam.cz>"
+    }
+  }
+}
