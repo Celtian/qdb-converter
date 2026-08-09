@@ -1,0 +1,77 @@
+eslint.config.js
+  s_f587b65efcb353::t_6b9e285e46fa21 99-106
+projects/electron/src/app/features/datasets/datasets.html
+  s_f587b65efcb353::t_65fcc8f5eaada6 176-178
+  s_f587b65efcb353::t_66197075ded2a8 112,114-116,254
+projects/electron/src/app/shared/dataset-id-analysis/dataset-id-analysis.html
+  s_f587b65efcb353::t_d3549692dfeb9b 89,98
+projects/electron/src/app/features/converted-datasets/converted-datasets.ts
+  s_f587b65efcb353::t_efb8fd0a3a1622 93
+  s_f587b65efcb353::t_65fcc8f5eaada6 45-51,164
+  s_f587b65efcb353::t_66197075ded2a8 39,68
+projects/electron/src/app/features/playernames/playernames.html
+  s_f587b65efcb353::t_66197075ded2a8 87-90,97-100
+projects/electron/src/app/features/datasets/datasets.ts
+  s_f587b65efcb353::t_66197075ded2a8 41,80
+  s_f587b65efcb353::t_65fcc8f5eaada6 106-112
+projects/electron/src/app/features/settings/settings.html
+  s_f587b65efcb353::t_66197075ded2a8 44,60
+projects/electron/src/app/features/datasets/dataset-details-dialog.html
+  s_f587b65efcb353::t_65fcc8f5eaada6 78
+projects/electron/src/app/features/playernames/playernames.ts
+  s_f587b65efcb353::t_66197075ded2a8 47
+  s_f587b65efcb353::t_89481291753aa0 34
+projects/electron/src/app/features/converted-datasets/converted-dataset-details-dialog.ts
+  s_f587b65efcb353::t_65fcc8f5eaada6 20-38,57-60
+projects/electron/src/app/features/converted-datasets/converted-dataset-details-dialog.html
+  s_f587b65efcb353::t_65fcc8f5eaada6 14,80
+projects/electron/src/app/shared/template-value-pipes.spec.ts
+  s_f587b65efcb353::t_6b9e285e46fa21 1-30
+projects/electron/src/app/shared/dataset-column-editor/dataset-column-editor.html
+  s_f587b65efcb353::t_66197075ded2a8 21
+projects/electron/src/app/features/datasets/dataset-details-dialog.ts
+  s_f587b65efcb353::t_65fcc8f5eaada6 16-21,40-42
+projects/electron/src/app/features/converted-datasets/converted-datasets.html
+  s_f587b65efcb353::t_66197075ded2a8 104,106-108,190
+  s_f587b65efcb353::t_65fcc8f5eaada6 134
+projects/electron/src/app/features/import-datasets/import-datasets.html
+  s_f587b65efcb353::t_f59dcf185f3469 340,342,346-347,457,549
+  s_f587b65efcb353::t_197952d6524239 282
+  s_f587b65efcb353::t_66197075ded2a8 217,224,355-362,371,379,386
+projects/electron/src/app/shared/template-value-pipes.ts
+  s_f587b65efcb353::t_6b9e285e46fa21 1-22
+projects/electron/src/app/shared/dataset-column-editor/dataset-column-editor.ts
+  s_f587b65efcb353::t_66197075ded2a8 42
+projects/electron/src/app/features/validate-dataset/validate-dataset.ts
+  s_f587b65efcb353::t_d3549692dfeb9b 87-93
+projects/electron/src/app/features/settings/settings.ts
+  s_f587b65efcb353::t_66197075ded2a8 46
+  s_f587b65efcb353::t_89481291753aa0 47
+projects/electron/src/app/features/validate-dataset/validate-dataset.html
+  s_f587b65efcb353::t_d3549692dfeb9b 120
+projects/electron/src/app/shared/dataset-id-analysis/dataset-id-analysis.ts
+  s_f587b65efcb353::t_d3549692dfeb9b 27-28,64-69
+projects/electron/src/app/features/import-datasets/import-datasets.ts
+  s_f587b65efcb353::t_66197075ded2a8 36,66-67
+  s_f587b65efcb353::t_f59dcf185f3469 51-55,112-137
+projects/electron/src/app/shared/validation-report/validation-report.ts
+  s_f587b65efcb353::t_d3549692dfeb9b 7-19,44-45
+projects/electron/src/app/shared/validation-report/validation-report.html
+  s_f587b65efcb353::t_d3549692dfeb9b 43,48,86,91
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.21",
+  "base_commit_sha": "17f1ce45888e552ab13dd81d09aecb38106c1b56",
+  "prompts": {},
+  "sessions": {
+    "s_f587b65efcb353": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019fe5b8-f004-7cf1-be67-c8609535c1aa",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "Celtian <dominik.hladik@seznam.cz>"
+    }
+  }
+}
