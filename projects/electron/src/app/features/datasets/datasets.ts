@@ -38,6 +38,7 @@ import {
 } from '../../shared/dataset-filter-drawer/dataset-filter-drawer';
 import { PageHeader } from '../../shared/page-header/page-header';
 import { StatusBadge } from '../../shared/status-badge/status-badge';
+import { SetHasPipe } from '../../shared/template-value-pipes';
 import { DatasetDetailsDialog, type DatasetDetailsDialogResult } from './dataset-details-dialog';
 
 type DatasetSortKey =
@@ -76,6 +77,7 @@ const sortLabels: Record<DatasetSortKey, string> = {
     MatTableModule,
     PageHeader,
     RouterLink,
+    SetHasPipe,
     StatusBadge,
   ],
   templateUrl: './datasets.html',
@@ -101,6 +103,13 @@ export class ImportedDatasets {
   protected readonly sort = signal<DatasetSort>({ active: 'imported', direction: 'desc' });
   protected readonly sortAnnouncement = signal('');
   protected readonly selectedIds = signal<ReadonlySet<string>>(new Set());
+  protected readonly playernameOperationLabels = computed<Record<string, string>>(() =>
+    Object.fromEntries(
+      this.store
+        .importedDatasets()
+        .map((dataset) => [dataset.id, this.playernameOperationLabel(dataset)]),
+    ),
+  );
   protected readonly deletionPending = signal(false);
   protected readonly columnDefinitions = columnsByDatasetTable.imported;
   private readonly columnPreference = signal(this.columnPreferences.load('imported'));
@@ -225,10 +234,6 @@ export class ImportedDatasets {
       .subscribe((confirmed) => {
         if (confirmed) void this.deleteDataset(dataset.id);
       });
-  }
-
-  protected isSelected(dataset: ImportedDatasetDescriptor): boolean {
-    return this.selectedIds().has(dataset.id);
   }
 
   protected toggleRow(dataset: ImportedDatasetDescriptor, checked: boolean): void {

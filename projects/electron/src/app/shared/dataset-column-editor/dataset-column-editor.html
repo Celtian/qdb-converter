@@ -18,7 +18,7 @@
       [cdkDragData]="column"
     >
       <mat-checkbox
-        [checked]="isColumnVisible(column)"
+        [checked]="column.required || visibilityModel()[column.key]"
         [disabled]="column.required"
         (change)="setColumnVisibility(column, $event.checked)"
       >

@@ -24,6 +24,8 @@ interface TableDetails {
   name: string;
   analysis?: DatasetTableIdAnalysis;
   conversion?: TableConversionSummary;
+  duplicateSamplesText: string;
+  invalidSamplesText: string;
 }
 
 @Component({
@@ -59,6 +61,12 @@ export class DatasetIdAnalysis {
       name,
       analysis: analyses.get(name),
       conversion: conversions.get(name),
+      duplicateSamplesText: analyses.get(name)?.duplicateSamples.join(', ') ?? '',
+      invalidSamplesText:
+        analyses
+          .get(name)
+          ?.invalidSamples.map((sample) => `row ${sample.row}: ${sample.value}`)
+          .join('; ') ?? '',
     }));
   });
 
@@ -80,16 +88,6 @@ export class DatasetIdAnalysis {
 
   protected retry(): void {
     void this.analyze();
-  }
-
-  protected duplicateSamples(table: DatasetTableIdAnalysis): string {
-    return table.duplicateSamples.join(', ');
-  }
-
-  protected invalidSamples(table: DatasetTableIdAnalysis): string {
-    return table.invalidSamples
-      .map((sample) => 'row ' + sample.row + ': ' + sample.value)
-      .join('; ');
   }
 
   private async analyze(): Promise<void> {

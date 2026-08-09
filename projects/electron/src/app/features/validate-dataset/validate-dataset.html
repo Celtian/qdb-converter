@@ -117,7 +117,7 @@
                 <strong>{{ dataset.name }}</strong>
                 <app-status-badge [status]="dataset.status" />
               </div>
-              <p class="text-on-surface-variant">{{ datasetOrigin(dataset) }}</p>
+              <p class="text-on-surface-variant">{{ selectedDatasetOrigin() }}</p>
               <p class="text-on-surface-variant">
                 {{ dataset.tableCount }} tables · {{ dataset.rowCount }} rows
               </p>

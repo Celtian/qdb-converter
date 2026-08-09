@@ -86,7 +86,7 @@
                       {{ analysis.duplicateCount | number }} duplicate
                       {{ analysis.duplicateCount === 1 ? 'value' : 'values' }}.
                       @if (analysis.duplicateSamples.length) {
-                        Samples: {{ duplicateSamples(analysis) }}.
+                        Samples: {{ table.duplicateSamplesText }}.
                       }
                     </p>
                   }
@@ -95,7 +95,7 @@
                       {{ analysis.invalidCount | number }} invalid
                       {{ analysis.invalidCount === 1 ? 'value' : 'values' }}.
                       @if (analysis.invalidSamples.length) {
-                        Samples: {{ invalidSamples(analysis) }}.
+                        Samples: {{ table.invalidSamplesText }}.
                       }
                     </p>
                   }

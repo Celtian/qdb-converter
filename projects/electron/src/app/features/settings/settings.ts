@@ -43,7 +43,8 @@ export class Settings {
   private readonly dialog = inject(MatDialog);
   private readonly columnPreferences = inject(DatasetColumnPreferences);
   protected readonly columnDefinitions = columnsByDatasetTable;
-  protected readonly defaultColumnPreference = defaultDatasetColumnPreference;
+  protected readonly defaultImportedColumnPreference = defaultDatasetColumnPreference('imported');
+  protected readonly defaultConvertedColumnPreference = defaultDatasetColumnPreference('converted');
   protected readonly importedColumnPreference = signal(this.columnPreferences.load('imported'));
   protected readonly convertedColumnPreference = signal(this.columnPreferences.load('converted'));
   protected readonly deletionPending = signal(false);

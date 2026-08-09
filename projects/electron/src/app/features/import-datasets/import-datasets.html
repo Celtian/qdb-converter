@@ -214,14 +214,14 @@
 
                   <p
                     class="m-0 flex min-w-0 items-center gap-2 pl-14 text-sm text-on-surface-variant max-xs:items-start max-xs:pl-0"
-                    [title]="candidate.originalPaths.join(' · ')"
+                    [title]="candidate.originalPaths | arrayJoin: ' · '"
                   >
                     <mat-icon class="size-4.5 shrink-0 text-lg" aria-hidden="true"
                       >folder_open</mat-icon
                     >
                     <span
                       class="truncate max-xs:overflow-visible max-xs:wrap-anywhere max-xs:whitespace-normal"
-                      >{{ candidate.originalPaths.join(' · ') }}</span
+                      >{{ candidate.originalPaths | arrayJoin: ' · ' }}</span
                     >
                   </p>
 
@@ -279,7 +279,7 @@
             </div>
 
             <div class="grid gap-3">
-              @for (candidate of candidates(); track candidate.selectionId) {
+              @for (candidate of reviewCandidates(); track candidate.selectionId) {
                 <mat-card
                   appearance="outlined"
                   class="grid gap-3.5 rounded-2xl border-outline-variant bg-surface-container-low p-4"
@@ -337,14 +337,14 @@
                         autocomplete="off"
                         [value]="candidate.name"
                         [errorStateMatcher]="
-                          nameHasError(candidate) ? showErrorStateMatcher : hideErrorStateMatcher
+                          candidate.nameHasError ? showErrorStateMatcher : hideErrorStateMatcher
                         "
-                        [attr.aria-invalid]="nameHasError(candidate) ? 'true' : 'false'"
+                        [attr.aria-invalid]="candidate.nameHasError ? 'true' : 'false'"
                         [disabled]="validationRunning()"
                         (input)="changeName(candidate.selectionId, $event)"
                       />
-                      @if (nameHasError(candidate)) {
-                        <mat-error>{{ firstValidationMessage(candidate) }}</mat-error>
+                      @if (candidate.nameHasError) {
+                        <mat-error>{{ candidate.firstValidationMessage }}</mat-error>
                       }
                     </mat-form-field>
                     <mat-form-field appearance="outline">
@@ -352,9 +352,15 @@
                       <mat-select
                         [value]="candidate.version"
                         [errorStateMatcher]="
-                          versionHasError(candidate) ? showErrorStateMatcher : hideErrorStateMatcher
+                          !(candidate.matchingVersions | arrayIncludes: candidate.version)
+                            ? showErrorStateMatcher
+                            : hideErrorStateMatcher
                         "
-                        [attr.aria-invalid]="versionHasError(candidate) ? 'true' : 'false'"
+                        [attr.aria-invalid]="
+                          !(candidate.matchingVersions | arrayIncludes: candidate.version)
+                            ? 'true'
+                            : 'false'
+                        "
                         [disabled]="validationRunning()"
                         (valueChange)="changeVersion(candidate.selectionId, $event)"
                       >
@@ -362,7 +368,7 @@
                           <mat-option [value]="version">FIFA {{ version }}</mat-option>
                         }
                       </mat-select>
-                      @if (versionHasError(candidate)) {
+                      @if (!(candidate.matchingVersions | arrayIncludes: candidate.version)) {
                         <mat-error>Select a matching FIFA version.</mat-error>
                       }
                     </mat-form-field>
@@ -370,14 +376,14 @@
 
                   <p
                     class="m-0 flex min-w-0 items-center gap-2 pl-14 text-sm text-on-surface-variant max-xs:items-start max-xs:pl-0"
-                    [title]="candidate.originalPaths.join(' · ')"
+                    [title]="candidate.originalPaths | arrayJoin: ' · '"
                   >
                     <mat-icon class="size-4.5 shrink-0 text-lg" aria-hidden="true"
                       >folder_open</mat-icon
                     >
                     <span
                       class="truncate max-xs:overflow-visible max-xs:wrap-anywhere max-xs:whitespace-normal"
-                      >{{ candidate.originalPaths.join(' · ') }}</span
+                      >{{ candidate.originalPaths | arrayJoin: ' · ' }}</span
                     >
                   </p>
 
@@ -448,7 +454,7 @@
                     >
                       {{ candidate.name }}
                     </h3>
-                    @if (validationState(candidate.selectionId); as state) {
+                    @if (validationStates()[candidate.selectionId]; as state) {
                       <div class="border-b border-outline-variant p-4">
                         @switch (state.status) {
                           @case ('pending') {
@@ -540,7 +546,7 @@
                         {{ result.status === 'completed' ? 'check_circle' : 'error' }}
                       </mat-icon>
                       <span>
-                        <strong>{{ resultLabel(result) }}</strong> ·
+                        <strong>{{ resultLabels()[result.selectionId] }}</strong> ·
                         {{
                           result.status === 'completed'
                             ? 'Imported successfully'

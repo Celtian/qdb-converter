@@ -31,6 +31,7 @@ import {
   PlayernameIdLanes,
   playernameSummaryProfiles,
 } from '../../shared/playername-id-range/playername-id-lanes';
+import { ArrayIncludesPipe } from '../../shared/template-value-pipes';
 
 type PlayernameDataset = ImportedDatasetDescriptor | ConvertedDatasetDescriptor;
 type OutputKind = PlayernameOutput['kind'];
@@ -43,6 +44,7 @@ const searchDetails = (dataset: PlayernameDataset): string[] =>
 @Component({
   selector: 'app-playernames',
   imports: [
+    ArrayIncludesPipe,
     DecimalPipe,
     FormField,
     MatAutocompleteModule,

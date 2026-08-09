@@ -109,9 +109,11 @@
             </th>
             <td *matCellDef="let dataset" mat-cell>
               <mat-checkbox
-                [checked]="isSelected(dataset)"
+                [checked]="selectedIds() | setHas: dataset.id"
                 [disabled]="deletionPending()"
-                [aria-label]="(isSelected(dataset) ? 'Deselect ' : 'Select ') + dataset.name"
+                [aria-label]="
+                  ((selectedIds() | setHas: dataset.id) ? 'Deselect ' : 'Select ') + dataset.name
+                "
                 (click)="$event.stopPropagation()"
                 (change)="toggleRow(dataset, $event.checked)"
               />
@@ -171,7 +173,9 @@
             >
               Latest operation
             </th>
-            <td *matCellDef="let dataset" mat-cell>{{ playernameOperationLabel(dataset) }}</td>
+            <td *matCellDef="let dataset" mat-cell>
+              {{ playernameOperationLabels()[dataset.id] }}
+            </td>
           </ng-container>
           <ng-container matColumnDef="tables">
             <th
@@ -247,7 +251,7 @@
           <tr
             *matRowDef="let row; columns: displayedColumns()"
             mat-row
-            [class.bg-secondary-container]="isSelected(row)"
+            [class.bg-secondary-container]="selectedIds() | setHas: row.id"
           ></tr>
         </table>
       </div>
