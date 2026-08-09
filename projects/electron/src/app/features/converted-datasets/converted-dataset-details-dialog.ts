@@ -17,6 +17,25 @@ import { StatusBadge } from '../../shared/status-badge/status-badge';
 
 export type ConvertedDatasetDetailsDialogResult = 'rename';
 
+const resultKindLabel = (kind: DatasetResultKind): string => {
+  switch (kind) {
+    case 'conversion':
+      return 'Conversion';
+    case 'playernames-minimize':
+      return 'Playernames minimize';
+    case 'playernames-remove-unused':
+      return 'Remove unused playernames';
+    case 'playernames-combined':
+      return 'Remove unused and minimize playernames';
+  }
+};
+
+const operationsLabel = (operations: PlayernameOperations): string => {
+  if (operations.minimize && operations.removeUnused)
+    return 'Remove unused names, then minimize ID holes';
+  return operations.minimize ? 'Minimize ID holes' : 'Remove unused names';
+};
+
 @Component({
   selector: 'app-converted-dataset-details-dialog',
   imports: [
@@ -35,6 +54,10 @@ export class ConvertedDatasetDetailsDialog {
   protected readonly dataset = inject<ConvertedDatasetDescriptor>(MAT_DIALOG_DATA);
   protected readonly closeResult: undefined = undefined;
   protected readonly renameResult: ConvertedDatasetDetailsDialogResult = 'rename';
+  protected readonly resultKindText = resultKindLabel(this.dataset.resultKind);
+  protected readonly playernameOperationsText = this.dataset.playernameSummary
+    ? operationsLabel(this.dataset.playernameSummary.operations)
+    : '';
   protected readonly playernameBeforeProfiles = playernameSummaryProfiles(
     this.dataset.playernameSummary?.tables ?? [],
     'before',
@@ -43,23 +66,4 @@ export class ConvertedDatasetDetailsDialog {
     this.dataset.playernameSummary?.tables ?? [],
     'after',
   );
-
-  protected resultKindLabel(kind: DatasetResultKind): string {
-    switch (kind) {
-      case 'conversion':
-        return 'Conversion';
-      case 'playernames-minimize':
-        return 'Playernames minimize';
-      case 'playernames-remove-unused':
-        return 'Remove unused playernames';
-      case 'playernames-combined':
-        return 'Remove unused and minimize playernames';
-    }
-  }
-
-  protected operationsLabel(operations: PlayernameOperations): string {
-    if (operations.minimize && operations.removeUnused)
-      return 'Remove unused names, then minimize ID holes';
-    return operations.minimize ? 'Minimize ID holes' : 'Remove unused names';
-  }
 }

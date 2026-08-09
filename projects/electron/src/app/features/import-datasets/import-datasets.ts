@@ -33,6 +33,7 @@ import { AppStore } from '../../core/app-store';
 import { ConfettiService } from '../../core/confetti/confetti.service';
 import { DesktopApi } from '../../core/desktop-api';
 import { PageHeader } from '../../shared/page-header/page-header';
+import { ArrayIncludesPipe, ArrayJoinPipe } from '../../shared/template-value-pipes';
 import { ValidationReport } from '../../shared/validation-report/validation-report';
 
 interface EditableCandidate extends DatasetImportCandidate {
@@ -47,6 +48,11 @@ interface CandidateValidationState {
   error?: string;
 }
 
+interface ReviewCandidate extends EditableCandidate {
+  firstValidationMessage: string;
+  nameHasError: boolean;
+}
+
 const FORMAT_STORAGE_KEY = 'qdb-converter-import-source-kind';
 
 const storedFormat = (): DatasetSourceKind => {
@@ -57,6 +63,8 @@ const storedFormat = (): DatasetSourceKind => {
 @Component({
   selector: 'app-import-datasets',
   imports: [
+    ArrayIncludesPipe,
+    ArrayJoinPipe,
     DecimalPipe,
     MatButtonModule,
     MatCardModule,
@@ -101,6 +109,32 @@ export class ImportDatasets {
   protected readonly hideErrorStateMatcher: ErrorStateMatcher = {
     isErrorState: () => false,
   };
+  protected readonly reviewCandidates = computed<ReviewCandidate[]>(() =>
+    this.candidates().map((candidate) => {
+      const messages = this.validationMessages(candidate);
+      return {
+        ...candidate,
+        firstValidationMessage: messages[0] ?? '',
+        nameHasError: messages.some(
+          (message) =>
+            message.includes('name') ||
+            message.includes('characters') ||
+            message.includes('exists'),
+        ),
+      };
+    }),
+  );
+  protected readonly resultLabels = computed<Record<string, string>>(() =>
+    Object.fromEntries(
+      this.results().map((result) => [
+        result.selectionId,
+        result.dataset?.name ??
+          this.candidates().find((candidate) => candidate.selectionId === result.selectionId)
+            ?.name ??
+          'Dataset',
+      ]),
+    ),
+  );
   protected readonly sourceReady = computed(
     () =>
       this.candidates().length > 0 ||
@@ -264,21 +298,6 @@ export class ImportDatasets {
     return messages;
   }
 
-  protected firstValidationMessage(candidate: EditableCandidate): string {
-    return this.validationMessages(candidate)[0] ?? '';
-  }
-
-  protected nameHasError(candidate: EditableCandidate): boolean {
-    return this.validationMessages(candidate).some(
-      (message) =>
-        message.includes('name') || message.includes('characters') || message.includes('exists'),
-    );
-  }
-
-  protected versionHasError(candidate: EditableCandidate): boolean {
-    return !candidate.matchingVersions.includes(candidate.version);
-  }
-
   protected reviewImport(): void {
     if (!this.reviewReady() || this.validationRunning()) return;
     this.stepper()?.next();
@@ -375,14 +394,6 @@ export class ImportDatasets {
 
   protected cancelImport(): void {
     void this.desktop.cancelImport();
-  }
-
-  protected resultLabel(result: DatasetImportResult): string {
-    return (
-      result.dataset?.name ??
-      this.candidates().find((candidate) => candidate.selectionId === result.selectionId)?.name ??
-      'Dataset'
-    );
   }
 
   protected startAnotherImport(): void {

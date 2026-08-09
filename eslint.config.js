@@ -96,6 +96,14 @@ module.exports = defineConfig([
       '@angular-eslint/template/attributes-order': 'error',
       '@angular-eslint/template/no-any': 'error',
       '@angular-eslint/template/prefer-contextual-for-variables': 'error',
+      'no-restricted-syntax': [
+        'error',
+        {
+          selector: 'Call[args.length > 0]:not(BoundEvent Call)',
+          message:
+            'Avoid calling functions with arguments in templates. Use signals, properties, or pure pipes instead.',
+        },
+      ],
       'max-lines': ['error', { max: 500, skipBlankLines: false, skipComments: false }],
     },
   },

@@ -84,6 +84,13 @@ export class ValidateDataset {
   protected readonly selectedDataset = computed(() =>
     this.availableDatasets().find((dataset) => dataset.id === this.selectedDatasetId()),
   );
+  protected readonly selectedDatasetOrigin = computed(() => {
+    const dataset = this.selectedDataset();
+    if (!dataset) return '';
+    if ('sourceDatasetName' in dataset)
+      return `Converted from ${dataset.sourceDatasetName} · FIFA ${dataset.sourceVersion} to FIFA ${dataset.fifaVersion}`;
+    return dataset.source.kind === 't3db' ? 'Imported from t3db' : 'Imported from a text folder';
+  });
   protected readonly filteredDatasets = computed(() => {
     const query = this.datasetQuery().trim().toLocaleLowerCase('en');
     const datasets = this.availableDatasets();
@@ -162,12 +169,6 @@ export class ValidateDataset {
     } finally {
       if (requestId === this.validationRequestId) this.loading.set(false);
     }
-  }
-
-  protected datasetOrigin(dataset: ValidatableDatasetDescriptor): string {
-    if ('sourceDatasetName' in dataset)
-      return `Converted from ${dataset.sourceDatasetName} · FIFA ${dataset.sourceVersion} to FIFA ${dataset.fifaVersion}`;
-    return dataset.source.kind === 't3db' ? 'Imported from t3db' : 'Imported from a text folder';
   }
 
   private selectionKey(): string {

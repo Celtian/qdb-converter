@@ -84,14 +84,20 @@
                 <mat-option
                   class="min-h-16"
                   [value]="dataset.id"
-                  [disabled]="!isCompatible(dataset)"
+                  [disabled]="
+                    !(dataset.tableNames | arrayIncludes: 'players') ||
+                    !(dataset.tableNames | arrayIncludes: 'playernames')
+                  "
                 >
                   <span class="grid py-1.5 leading-option">
                     <strong>{{ dataset.name }}</strong>
                     <span class="text-sm text-on-surface-variant">
                       FIFA {{ dataset.fifaVersion }} · {{ dataset.tableCount }} tables ·
                       {{ dataset.rowCount | number }} rows
-                      @if (!isCompatible(dataset)) {
+                      @if (
+                        !(dataset.tableNames | arrayIncludes: 'players') ||
+                        !(dataset.tableNames | arrayIncludes: 'playernames')
+                      ) {
                         · Missing players or playernames
                       }
                     </span>

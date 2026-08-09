@@ -40,12 +40,12 @@
         }}
       </p>
       <div class="mt-3 grid gap-2">
-        @for (issue of validation.errors; track issueLabel(issue)) {
+        @for (issue of errors(); track issue.label) {
           <details class="rounded-lg border border-outline-variant bg-surface-container-low">
             <summary
               class="cursor-pointer rounded-lg p-3 leading-issue focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-primary"
             >
-              <strong class="text-error">{{ issueLabel(issue) }}</strong>
+              <strong class="text-error">{{ issue.label }}</strong>
               <span>
                 — {{ issue.message }} ({{ issue.occurrences | number }}
                 {{ issue.occurrences === 1 ? 'occurrence' : 'occurrences' }})
@@ -83,12 +83,12 @@
       </h3>
       <p>Modified databases may intentionally exceed the published FIFA table metadata.</p>
       <div class="mt-3 grid gap-2">
-        @for (issue of validation.warnings; track issueLabel(issue)) {
+        @for (issue of warnings(); track issue.label) {
           <details class="rounded-lg border border-outline-variant bg-surface-container-low">
             <summary
               class="cursor-pointer rounded-lg p-3 leading-issue focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-primary"
             >
-              <strong class="text-primary">{{ issueLabel(issue) }}</strong>
+              <strong class="text-primary">{{ issue.label }}</strong>
               <span>
                 — {{ issue.message }} ({{ issue.occurrences | number }}
                 {{ issue.occurrences === 1 ? 'occurrence' : 'occurrences' }})

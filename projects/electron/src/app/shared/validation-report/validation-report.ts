@@ -4,6 +4,19 @@ import { MatIconModule } from '@angular/material/icon';
 
 import type { DatasetValidationIssue, DatasetValidationReport } from '../../../../shared/contracts';
 
+interface ValidationIssueView extends DatasetValidationIssue {
+  label: string;
+}
+
+const issueView = (issue: DatasetValidationIssue): ValidationIssueView => ({
+  ...issue,
+  label: issue.field
+    ? `${issue.table}.txt · ${issue.field}`
+    : issue.table === 'Dataset' || issue.table === 'Source'
+      ? issue.table
+      : `${issue.table}.txt`,
+});
+
 @Component({
   selector: 'app-validation-report',
   imports: [DecimalPipe, MatIconModule],
@@ -28,11 +41,6 @@ export class ValidationReport {
   protected readonly warningsHeadingId = computed(
     () => `${this.headingIdPrefix()}-warnings-heading`,
   );
-
-  protected issueLabel(issue: DatasetValidationIssue): string {
-    if (issue.field) return `${issue.table}.txt · ${issue.field}`;
-    return issue.table === 'Dataset' || issue.table === 'Source'
-      ? issue.table
-      : `${issue.table}.txt`;
-  }
+  protected readonly errors = computed(() => this.report().errors.map(issueView));
+  protected readonly warnings = computed(() => this.report().warnings.map(issueView));
 }

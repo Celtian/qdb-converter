@@ -13,6 +13,12 @@ import { StatusBadge } from '../../shared/status-badge/status-badge';
 
 export type DatasetDetailsDialogResult = 'rename';
 
+const operationsLabel = (operations: PlayernameOperations): string => {
+  if (operations.minimize && operations.removeUnused)
+    return 'Remove unused names, then minimize ID holes';
+  return operations.minimize ? 'Minimize ID holes' : 'Remove unused names';
+};
+
 @Component({
   selector: 'app-dataset-details-dialog',
   imports: [
@@ -31,6 +37,9 @@ export class DatasetDetailsDialog {
   protected readonly dataset = inject<ImportedDatasetDescriptor>(MAT_DIALOG_DATA);
   protected readonly closeResult: undefined = undefined;
   protected readonly renameResult: DatasetDetailsDialogResult = 'rename';
+  protected readonly playernameOperationsText = this.dataset.playernameSummary
+    ? operationsLabel(this.dataset.playernameSummary.operations)
+    : '';
   protected readonly playernameBeforeProfiles = playernameSummaryProfiles(
     this.dataset.playernameSummary?.tables ?? [],
     'before',
@@ -39,10 +48,4 @@ export class DatasetDetailsDialog {
     this.dataset.playernameSummary?.tables ?? [],
     'after',
   );
-
-  protected operationsLabel(operations: PlayernameOperations): string {
-    if (operations.minimize && operations.removeUnused)
-      return 'Remove unused names, then minimize ID holes';
-    return operations.minimize ? 'Minimize ID holes' : 'Remove unused names';
-  }
 }

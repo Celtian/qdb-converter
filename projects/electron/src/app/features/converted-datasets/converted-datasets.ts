@@ -36,10 +36,18 @@ import {
 } from '../../shared/dataset-filter-drawer/dataset-filter-drawer';
 import { PageHeader } from '../../shared/page-header/page-header';
 import { StatusBadge } from '../../shared/status-badge/status-badge';
+import { SetHasPipe } from '../../shared/template-value-pipes';
 import {
   ConvertedDatasetDetailsDialog,
   type ConvertedDatasetDetailsDialogResult,
 } from './converted-dataset-details-dialog';
+
+const resultKindLabels: Record<DatasetResultKind, string> = {
+  conversion: 'Conversion',
+  'playernames-minimize': 'Playernames minimize',
+  'playernames-remove-unused': 'Remove unused names',
+  'playernames-combined': 'Remove unused + minimize',
+};
 
 @Component({
   selector: 'app-converted-datasets',
@@ -57,6 +65,7 @@ import {
     MatTableModule,
     PageHeader,
     RouterLink,
+    SetHasPipe,
     StatusBadge,
   ],
   templateUrl: './converted-datasets.html',
@@ -81,6 +90,7 @@ export class ConvertedDatasets {
   protected readonly pageSize = signal(25);
   protected readonly pageSizeOptions = [10, 25, 50, 100];
   protected readonly selectedIds = signal<ReadonlySet<string>>(new Set());
+  protected readonly resultKindLabels: Readonly<Record<string, string>> = resultKindLabels;
   protected readonly deletionPending = signal(false);
   protected readonly columnDefinitions = columnsByDatasetTable.converted;
   private readonly columnPreference = signal(this.columnPreferences.load('converted'));
@@ -151,16 +161,7 @@ export class ConvertedDatasets {
   }
 
   protected resultKindLabel(kind: DatasetResultKind): string {
-    switch (kind) {
-      case 'conversion':
-        return 'Conversion';
-      case 'playernames-minimize':
-        return 'Playernames minimize';
-      case 'playernames-remove-unused':
-        return 'Remove unused names';
-      case 'playernames-combined':
-        return 'Remove unused + minimize';
-    }
+    return resultKindLabels[kind];
   }
 
   protected openFilters(): void {
@@ -283,10 +284,6 @@ export class ConvertedDatasets {
       .subscribe((confirmed) => {
         if (confirmed) void this.deleteDataset(dataset.id);
       });
-  }
-
-  protected isSelected(dataset: ConvertedDatasetDescriptor): boolean {
-    return this.selectedIds().has(dataset.id);
   }
 
   protected toggleRow(dataset: ConvertedDatasetDescriptor, checked: boolean): void {

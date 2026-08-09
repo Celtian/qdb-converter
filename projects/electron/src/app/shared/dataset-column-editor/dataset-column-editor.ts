@@ -39,7 +39,7 @@ export class DatasetColumnEditor {
   readonly columns = input.required<readonly DatasetColumnDefinition[]>();
   readonly preference = model.required<DatasetColumnPreference>();
   readonly defaultPreference = input.required<DatasetColumnPreference>();
-  private readonly visibilityModel = linkedSignal(() =>
+  protected readonly visibilityModel = linkedSignal(() =>
     toDatasetColumnVisibility(this.columns(), this.preference().visible),
   );
   protected readonly announcement = signal('');
@@ -71,10 +71,6 @@ export class DatasetColumnEditor {
       order: this.preference().order,
       visible: fromDatasetColumnVisibility(this.orderedColumns(), visibility),
     });
-  }
-
-  protected isColumnVisible(column: DatasetColumnDefinition): boolean {
-    return column.required || Boolean(this.visibilityModel()[column.key]);
   }
 
   protected drop(event: CdkDragDrop<DatasetColumnDefinition[]>): void {
